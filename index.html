@@ -60,7 +60,7 @@ body {
   height: min(850px, 88vh);
 
   background-color: #c3c5bf;
-  background-image: url('./assets/corpo-gameboy.png');
+  background-image: url('./assets/corpo-dx-boy.png');
   background-position: center;
   background-repeat: no-repeat;
   background-size: 100% 100%;
@@ -155,33 +155,14 @@ body {
   margin: 0 0 10px 6px;
 }
 
-.consoleTopImage {
-  position: absolute;
-  z-index: 2;
 
-  top: -18px;
-  left: 50%;
-
-  transform: translateX(-50%);
-
-  display: none;
-
-  width: 101%;
-  height: auto;
-  max-width: none;
-
-  margin: 0;
-}
-
-#app > .consoleTopImage {
-  position: absolute;
-}
+/*tela cinza ao redor do canvas*/
 
 #screenWrap {
   position: relative;
-  margin-top: 20px;
+  margin-top: 5px;
   flex-shrink: 0;
-  background: #5b5e58;
+  background: #3d3e3c;
   
 
   border-radius:
@@ -200,6 +181,13 @@ body {
     inset 0 2px 7px #ffffff30,
     inset 0 -4px 8px #20221f99,
     0 2px 0 #858980;
+}
+
+.logoDX {
+  display: block;
+  width: 140px;
+  height: auto;
+  margin: 10px auto 0;
 }
 
 .screenSprite {
@@ -255,10 +243,15 @@ body {
   text-align: center;
 }
 
+/* ==========================================
+   PALAVRA POWER + LED
+   ========================================== */
 .powerIndicator {
   display: inline-flex;
 
   align-items: center;
+
+  
 
   gap: 1px;
 
@@ -270,18 +263,20 @@ body {
 
   letter-spacing: 2px;
 
-  font-weight: 300;
+  font-weight: 350;
 }
 
 .screenHeader > .powerIndicator:first-child {
   position: absolute !important;
 
-  left: 1px !important;
+  left: 4px !important;
   top: 40%;
 
   z-index: 3;
 
   flex-direction: column;
+
+  align-items: center;
 
   gap: 1px;
 
@@ -309,14 +304,16 @@ body {
 
   box-shadow:
     inset 0 1px 1px #0008;
+
+    transform: translateX(-1px);
 }
 
 #powerLed.is-on {
-  background: #e32828;
+  background: #16bc0a;
 
   box-shadow:
-    0 0 8px #ff3b3b,
-    inset 1px 1px 1px #ffaaaa;
+    0 0 8px #2af03a,
+    inset 1px 1px 1px #6cfd64;
 }
 
 canvas {
@@ -364,54 +361,7 @@ canvas {
   min-height: 13px;
 }
 
-.consoleLogoArea {
-  display: flex;
-  align-items: flex-start;
-  justify-content: flex-start;
-  width: 100%;
-  min-height: 25px;
-  position: relative;
-}
 
-.consoleLogo {
-  display: block;
-  width: 220px;
-  height: 50px;
-  object-fit: contain;
-
-  filter:
-    contrast(1.05)
-    saturate(0.8);
-
-  max-width: 100%;
-  margin: 4px 0 0 0;
-
-  transform: translateX(-04px);
-}
-
-/* CELULAR */
-@media (max-width: 600px) {
-  .consoleLogoArea {
-    align-items: flex-start;
-  }
-
-  .consoleLogo {
-    width: 180px;
-    height: 45px;
-    margin-top: -5px;
-    transform: translateX(-04px);
-  }
-}
-
-/* CELULAR PEQUENO */
-@media (max-width: 380px) {
-  .consoleLogo {
-    width: 160px;
-    height: 42px;
-    margin-top: 2px;
-    transform: translateX(-40px);
-  }
-}
 
 
 .controls {
@@ -661,7 +611,7 @@ button {
 
 }
 
-
+/*botões SELECT e START*/
 .small button {
 
   position: relative;
@@ -685,9 +635,9 @@ button {
     4px
     18px;
 
-  font-size: 11px;
+  font-size: 14px;
 
-  font-weight: 1000;
+  font-weight: 900;
 
   letter-spacing: 0.4px;
 
@@ -697,11 +647,13 @@ button {
 }
 
 
-
+/* ==========================================
+   BOTÃO POWER
+   ========================================== */
 #power {
   position: absolute !important;
 
-  top: 8px !important;
+  top: 14px !important;
   left: 43px !important;
 
   width: 90px;
@@ -714,15 +666,15 @@ button {
   background:
     linear-gradient(
       180deg,
-      #383c38,
+      #899089,
       #20231f
     );
 
   color: #aeb3aa;
 
-  font-size: 11px;
+  font-size: 14px;
 
-  font-weight: 800;
+  font-weight: 700;
 
   letter-spacing: 1px;
 
@@ -739,22 +691,22 @@ button {
   background:
     linear-gradient(
       180deg,
-      #737870,
-      #454a44
+      #3d3e3c,
+      #313231
     );
 
-  color: #e2e5df;
+  color: #59b100;
 }
 
 #power.is-off {
   background:
     linear-gradient(
       180deg,
-      #383c38,
-      #20231f
+      #666a64,
+      #3f433f
     );
 
-  color: #aeb3aa;
+  color: #fcfdfc;
 }
 
 #power:active {
@@ -778,7 +730,7 @@ button {
   width: 90px;
   height: 20px;
 
-  top: 8px !important;
+  top: 14px !important;
   right: 43px !important;
   left: auto !important;
 
@@ -879,6 +831,10 @@ button {
     padding 0.2s ease;
 }
 
+/* ==========================================
+   MENU ABERTO
+   ========================================== */
+
 #app > .menuDrawer.open .menu {
   max-height: 250px !important;
 
@@ -889,20 +845,30 @@ button {
   padding: 10px !important;
 }
 
+/* ==========================================
+   BOTÕES DENTRO DO MENU
+   ========================================== */
 .menu button {
   flex:
-    1 1
-    calc(50% - 4px);
+    1 1  
+    calc(30% - 4px);
 
-  background: #2f332e;
+  background: #327f21;
 
-  color: #d7ddcf;
+  color: #ffffff;
 
   border-radius: 8px;
 
+  border: solid 1px #000000;
+
+  box-shadow:
+    0 2px 2px rgba(246, 246, 246, 0.333);
+
   padding: 5px;
 
-  font-size: 11px;
+  font-size: 14px;
+
+  font-weight: 500;
 }
 
 #hint {
@@ -1077,11 +1043,7 @@ button {
 
   <div id="brand"></div>
 
-  <img
-    class="consoleTopImage"
-    src="./assets/parte-superior-console.png"
-    alt="Parte superior da tela"
-  >
+  
 
   <button
     id="power"
@@ -1096,8 +1058,8 @@ button {
 
     <img
       class="topImage"
-      src="./assets/logo-dot-matrix.png"
-      alt="Dot Matrix"
+      src="./assets/logo-developed-by-dougx.png"
+      alt="Developed by DougX"
     >
 
     <div class="screenHeader">
@@ -1109,7 +1071,7 @@ button {
           aria-label="Desligado"
         ></span>
 
-        BATTERY
+        POWER
 
       </span>
 
@@ -1127,15 +1089,12 @@ button {
 
   </div>
 
-  <div class="consoleLogoArea">
-
     <img
-      class="consoleLogo"
-      src="./assets/logo-nintendo.png"
-      alt="Nintendo"
-    >
+    class="logoDX"
+    src="./assets/logo-dx.png"
+    alt="DougX Boy"
+  >
 
-  </div>
 
   <div class="controls">
 
