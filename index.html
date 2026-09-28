@@ -13,108 +13,209 @@ if ('serviceWorker' in navigator) {
   )
   .then(registration => {
 
-
   })
   .catch(error => {
-
 
   });
 
 }
 </script>
+
 <meta charset="UTF-8">
+
 <meta
   name="viewport"
   content="width=device-width, initial-scale=1.0, viewport-fit=cover"
 >
-<title>Game Boy Canvas — Emulador</title>
+
+<title>DougX Emulator GB</title>
 
 <style>
+
 * {
   box-sizing: border-box;
 }
 
+
+
 html,
 body {
+
   margin: 0;
+
   padding: 0;
+
   width: 100%;
+
   height: 100%;
+
   overflow: hidden;
+
   background: #202124;
+
   font-family: system-ui, sans-serif;
+
   display: grid;
+
   place-items: center;
+
   color: #eee;
+
   user-select: none;
+
   -webkit-user-select: none;
+
   -webkit-touch-callout: none;
+
   -webkit-tap-highlight-color: transparent;
-   touch-action: none;
+
+  touch-action: none;
 }
 
+
+
+/* =====================================================
+   CORPO PRINCIPAL DO CONSOLE
+   ===================================================== */
+
 #app {
+
   position: relative;
+
   isolation: isolate;
-  width: min(420px, 92vw);
-  height: min(850px, 88vh);
+
+  width: 420px;
+
+  height: 700px;
+
+  /*
+    TAMANHO BASE FIXO.
+
+    O console mantém o mesmo
+    tamanho e proporção no desktop.
+  */
 
   background-color: #c3c5bf;
-  background-image: url('./assets/corpo-dx-boy.png');
-  background-position: center;
+
+  background-image:
+    url('./assets/corpo-dx-boy.png');
+
+  background-position: center center;
+
   background-repeat: no-repeat;
-  background-size: 100% 100%;
 
-  border-radius: 28px 28px 115px 28px;
+  /*
+    COVER preenche toda a área do console
+    mantendo a proporção original da imagem.
 
-  padding: 30px 24px 80px;
+    Isso evita que o corpo seja achatado
+    ou esticado verticalmente.
+  */
+
+  background-size: cover;
+
+  border-radius:
+    28px
+    28px
+    115px
+    28px;
+
+  padding:
+    30px
+    24px
+    80px;
 
   box-shadow:
     0 22px 50px #0008,
     inset 2px 2px 5px #fff8;
 
   display: flex;
+
   flex-direction: column;
+
   justify-content: flex-start;
 
   overflow: hidden !important;
 }
 
+
+
 #app > * {
+
   position: relative;
+
   z-index: 1;
+
 }
+
+
 
 #app::-webkit-scrollbar {
+
   display: none;
+
 }
 
+
+
 #app {
+
   -ms-overflow-style: none;
+
   scrollbar-width: none;
+
 }
+
+
+
+/* =====================================================
+   MOBILE
+   ===================================================== */
 
 @media (max-width: 768px) {
 
   body {
+
     margin: 0;
+
     padding: 0;
+
     width: 100%;
+
     height: 100dvh;
 
     display: flex;
+
     justify-content: center;
+
     align-items: center;
 
     background-color: #121212;
+
+    overflow: hidden;
   }
 
-  #app {
-    width: calc(100vw - 24px) !important;
-    height: calc(100dvh - 24px) !important;
 
-    max-width: 420px !important;
-    max-height: 850px !important;
+  #app {
+
+    width: 420px !important;
+
+    height: 700px !important;
+
+    max-width: none !important;
+
+    max-height: none !important;
+
+    /*
+      O corpo continua usando a mesma
+      proporção do desktop.
+    */
+
+    background-position:
+      center center !important;
+
+    background-size:
+      cover !important;
 
     border-radius:
       28px
@@ -126,14 +227,16 @@ body {
       0 15px 35px #0009,
       inset 2px 2px 5px #fff8 !important;
 
-    padding:
-      max(env(safe-area-inset-top), 18px)
-      14px
-      max(env(safe-area-inset-bottom), 24px);
-
     overflow: hidden !important;
   }
+
 }
+
+
+
+/* =====================================================
+   CAMADAS
+   ===================================================== */
 
 #brand,
 #screenWrap,
@@ -143,27 +246,46 @@ body {
 #app > .menu,
 #hint,
 #editor {
+
   position: relative;
+
   z-index: 3 !important;
 }
 
+
+
 #brand {
+
   font-weight: 800;
+
   letter-spacing: 3px;
+
   color: #30322f;
+
   font-size: 20px;
-  margin: 0 0 10px 6px;
+
+  margin:
+    0
+    0
+    10px
+    6px;
 }
 
 
-/*tela cinza ao redor do canvas*/
+
+/* =====================================================
+   TELA
+   ===================================================== */
 
 #screenWrap {
+
   position: relative;
+
   margin-top: 5px;
+
   flex-shrink: 0;
+
   background: #3d3e3c;
-  
 
   border-radius:
     10px
@@ -183,29 +305,41 @@ body {
     0 2px 0 #858980;
 }
 
+
+
 .logoDX {
+
   position: absolute;
+
   width: 140px;
+
   height: auto;
 
   left: 50%;
+
   transform: translateX(-50%);
 
   margin-top: 5px;
+
   z-index: 5 !important;
 }
- 
+
+
+
 .topImage {
+
   position: absolute !important;
 
   z-index: 2;
 
   top: 8px;
+
   left: 25px;
 
   display: block;
 
   height: 28px;
+
   width: calc(100% - 50px);
 
   object-fit: contain;
@@ -213,46 +347,63 @@ body {
   margin: 0;
 }
 
+
+
 #screenWrap > * {
+
   position: relative;
 }
 
+
+
 .screenHeader {
+
   display: flex;
+
   justify-content: flex-start;
 
   min-height: 20px;
 
   font-size: 8px;
+
   font-weight: 800;
 
   text-transform: uppercase;
 }
 
+
+
 #screenWrap > .screenHeader {
+
   position: static;
 }
 
+
+
 .screenHeader small {
+
   flex: 1;
 
   color: #d5d8d3;
 
   font-size: 7px;
+
   letter-spacing: 1px;
 
   text-align: center;
 }
 
-/* ==========================================
-   PALAVRA POWER + LED
-   ========================================== */
+
+
+/* =====================================================
+   POWER + LED
+   ===================================================== */
+
 .powerIndicator {
+
   display: inline-flex;
 
   align-items: center;
-
-  
 
   gap: 1px;
 
@@ -267,10 +418,14 @@ body {
   font-weight: 350;
 }
 
+
+
 .screenHeader > .powerIndicator:first-child {
+
   position: absolute !important;
 
   left: 4px !important;
+
   top: 40%;
 
   z-index: 3;
@@ -286,13 +441,21 @@ body {
   transform: translateY(-50%);
 }
 
+
+
 .screenHeader > .powerIndicator:first-child #powerLed {
+
   width: 13px;
+
   height: 13px;
 }
 
+
+
 #powerLed {
+
   width: 7px;
+
   height: 7px;
 
   border:
@@ -306,10 +469,14 @@ body {
   box-shadow:
     inset 0 1px 1px #0008;
 
-    transform: translateX(-1px);
+  transform:
+    translateX(-1px);
 }
 
+
+
 #powerLed.is-on {
+
   background: #16bc0a;
 
   box-shadow:
@@ -317,12 +484,24 @@ body {
     inset 1px 1px 1px #6cfd64;
 }
 
+
+
+/* =====================================================
+   CANVAS
+   ===================================================== */
+
 canvas {
+
   display: block;
 
   width: 100%;
 
-  aspect-ratio: 160 / 120;
+  /*
+    Game Boy original:
+    160 x 144
+  */
+
+  aspect-ratio: 160 / 144;
 
   image-rendering: pixelated;
 
@@ -339,16 +518,26 @@ canvas {
     0 2px 2px #20221f99;
 }
 
+
+
 #screenWrap.powered-off canvas {
+
   background: #283603;
+
   filter: none;
 }
 
+
+
 #screenWrap.powered-off #status {
+
   visibility: hidden;
 }
 
+
+
 #status {
+
   text-align: center;
 
   color: #b8cfa1;
@@ -364,6 +553,9 @@ canvas {
 
 
 
+/* =====================================================
+   CONTROLES
+   ===================================================== */
 
 .controls {
 
@@ -378,8 +570,9 @@ canvas {
   width: 100%;
 
   padding: 0 10px;
-
 }
+
+
 
 .dpadArea {
 
@@ -390,8 +583,9 @@ canvas {
   align-items: center;
 
   gap: 10px;
-
 }
+
+
 
 .dpad {
 
@@ -405,8 +599,9 @@ canvas {
     drop-shadow(
       0 5px 4px #0006
     );
-
 }
+
+
 
 .dpadSprite {
 
@@ -425,8 +620,9 @@ canvas {
   object-fit: fill;
 
   pointer-events: none;
-
 }
+
+
 
 .pad {
 
@@ -447,8 +643,9 @@ canvas {
   color: transparent;
 
   appearance: none;
-
 }
+
+
 
 .v {
 
@@ -457,8 +654,9 @@ canvas {
   height: 37px;
 
   left: 36px;
-
 }
+
+
 
 .h {
 
@@ -467,44 +665,51 @@ canvas {
   height: 37px;
 
   top: 36px;
-
 }
+
+
 
 .v[data-key="up"] {
 
   top: 0;
-
 }
+
+
 
 .v[data-key="down"] {
 
   top: 73px;
-
 }
+
+
 
 .h[data-key="left"] {
 
   left: 0;
-
 }
+
+
 
 .h[data-key="right"] {
 
   left: 73px;
-
 }
+
+
 
 .hub {
 
   display: none !important;
-
 }
+
+
 
 .pad[data-key]::after {
 
   content: none !important;
-
 }
+
+
 
 .actions {
 
@@ -513,8 +718,9 @@ canvas {
   gap: 10px;
 
   transform: rotate(-18deg);
-
 }
+
+
 
 button {
 
@@ -525,8 +731,9 @@ button {
   touch-action: none;
 
   border: 0;
-
 }
+
+
 
 .ab {
 
@@ -548,8 +755,9 @@ button {
     0 4px 4px #0006;
 
   overflow: hidden;
-
 }
+
+
 
 .buttonSprite {
 
@@ -566,8 +774,9 @@ button {
   object-fit: fill;
 
   pointer-events: none;
-
 }
+
+
 
 .small {
 
@@ -580,8 +789,9 @@ button {
   gap: 20px;
 
   margin-top: 20px;
-
 }
+
+
 
 .smallControl {
 
@@ -590,13 +800,13 @@ button {
   display: block;
 
   flex: 0 0 auto;
-
 }
 
 
-/* ==========================================
-   PROTEÇÃO CONTRA SELEÇÃO NO TOUCH
-   ========================================== */
+
+/* =====================================================
+   TOUCH
+   ===================================================== */
 
 .dpad,
 .ab,
@@ -609,10 +819,14 @@ button {
   -webkit-touch-callout: none;
 
   -webkit-tap-highlight-color: transparent;
-
 }
 
-/*botões SELECT e START*/
+
+
+/* =====================================================
+   SELECT / START
+   ===================================================== */
+
 .small button {
 
   position: relative;
@@ -644,20 +858,24 @@ button {
 
   box-shadow:
     0 3px 3px #0005;
-
 }
 
 
-/* ==========================================
-   BOTÃO POWER
-   ========================================== */
+
+/* =====================================================
+   POWER
+   ===================================================== */
+
 #power {
+
   position: absolute !important;
 
   top: 14px !important;
+
   left: 43px !important;
 
   width: 90px;
+
   height: 20px;
 
   z-index: 100 !important;
@@ -688,7 +906,10 @@ button {
     transform 0.1s ease;
 }
 
+
+
 #power.is-on {
+
   background:
     linear-gradient(
       180deg,
@@ -699,7 +920,10 @@ button {
   color: #59b100;
 }
 
+
+
 #power.is-off {
+
   background:
     linear-gradient(
       180deg,
@@ -710,29 +934,49 @@ button {
   color: #fcfdfc;
 }
 
+
+
 #power:active {
+
   transform: translateY(1px);
 }
 
+
+
+/* =====================================================
+   MENU
+   ===================================================== */
+
 .menuDrawer {
+
   margin-top: 12px;
 }
+
+
 
 #app > .menuDrawer {
+
   position: static !important;
+
   margin-top: 12px;
 }
 
+
+
 #menuToggle {
+
   position: absolute !important;
 
   display: block;
 
   width: 90px;
+
   height: 20px;
 
   top: 14px !important;
+
   right: 43px !important;
+
   left: auto !important;
 
   transform: none !important;
@@ -768,7 +1012,10 @@ button {
     box-shadow 0.1s ease;
 }
 
+
+
 #menuToggle:active {
+
   transform:
     translateY(2px) !important;
 
@@ -776,7 +1023,10 @@ button {
     0 1px 2px #0005;
 }
 
+
+
 #menuToggle[aria-expanded="true"] {
+
   background:
     linear-gradient(
       180deg,
@@ -785,12 +1035,16 @@ button {
     );
 }
 
+
+
 .menu {
+
   position: absolute !important;
 
   top: 45px !important;
 
   left: 20px !important;
+
   right: 20px !important;
 
   width: auto !important;
@@ -832,11 +1086,10 @@ button {
     padding 0.2s ease;
 }
 
-/* ==========================================
-   MENU ABERTO
-   ========================================== */
+
 
 #app > .menuDrawer.open .menu {
+
   max-height: 250px !important;
 
   opacity: 1 !important;
@@ -846,12 +1099,12 @@ button {
   padding: 10px !important;
 }
 
-/* ==========================================
-   BOTÕES DENTRO DO MENU
-   ========================================== */
+
+
 .menu button {
+
   flex:
-    1 1  
+    1 1
     calc(30% - 4px);
 
   background: #327f21;
@@ -860,10 +1113,18 @@ button {
 
   border-radius: 8px;
 
-  border: solid 1px #000000;
+  border:
+    solid 1px
+    #000000;
 
   box-shadow:
-    0 2px 2px rgba(246, 246, 246, 0.333);
+    0 2px 2px
+    rgba(
+      246,
+      246,
+      246,
+      0.333
+    );
 
   padding: 5px;
 
@@ -872,7 +1133,10 @@ button {
   font-weight: 500;
 }
 
+
+
 #hint {
+
   text-align: center;
 
   color: #3d403b;
@@ -884,7 +1148,14 @@ button {
   line-height: 1.2;
 }
 
+
+
+/* =====================================================
+   EDITOR
+   ===================================================== */
+
 #editor {
+
   display: none;
 
   position: absolute !important;
@@ -892,6 +1163,7 @@ button {
   top: 45px !important;
 
   left: 50% !important;
+
   right: auto !important;
 
   width:
@@ -926,13 +1198,21 @@ button {
   scrollbar-width: none;
 }
 
+
+
 #editor::-webkit-scrollbar {
+
   display: none;
 }
 
+
+
 #editor.open {
+
   display: block !important;
 }
+
+
 
 #editor .editRow > label:has(+ #dpadRange),
 #editor .editRow > label:has(+ #bRange),
@@ -942,12 +1222,16 @@ button {
 #bRange,
 #aRange,
 #smallRange {
+
   display: none !important;
 }
+
+
 
 #app.editing .dpad,
 #app.editing .ab,
 #app.editing .smallControl {
+
   cursor: move;
 
   outline:
@@ -957,21 +1241,36 @@ button {
   outline-offset: 2px;
 }
 
+
+
 #app.editing .smallControl [data-key] {
+
   pointer-events: none;
 }
 
+
+
 #editor h3 {
-  margin: 0 0 6px;
+
+  margin:
+    0
+    0
+    6px;
 
   font-size: 12px;
 }
 
+
+
 .editRow {
+
   margin-bottom: 6px;
 }
 
+
+
 .editRow label {
+
   display: flex;
 
   justify-content: space-between;
@@ -981,11 +1280,17 @@ button {
   margin-bottom: 2px;
 }
 
+
+
 .editRow input {
+
   width: 100%;
 }
 
+
+
 .editorButtons {
+
   display: flex;
 
   gap: 5px;
@@ -993,7 +1298,10 @@ button {
   margin-top: 7px;
 }
 
+
+
 .editorButtons button {
+
   flex: 1;
 
   padding: 5px;
@@ -1007,34 +1315,53 @@ button {
   font-size: 9px;
 }
 
+
+
 #grpDpad {
+
   transform:
     translate(0px, 0px);
 }
+
+
 
 #grpB {
+
   transform:
     translate(0px, 0px);
 }
+
+
 
 #grpA {
+
   transform:
     translate(0px, 0px);
 }
+
+
 
 #grpSmall {
+
   transform:
     translate(0px, 0px);
 }
 
+
+
 .pressed {
+
   filter:
     brightness(0.75);
 }
 
+
+
 #screenWrap.booting canvas {
+
   background: #9bbc0f;
 }
+
 </style>
 </head>
 
@@ -1044,7 +1371,6 @@ button {
 
   <div id="brand"></div>
 
-  
 
   <button
     id="power"
@@ -1055,6 +1381,7 @@ button {
     OFF
   </button>
 
+
   <div id="screenWrap">
 
     <img
@@ -1062,6 +1389,7 @@ button {
       src="./assets/logo-developed-by-dougx.png"
       alt="Developed by DougX"
     >
+
 
     <div class="screenHeader">
 
@@ -1078,11 +1406,13 @@ button {
 
     </div>
 
+
     <canvas
       id="screen"
       width="160"
       height="144"
     ></canvas>
+
 
     <div id="status">
       SISTEMA DESLIGADO
@@ -1090,11 +1420,13 @@ button {
 
   </div>
 
-    <img
+
+  <img
     class="logoDX"
     src="./assets/logo-dx.png"
     alt="DougX Boy"
   >
+
 
 
   <div class="controls">
@@ -1117,20 +1449,24 @@ button {
           aria-hidden="true"
         ></div>
 
+
         <button
           class="pad v"
           data-key="up"
         ></button>
+
 
         <button
           class="pad h"
           data-key="left"
         ></button>
 
+
         <button
           class="pad v"
           data-key="down"
         ></button>
+
 
         <button
           class="pad h"
@@ -1140,6 +1476,7 @@ button {
       </div>
 
     </div>
+
 
     <div class="actions">
 
@@ -1158,6 +1495,7 @@ button {
         B
 
       </button>
+
 
       <button
         class="ab"
@@ -1179,6 +1517,8 @@ button {
 
   </div>
 
+
+
   <div
     class="small"
     id="grpSmall"
@@ -1195,6 +1535,7 @@ button {
 
     </span>
 
+
     <span
       class="smallControl"
       id="grpStart"
@@ -1207,6 +1548,8 @@ button {
     </span>
 
   </div>
+
+
 
   <div
     class="menuDrawer"
@@ -1223,6 +1566,7 @@ button {
       Menu
     </button>
 
+
     <div
       class="menu"
       id="menu"
@@ -1232,9 +1576,11 @@ button {
         📂 LOAD GAME
       </button>
 
+
       <button id="reset">
         ↻ RESET
       </button>
+
 
       <button
         id="btnEdit"
@@ -1248,9 +1594,12 @@ button {
 
   </div>
 
+
+
   <div id="editor">
 
     <h3>AJUSTAR CONTROLES</h3>
+
 
     <div class="editRow">
 
@@ -1258,6 +1607,7 @@ button {
         D-PAD
         <span id="dpadValue">0</span>
       </label>
+
 
       <input
         id="dpadRange"
@@ -1267,10 +1617,12 @@ button {
         value="0"
       >
 
+
       <label>
         TAMANHO DA CRUZ
         <span id="dpadScaleValue">100%</span>
       </label>
+
 
       <input
         id="dpadScaleRange"
@@ -1282,12 +1634,15 @@ button {
 
     </div>
 
+
+
     <div class="editRow">
 
       <label>
         BOTÃO B
         <span id="bValue">0</span>
       </label>
+
 
       <input
         id="bRange"
@@ -1297,10 +1652,12 @@ button {
         value="0"
       >
 
+
       <label>
         TAMANHO DO BOTÃO B
         <span id="bScaleValue">100%</span>
       </label>
+
 
       <input
         id="bScaleRange"
@@ -1312,12 +1669,15 @@ button {
 
     </div>
 
+
+
     <div class="editRow">
 
       <label>
         BOTÃO A
         <span id="aValue">0</span>
       </label>
+
 
       <input
         id="aRange"
@@ -1327,10 +1687,12 @@ button {
         value="0"
       >
 
+
       <label>
         TAMANHO DO BOTÃO A
         <span id="aScaleValue">100%</span>
       </label>
+
 
       <input
         id="aScaleRange"
@@ -1342,12 +1704,15 @@ button {
 
     </div>
 
+
+
     <div class="editRow">
 
       <label>
         SELECT / START
         <span id="smallValue">0</span>
       </label>
+
 
       <input
         id="smallRange"
@@ -1357,10 +1722,12 @@ button {
         value="0"
       >
 
+
       <label>
         TAMANHO SELECT / START
         <span id="smallScaleValue">100%</span>
       </label>
+
 
       <input
         id="smallScaleRange"
@@ -1372,11 +1739,14 @@ button {
 
     </div>
 
+
+
     <div class="editorButtons">
 
       <button id="resetControls">
         RESETAR
       </button>
+
 
       <button id="doneEdit">
         CONCLUÍDO
@@ -1388,9 +1758,11 @@ button {
 
 </div>
 
-<script type="module">
-'use strict';
 
+
+<script type="module">
+
+'use strict';
 
 
 
@@ -1406,17 +1778,22 @@ const ctx =
 
 ctx.imageSmoothingEnabled = false;
 
+
 const statusEl =
   document.getElementById('status');
+
 
 const screenWrap =
   document.getElementById('screenWrap');
 
+
 const powerLed =
   document.getElementById('powerLed');
 
+
 const powerButton =
   document.getElementById('power');
+
 
 
 /* =====================================================
@@ -1424,19 +1801,25 @@ const powerButton =
    ===================================================== */
 
 function showStatus(text) {
-  statusEl.textContent = text;
+
+  statusEl.textContent =
+    text;
 }
 
 
+
 function showError(text) {
+
   statusEl.textContent =
     'ERRO • ' + text;
 }
 
 
+
 function paintPoweredOffScreen() {
 
-  ctx.fillStyle = '#283603';
+  ctx.fillStyle =
+    '#283603';
 
   ctx.fillRect(
     0,
@@ -1447,9 +1830,11 @@ function paintPoweredOffScreen() {
 }
 
 
+
 function paintBootScreen() {
 
-  ctx.fillStyle = '#9bbc0f';
+  ctx.fillStyle =
+    '#9bbc0f';
 
   ctx.fillRect(
     0,
@@ -1458,14 +1843,22 @@ function paintBootScreen() {
     canvas.height
   );
 
-  ctx.fillStyle = '#0f380f';
 
-  ctx.textAlign = 'center';
+  ctx.fillStyle =
+    '#0f380f';
 
-  ctx.textBaseline = 'middle';
+
+  ctx.textAlign =
+    'center';
+
+
+  ctx.textBaseline =
+    'middle';
+
 
   ctx.font =
     'bold 19px Arial, sans-serif';
+
 
   ctx.fillText(
     'Nintendo',
@@ -1473,14 +1866,17 @@ function paintBootScreen() {
     canvas.height / 2 - 8
   );
 
+
   ctx.fillText(
     'Nintendo',
     canvas.width / 2 + 1,
     canvas.height / 2 - 8
   );
 
+
   ctx.font =
     'bold 9px Arial, sans-serif';
+
 
   ctx.fillText(
     'by DougX',
@@ -1490,6 +1886,7 @@ function paintBootScreen() {
 }
 
 
+
 function updatePowerVisual(isPoweredOn) {
 
   screenWrap.classList.toggle(
@@ -1497,15 +1894,18 @@ function updatePowerVisual(isPoweredOn) {
     !isPoweredOn
   );
 
+
   screenWrap.classList.toggle(
     'booting',
     false
   );
 
+
   powerLed.classList.toggle(
     'is-on',
     isPoweredOn
   );
+
 
   powerLed.setAttribute(
     'aria-label',
@@ -1514,26 +1914,31 @@ function updatePowerVisual(isPoweredOn) {
       : 'Desligado'
   );
 
+
   powerButton.classList.toggle(
     'is-on',
     isPoweredOn
   );
+
 
   powerButton.classList.toggle(
     'is-off',
     !isPoweredOn
   );
 
+
   powerButton.textContent =
     isPoweredOn
       ? ' ON'
       : ' OFF';
+
 
   powerButton.setAttribute(
     'aria-pressed',
     String(isPoweredOn)
   );
 }
+
 
 
 /* =====================================================
@@ -1551,19 +1956,24 @@ let emulatorPoweredOn = false;
 let pendingFrameId = null;
 
 
+
 const nativeRequestAnimationFrame =
   window.requestAnimationFrame.bind(window);
 
+
 const nativeCancelAnimationFrame =
   window.cancelAnimationFrame.bind(window);
+
 
 
 window.requestAnimationFrame =
   callback => {
 
     if (!emulatorPoweredOn) {
+
       return 0;
     }
+
 
     pendingFrameId =
       nativeRequestAnimationFrame(
@@ -1575,8 +1985,10 @@ window.requestAnimationFrame =
         }
       );
 
+
     return pendingFrameId;
   };
+
 
 
 /* =====================================================
@@ -1588,6 +2000,7 @@ let autosaveTimer = null;
 let sramSaveTimer = null;
 
 
+
 /* =====================================================
    ÁUDIO
    ===================================================== */
@@ -1597,168 +2010,140 @@ let soundEnabled = true;
 let audioUnlocked = false;
 
 
-/*
-  O boot sound usa HTMLAudioElement.
-
-  Isso é proposital.
-
-  Não dependemos do AudioContext do navegador
-  para tocar o MP3 de inicialização.
-*/
 
 const bootAudio =
   new Audio(
     './assets/gameboy-startup.mp3'
   );
 
-bootAudio.preload = 'auto';
 
-bootAudio.playsInline = true;
+bootAudio.preload =
+  'auto';
+
+
+bootAudio.playsInline =
+  true;
+
 
 bootAudio.setAttribute(
   'playsinline',
   ''
 );
 
+
 bootAudio.setAttribute(
   'webkit-playsinline',
   ''
 );
 
-bootAudio.volume = 0.8;
 
+bootAudio.volume =
+  0.8;
 
-/*
-  Fazemos o carregamento antecipado.
-
-  Se o navegador não carregar agora,
-  ele poderá carregar no momento do clique.
-*/
 
 bootAudio.load();
 
 
-/*
-  Desbloqueio de áudio.
-
-  Em celulares, a maneira mais confiável
-  é executar play() durante uma interação
-  real do usuário.
-
-  Aqui fazemos um pequeno ciclo silencioso
-  apenas para preparar o elemento.
-*/
 
 async function unlockAudio() {
 
   if (audioUnlocked) {
+
     return true;
   }
 
+
   try {
 
-    /*
-      Não usamos AudioContext aqui.
+    bootAudio.muted =
+      true;
 
-      O próprio HTMLAudioElement é preparado
-      através de uma interação do usuário.
-    */
 
-    bootAudio.muted = true;
+    bootAudio.currentTime =
+      0;
 
-    bootAudio.currentTime = 0;
 
     const promise =
       bootAudio.play();
 
+
     if (promise) {
+
       await promise;
     }
 
+
     bootAudio.pause();
 
-    bootAudio.currentTime = 0;
 
-    bootAudio.muted = false;
+    bootAudio.currentTime =
+      0;
 
-    audioUnlocked = true;
+
+    bootAudio.muted =
+      false;
+
+
+    audioUnlocked =
+      true;
+
 
     return true;
 
   } catch (error) {
 
-    /*
-      Alguns navegadores podem rejeitar
-      mesmo o play silencioso.
-
-      Isso não impede o jogo.
-
-      A próxima tentativa será feita
-      diretamente no botão ON.
-    */
-
     bootAudio.pause();
 
-    bootAudio.currentTime = 0;
+    bootAudio.currentTime =
+      0;
 
-    bootAudio.muted = false;
+    bootAudio.muted =
+      false;
 
     return false;
   }
 }
 
 
-/*
-  Toca o boot sound.
-
-  Essa função NÃO usa await.
-
-  Isso é importante porque o play()
-  deve permanecer ligado diretamente
-  ao gesto do usuário no botão ON.
-*/
 
 function playGameBoyBootSound() {
 
   if (!soundEnabled) {
+
     return;
   }
+
 
   try {
 
     bootAudio.pause();
 
-    bootAudio.currentTime = 0;
+    bootAudio.currentTime =
+      0;
 
-    bootAudio.muted = false;
+    bootAudio.muted =
+      false;
 
-    bootAudio.volume = 0.8;
+    bootAudio.volume =
+      0.8;
+
 
     const playPromise =
       bootAudio.play();
 
+
     if (playPromise) {
 
       playPromise.catch(() => {
-
-        /*
-          O navegador pode bloquear o áudio.
-
-          Não mostramos erro na tela,
-          pois isso não deve impedir
-          o funcionamento do emulador.
-        */
 
       });
     }
 
   } catch {
 
-    /*
-      O áudio nunca deve derrubar o jogo.
-    */
   }
 }
+
 
 
 /* =====================================================
@@ -1768,8 +2153,10 @@ function playGameBoyBootSound() {
 const DB_NAME =
   'GB_Emulator_Storage';
 
+
 const STORE_NAME =
   'rom_data';
+
 
 
 function openDB() {
@@ -1783,35 +2170,43 @@ function openDB() {
           1
         );
 
-      request.onupgradeneeded = () => {
 
-        const db =
-          request.result;
+      request.onupgradeneeded =
+        () => {
 
-        if (
-          !db.objectStoreNames.contains(
-            STORE_NAME
-          )
-        ) {
+          const db =
+            request.result;
 
-          db.createObjectStore(
-            STORE_NAME
+
+          if (
+            !db.objectStoreNames.contains(
+              STORE_NAME
+            )
+          ) {
+
+            db.createObjectStore(
+              STORE_NAME
+            );
+          }
+        };
+
+
+      request.onsuccess =
+        () =>
+          resolve(
+            request.result
           );
-        }
-      };
 
-      request.onsuccess = () =>
-        resolve(
-          request.result
-        );
 
-      request.onerror = () =>
-        reject(
-          request.error
-        );
+      request.onerror =
+        () =>
+          reject(
+            request.error
+          );
     }
   );
 }
+
 
 
 async function saveToDB(
@@ -1822,6 +2217,7 @@ async function saveToDB(
   const db =
     await openDB();
 
+
   return new Promise(
     (resolve, reject) => {
 
@@ -1831,6 +2227,7 @@ async function saveToDB(
           'readwrite'
         );
 
+
       tx
         .objectStore(STORE_NAME)
         .put(
@@ -1838,30 +2235,36 @@ async function saveToDB(
           key
         );
 
-      tx.oncomplete = () => {
 
-        db.close();
+      tx.oncomplete =
+        () => {
 
-        resolve();
-      };
+          db.close();
 
-      tx.onerror = () => {
+          resolve();
+        };
 
-        db.close();
 
-        reject(
-          tx.error
-        );
-      };
+      tx.onerror =
+        () => {
+
+          db.close();
+
+          reject(
+            tx.error
+          );
+        };
     }
   );
 }
+
 
 
 async function getFromDB(key) {
 
   const db =
     await openDB();
+
 
   return new Promise(
     (resolve, reject) => {
@@ -1872,31 +2275,37 @@ async function getFromDB(key) {
           'readonly'
         );
 
+
       const request =
         tx
           .objectStore(STORE_NAME)
           .get(key);
 
-      request.onsuccess = () => {
 
-        db.close();
+      request.onsuccess =
+        () => {
 
-        resolve(
-          request.result
-        );
-      };
+          db.close();
 
-      request.onerror = () => {
+          resolve(
+            request.result
+          );
+        };
 
-        db.close();
 
-        reject(
-          request.error
-        );
-      };
+      request.onerror =
+        () => {
+
+          db.close();
+
+          reject(
+            request.error
+          );
+        };
     }
   );
 }
+
 
 
 /* =====================================================
@@ -1908,9 +2317,14 @@ function arrayBufferToBase64(buffer) {
   const bytes =
     new Uint8Array(buffer);
 
-  let binary = '';
 
-  const chunk = 0x8000;
+  let binary =
+    '';
+
+
+  const chunk =
+    0x8000;
+
 
   for (
     let i = 0;
@@ -1927,8 +2341,10 @@ function arrayBufferToBase64(buffer) {
       );
   }
 
+
   return btoa(binary);
 }
+
 
 
 function base64ToArrayBuffer(base64) {
@@ -1936,10 +2352,12 @@ function base64ToArrayBuffer(base64) {
   const binary =
     atob(base64);
 
+
   const bytes =
     new Uint8Array(
       binary.length
     );
+
 
   for (
     let i = 0;
@@ -1951,8 +2369,10 @@ function base64ToArrayBuffer(base64) {
       binary.charCodeAt(i);
   }
 
+
   return bytes.buffer;
 }
+
 
 
 /* =====================================================
@@ -1972,10 +2392,12 @@ async function saveState(
     return false;
   }
 
+
   try {
 
     const saveData =
       gameboy.getCartridgeSaveRam();
+
 
     if (
       !saveData ||
@@ -1989,13 +2411,16 @@ async function saveState(
         );
       }
 
+
       return false;
     }
+
 
     await saveToDB(
       'save_' + currentRomName,
       saveData
     );
+
 
     try {
 
@@ -2004,6 +2429,7 @@ async function saveState(
           saveData
         );
 
+
       localStorage.setItem(
         'gb_save_' + currentRomName,
         base64
@@ -2011,12 +2437,14 @@ async function saveState(
 
     } catch {}
 
+
     if (!isAuto) {
 
       showStatus(
         'PROGRESSO DO JOGO SALVO'
       );
     }
+
 
     return true;
 
@@ -2029,9 +2457,11 @@ async function saveState(
       );
     }
 
+
     return false;
   }
 }
+
 
 
 /* =====================================================
@@ -2051,12 +2481,14 @@ async function loadSaveState(
     return false;
   }
 
+
   try {
 
     let saveData =
       await getFromDB(
         'save_' + currentRomName
       );
+
 
     if (!saveData) {
 
@@ -2067,6 +2499,7 @@ async function loadSaveState(
             'gb_save_' +
             currentRomName
           );
+
 
         if (raw) {
 
@@ -2079,11 +2512,13 @@ async function loadSaveState(
       } catch {}
     }
 
+
     if (saveData) {
 
       gameboy.setCartridgeSaveRam(
         saveData
       );
+
 
       if (!isAuto) {
 
@@ -2091,6 +2526,7 @@ async function loadSaveState(
           'SAVE DO JOGO RESTAURADO'
         );
       }
+
 
       return true;
     }
@@ -2105,8 +2541,10 @@ async function loadSaveState(
     }
   }
 
+
   return false;
 }
+
 
 
 /* =====================================================
@@ -2123,6 +2561,7 @@ function setupSramAutoSave() {
     return;
   }
 
+
   try {
 
     gameboy.setOnWriteToCartridgeRam(
@@ -2131,6 +2570,7 @@ function setupSramAutoSave() {
         clearTimeout(
           sramSaveTimer
         );
+
 
         sramSaveTimer =
           setTimeout(
@@ -2148,9 +2588,11 @@ function setupSramAutoSave() {
 }
 
 
+
 function startAutosave() {
 
   stopAutosave();
+
 
   autosaveTimer =
     setInterval(
@@ -2164,6 +2606,7 @@ function startAutosave() {
 }
 
 
+
 function stopAutosave() {
 
   if (autosaveTimer) {
@@ -2175,6 +2618,8 @@ function stopAutosave() {
     autosaveTimer = null;
   }
 }
+
+
 
 /* =====================================================
    CARREGAR ROM
@@ -2194,9 +2639,11 @@ async function loadROM(
     return;
   }
 
+
   try {
 
     stopAutosave();
+
 
     if (
       pendingFrameId !== null
@@ -2209,14 +2656,22 @@ async function loadROM(
       pendingFrameId = null;
     }
 
-    emulatorPoweredOn = false;
 
-    updatePowerVisual(false);
+    emulatorPoweredOn =
+      false;
+
+
+    updatePowerVisual(
+      false
+    );
+
 
     paintPoweredOffScreen();
 
+
     currentRomBuffer =
       buffer;
+
 
     currentRomName =
       name.replace(
@@ -2224,37 +2679,42 @@ async function loadROM(
         '_'
       );
 
+
     await saveToDB(
       'active_rom_buffer',
       buffer
     );
+
 
     await saveToDB(
       'active_rom_name',
       currentRomName
     );
 
+
     gameboy.loadGame(
       buffer
     );
 
-    /*
-      =================================================
-      ATIVAR ÁUDIO DO CORE
-      =================================================
-    */
+
     if (
       gameboy.apu &&
       typeof gameboy.apu.enableSound === 'function'
     ) {
+
       try {
+
         gameboy.apu.enableSound();
+
       } catch {}
     }
 
+
     setupSramAutoSave();
 
+
     await loadSaveState(true);
+
 
     showStatus(
       'ROM PRONTA • APERTE ON'
@@ -2269,26 +2729,33 @@ async function loadROM(
 }
 
 
+
 /* =====================================================
    INPUT DE ROM
-   ================================================= */
+   ===================================================== */
 
 const fileInput =
   document.createElement(
     'input'
   );
 
-fileInput.type = 'file';
+
+fileInput.type =
+  'file';
+
 
 fileInput.accept =
   '.gb,.gbc,application/octet-stream';
 
+
 fileInput.style.display =
   'none';
+
 
 document.body.appendChild(
   fileInput
 );
+
 
 
 document
@@ -2297,17 +2764,12 @@ document
     'click',
     () => {
 
-      /*
-        Uma interação do usuário
-        também é uma boa oportunidade
-        para preparar o áudio.
-      */
-
       unlockAudio();
 
       fileInput.click();
     }
   );
+
 
 
 fileInput.addEventListener(
@@ -2317,14 +2779,18 @@ fileInput.addEventListener(
     const file =
       fileInput.files?.[0];
 
+
     if (!file) {
+
       return;
     }
+
 
     try {
 
       const buffer =
         await file.arrayBuffer();
+
 
       await loadROM(
         buffer,
@@ -2338,9 +2804,12 @@ fileInput.addEventListener(
       );
     }
 
-    fileInput.value = '';
+
+    fileInput.value =
+      '';
   }
 );
+
 
 
 /* =====================================================
@@ -2365,6 +2834,7 @@ document
         return;
       }
 
+
       if (!gameboy) {
 
         showStatus(
@@ -2373,6 +2843,7 @@ document
 
         return;
       }
+
 
       if (!emulatorPoweredOn) {
 
@@ -2383,13 +2854,17 @@ document
         return;
       }
 
+
       unlockAudio();
 
+
       await saveState(true);
+
 
       try {
 
         stopAutosave();
+
 
         if (
           pendingFrameId !== null
@@ -2402,14 +2877,11 @@ document
           pendingFrameId = null;
         }
 
+
         gameboy.loadGame(
           currentRomBuffer
         );
 
-        /*
-          Reativa o áudio do core
-          depois de carregar a ROM.
-        */
 
         if (
           gameboy.apu &&
@@ -2420,17 +2892,24 @@ document
 
         }
 
+
         setupSramAutoSave();
+
 
         await loadSaveState(true);
 
+
         if (!emulatorPoweredOn) {
+
           return;
         }
 
+
         gameboy.run();
 
+
         startAutosave();
+
 
         showStatus(
           'JOGO REINICIADO'
@@ -2446,6 +2925,7 @@ document
   );
 
 
+
 /* =====================================================
    BOTÃO POWER
    ===================================================== */
@@ -2454,27 +2934,32 @@ powerButton.addEventListener(
   'click',
   async () => {
 
-    /*
-      =================================================
-      DESLIGAR
-      =================================================
-    */
+
+    /* =================================================
+       DESLIGAR
+       ================================================= */
 
     if (emulatorPoweredOn) {
 
       bootAudio.pause();
 
-      bootAudio.currentTime = 0;
+      bootAudio.currentTime =
+        0;
+
 
       if (
         gameboy &&
         gameboy.apu &&
         typeof gameboy.apu.disableSound === 'function'
       ) {
+
         try {
+
           gameboy.apu.disableSound();
+
         } catch {}
       }
+
 
       try {
 
@@ -2482,7 +2967,10 @@ powerButton.addEventListener(
 
       } catch {}
 
-      emulatorPoweredOn = false;
+
+      emulatorPoweredOn =
+        false;
+
 
       if (
         pendingFrameId !== null
@@ -2492,63 +2980,65 @@ powerButton.addEventListener(
           pendingFrameId
         );
 
-        pendingFrameId = null;
+        pendingFrameId =
+          null;
       }
+
 
       stopAutosave();
 
+
       paintPoweredOffScreen();
 
-      updatePowerVisual(false);
+
+      updatePowerVisual(
+        false
+      );
+
 
       showStatus(
         'EMULADOR DESLIGADO'
       );
 
+
       return;
     }
 
 
-    /*
-      =================================================
-      LIGAR
-      =================================================
-    */
 
-    emulatorPoweredOn = true;
+    /* =================================================
+       LIGAR
+       ================================================= */
 
-    updatePowerVisual(true);
+    emulatorPoweredOn =
+      true;
+
+
+    updatePowerVisual(
+      true
+    );
+
 
     screenWrap.classList.add(
       'booting'
     );
 
+
     screenWrap.classList.remove(
       'powered-off'
     );
 
+
     paintBootScreen();
 
 
-    /*
-      =================================================
-      ÁUDIO DE BOOT
-      =================================================
-
-      O timmmm continua sendo disparado
-      diretamente pelo clique do botão ON.
-    */
-
     playGameBoyBootSound();
+
 
     showStatus(
       'NINTENDO • by DougX'
     );
 
-
-    /*
-      Tela de boot por 3 segundos.
-    */
 
     await new Promise(
       resolve =>
@@ -2560,17 +3050,16 @@ powerButton.addEventListener(
 
 
     if (!emulatorPoweredOn) {
+
       return;
     }
+
 
     screenWrap.classList.remove(
       'booting'
     );
 
 
-    /*
-      Sem ROM.
-    */
 
     if (!currentRomBuffer) {
 
@@ -2582,15 +3071,11 @@ powerButton.addEventListener(
     }
 
 
-    /*
-      =================================================
-      INICIAR ROM
-      =================================================
-    */
 
     try {
 
       stopAutosave();
+
 
       if (
         pendingFrameId !== null
@@ -2603,31 +3088,43 @@ powerButton.addEventListener(
         pendingFrameId = null;
       }
 
+
       gameboy.loadGame(
         currentRomBuffer
       );
+
 
       if (
         gameboy.apu &&
         typeof gameboy.apu.enableSound === 'function'
       ) {
+
         try {
+
           gameboy.apu.enableSound();
+
         } catch {}
       }
 
+
       setupSramAutoSave();
+
 
       const restored =
         await loadSaveState(true);
 
+
       if (!emulatorPoweredOn) {
+
         return;
       }
 
+
       gameboy.run();
 
+
       startAutosave();
+
 
       if (restored) {
 
@@ -2650,13 +3147,20 @@ powerButton.addEventListener(
 
     } catch {
 
-      emulatorPoweredOn = false;
+      emulatorPoweredOn =
+        false;
+
 
       bootAudio.pause();
 
-      updatePowerVisual(false);
+
+      updatePowerVisual(
+        false
+      );
+
 
       paintPoweredOffScreen();
+
 
       showError(
         'NÃO FOI POSSÍVEL INICIAR'
@@ -2664,6 +3168,7 @@ powerButton.addEventListener(
     }
   }
 );
+
 
 
 /* =====================================================
@@ -2689,13 +3194,16 @@ const keyMap = {
 };
 
 
+
 window.addEventListener(
   'keydown',
   event => {
 
     if (!keyMap[event.key]) {
+
       return;
     }
+
 
     event.preventDefault();
 
@@ -2704,6 +3212,7 @@ window.addEventListener(
     passive: false
   }
 );
+
 
 
 window.addEventListener(
@@ -2711,8 +3220,10 @@ window.addEventListener(
   event => {
 
     if (!keyMap[event.key]) {
+
       return;
     }
+
 
     event.preventDefault();
 
@@ -2721,6 +3232,7 @@ window.addEventListener(
     passive: false
   }
 );
+
 
 
 /* =====================================================
@@ -2742,6 +3254,7 @@ const touchInputMap = {
 };
 
 
+
 function setTouchInput(
   logical,
   pressed
@@ -2755,16 +3268,21 @@ function setTouchInput(
     return;
   }
 
+
   const property =
     touchInputMap[logical];
 
+
   if (!property) {
+
     return;
   }
+
 
   gameboy.input[property] =
     pressed;
 }
+
 
 
 document
@@ -2778,73 +3296,98 @@ document
 
 
 
-function press(event) {
+    function press(event) {
 
-  event.preventDefault();
-  event.stopPropagation();
+      event.preventDefault();
 
-  if (
-    ['up', 'down', 'left', 'right', 'a', 'b']
-      .includes(logical) &&
-    navigator.vibrate
-  ) {
-    navigator.vibrate(50);
-  }
+      event.stopPropagation();
 
-  button.classList.add(
-    'pressed'
-  );
 
-  setTouchInput(
-    logical,
-    true
-  );
-  if (
-  event.pointerId !== undefined &&
-  button.setPointerCapture
-) {
-  try {
-    button.setPointerCapture(
-      event.pointerId
-    );
-  } catch {}
-}
-}
+      if (
+        [
+          'up',
+          'down',
+          'left',
+          'right',
+          'a',
+          'b'
+        ].includes(logical) &&
+        navigator.vibrate
+      ) {
 
+        navigator.vibrate(50);
+      }
+
+
+      button.classList.add(
+        'pressed'
+      );
+
+
+      setTouchInput(
+        logical,
+        true
+      );
+
+
+      if (
+        event.pointerId !== undefined &&
+        button.setPointerCapture
+      ) {
+
+        try {
+
+          button.setPointerCapture(
+            event.pointerId
+          );
+
+        } catch {}
+      }
+    }
 
 
 
     function release(event) {
 
       if (event) {
+
         event.preventDefault();
+
         event.stopPropagation();
       }
+
 
       button.classList.remove(
         'pressed'
       );
 
+
       setTouchInput(
         logical,
         false
       );
+
+
       if (
-  event &&
-  event.pointerId !== undefined &&
-  button.hasPointerCapture &&
-  button.hasPointerCapture(
-    event.pointerId
-  ) &&
-  button.releasePointerCapture
-) {
-  try {
-    button.releasePointerCapture(
-      event.pointerId
-    );
-  } catch {}
-}
+        event &&
+        event.pointerId !== undefined &&
+        button.hasPointerCapture &&
+        button.hasPointerCapture(
+          event.pointerId
+        ) &&
+        button.releasePointerCapture
+      ) {
+
+        try {
+
+          button.releasePointerCapture(
+            event.pointerId
+          );
+
+        } catch {}
+      }
     }
+
 
 
     button.addEventListener(
@@ -2855,6 +3398,7 @@ function press(event) {
       }
     );
 
+
     button.addEventListener(
       'pointerup',
       release,
@@ -2863,6 +3407,7 @@ function press(event) {
       }
     );
 
+
     button.addEventListener(
       'pointercancel',
       release,
@@ -2870,6 +3415,7 @@ function press(event) {
         passive: false
       }
     );
+
 
     button.addEventListener(
       'lostpointercapture',
@@ -2880,6 +3426,7 @@ function press(event) {
     );
 
   });
+
 
 
 function releaseEverything() {
@@ -2893,14 +3440,17 @@ function releaseEverything() {
       const logical =
         button.dataset.key;
 
+
       button.classList.remove(
         'pressed'
       );
+
 
       setTouchInput(
         logical,
         false
       );
+
     });
 
 
@@ -2936,33 +3486,43 @@ function releaseEverything() {
 }
 
 
+
 window.addEventListener(
   'blur',
   releaseEverything
 );
 
 
+
 document.addEventListener(
   'visibilitychange',
   () => {
+
     if (
       document.visibilityState !==
       'visible'
     ) {
+
       releaseEverything();
+
 
       if (
         gameboy &&
         gameboy.apu &&
         typeof gameboy.apu.disableSound === 'function'
       ) {
+
         try {
+
           gameboy.apu.disableSound();
+
         } catch {}
       }
 
+
       return;
     }
+
 
     if (
       emulatorPoweredOn &&
@@ -2970,12 +3530,17 @@ document.addEventListener(
       gameboy.apu &&
       typeof gameboy.apu.enableSound === 'function'
     ) {
+
       try {
+
         gameboy.apu.enableSound();
+
       } catch {}
     }
+
   }
 );
+
 
 
 /* =====================================================
@@ -2987,35 +3552,42 @@ const editor =
     'editor'
   );
 
+
 const app =
   document.getElementById(
     'app'
   );
+
 
 const btnEdit =
   document.getElementById(
     'btnEdit'
   );
 
+
 const doneEdit =
   document.getElementById(
     'doneEdit'
   );
+
 
 const resetControls =
   document.getElementById(
     'resetControls'
   );
 
+
 const menuDrawer =
   document.getElementById(
     'menuDrawer'
   );
 
+
 const menuToggle =
   document.getElementById(
     'menuToggle'
   );
+
 
 
 menuToggle.addEventListener(
@@ -3027,10 +3599,12 @@ menuToggle.addEventListener(
         'open'
       );
 
+
     menuToggle.setAttribute(
       'aria-expanded',
       String(isOpen)
     );
+
 
     menuToggle.setAttribute(
       'aria-label',
@@ -3042,20 +3616,24 @@ menuToggle.addEventListener(
 );
 
 
+
 const dpadRange =
   document.getElementById(
     'dpadRange'
   );
+
 
 const bRange =
   document.getElementById(
     'bRange'
   );
 
+
 const aRange =
   document.getElementById(
     'aRange'
   );
+
 
 const smallRange =
   document.getElementById(
@@ -3063,20 +3641,24 @@ const smallRange =
   );
 
 
+
 const dpadScaleRange =
   document.getElementById(
     'dpadScaleRange'
   );
+
 
 const bScaleRange =
   document.getElementById(
     'bScaleRange'
   );
 
+
 const aScaleRange =
   document.getElementById(
     'aScaleRange'
   );
+
 
 const smallScaleRange =
   document.getElementById(
@@ -3084,20 +3666,24 @@ const smallScaleRange =
   );
 
 
+
 const dpadValue =
   document.getElementById(
     'dpadValue'
   );
+
 
 const bValue =
   document.getElementById(
     'bValue'
   );
 
+
 const aValue =
   document.getElementById(
     'aValue'
   );
+
 
 const smallValue =
   document.getElementById(
@@ -3105,20 +3691,24 @@ const smallValue =
   );
 
 
+
 const dpadScaleValue =
   document.getElementById(
     'dpadScaleValue'
   );
+
 
 const bScaleValue =
   document.getElementById(
     'bScaleValue'
   );
 
+
 const aScaleValue =
   document.getElementById(
     'aScaleValue'
   );
+
 
 const smallScaleValue =
   document.getElementById(
@@ -3126,35 +3716,42 @@ const smallScaleValue =
   );
 
 
+
 const grpDpad =
   document.getElementById(
     'grpDpad'
   );
+
 
 const grpB =
   document.getElementById(
     'grpB'
   );
 
+
 const grpA =
   document.getElementById(
     'grpA'
   );
+
 
 const grpSmall =
   document.getElementById(
     'grpSmall'
   );
 
+
 const grpSelect =
   document.getElementById(
     'grpSelect'
   );
 
+
 const grpStart =
   document.getElementById(
     'grpStart'
   );
+
 
 
 /* =====================================================
@@ -3189,6 +3786,7 @@ const defaultLayout = {
 };
 
 
+
 /* =====================================================
    APLICAR LAYOUT
    ===================================================== */
@@ -3198,8 +3796,10 @@ function applyLayout(layout) {
   const d =
     Number(layout.dpad) || 0;
 
+
   const dY =
     Number(layout.dpadY) || 0;
+
 
   const dScale =
     Number(layout.dpadScale) || 1;
@@ -3208,8 +3808,10 @@ function applyLayout(layout) {
   const b =
     Number(layout.b) || 0;
 
+
   const bY =
     Number(layout.bY) || 0;
+
 
   const bScale =
     Number(layout.bScale) || 1;
@@ -3218,8 +3820,10 @@ function applyLayout(layout) {
   const a =
     Number(layout.a) || 0;
 
+
   const aY =
     Number(layout.aY) || 0;
+
 
   const aScale =
     Number(layout.aScale) || 1;
@@ -3228,8 +3832,10 @@ function applyLayout(layout) {
   const s =
     Number(layout.small) || 0;
 
+
   const sY =
     Number(layout.smallY) || 0;
+
 
   const sScale =
     Number(layout.smallScale) || 1;
@@ -3238,8 +3844,10 @@ function applyLayout(layout) {
   const selectX =
     Number(layout.selectX) || 0;
 
+
   const selectY =
     Number(layout.selectY) || 0;
+
 
   const selectScale =
     Number(layout.selectScale) || 1;
@@ -3248,11 +3856,14 @@ function applyLayout(layout) {
   const startX =
     Number(layout.startX) || 0;
 
+
   const startY =
     Number(layout.startY) || 0;
 
+
   const startScale =
     Number(layout.startScale) || 1;
+
 
 
   grpDpad.style.transform =
@@ -3279,22 +3890,39 @@ function applyLayout(layout) {
     `translate(${startX}px, ${startY}px) rotate(-26deg) scale(${startScale})`;
 
 
-  dpadRange.value = d;
 
-  bRange.value = b;
-
-  aRange.value = a;
-
-  smallRange.value = s;
+  dpadRange.value =
+    d;
 
 
-  dpadValue.textContent = d;
+  bRange.value =
+    b;
 
-  bValue.textContent = b;
 
-  aValue.textContent = a;
+  aRange.value =
+    a;
 
-  smallValue.textContent = s;
+
+  smallRange.value =
+    s;
+
+
+
+  dpadValue.textContent =
+    d;
+
+
+  bValue.textContent =
+    b;
+
+
+  aValue.textContent =
+    a;
+
+
+  smallValue.textContent =
+    s;
+
 
 
   dpadScaleRange.value =
@@ -3302,15 +3930,18 @@ function applyLayout(layout) {
       dScale * 100
     );
 
+
   bScaleRange.value =
     Math.round(
       bScale * 100
     );
 
+
   aScaleRange.value =
     Math.round(
       aScale * 100
     );
+
 
   smallScaleRange.value =
     Math.round(
@@ -3318,48 +3949,89 @@ function applyLayout(layout) {
     );
 
 
+
   dpadScaleValue.textContent =
     `${Math.round(dScale * 100)}%`;
+
 
   bScaleValue.textContent =
     `${Math.round(bScale * 100)}%`;
 
+
   aScaleValue.textContent =
     `${Math.round(aScale * 100)}%`;
+
 
   smallScaleValue.textContent =
     `${Math.round(sScale * 100)}%`;
 
 
-  grpDpad.dataset.y = dY;
-  grpDpad.dataset.scale = dScale;
-  grpDpad.dataset.x = d;
+
+  grpDpad.dataset.y =
+    dY;
+
+  grpDpad.dataset.scale =
+    dScale;
+
+  grpDpad.dataset.x =
+    d;
 
 
-  grpB.dataset.y = bY;
-  grpB.dataset.scale = bScale;
-  grpB.dataset.x = b;
+
+  grpB.dataset.y =
+    bY;
+
+  grpB.dataset.scale =
+    bScale;
+
+  grpB.dataset.x =
+    b;
 
 
-  grpA.dataset.y = aY;
-  grpA.dataset.scale = aScale;
-  grpA.dataset.x = a;
+
+  grpA.dataset.y =
+    aY;
+
+  grpA.dataset.scale =
+    aScale;
+
+  grpA.dataset.x =
+    a;
 
 
-  grpSmall.dataset.y = sY;
-  grpSmall.dataset.scale = sScale;
-  grpSmall.dataset.x = s;
+
+  grpSmall.dataset.y =
+    sY;
+
+  grpSmall.dataset.scale =
+    sScale;
+
+  grpSmall.dataset.x =
+    s;
 
 
-  grpSelect.dataset.x = selectX;
-  grpSelect.dataset.y = selectY;
-  grpSelect.dataset.scale = selectScale;
+
+  grpSelect.dataset.x =
+    selectX;
+
+  grpSelect.dataset.y =
+    selectY;
+
+  grpSelect.dataset.scale =
+    selectScale;
 
 
-  grpStart.dataset.x = startX;
-  grpStart.dataset.y = startY;
-  grpStart.dataset.scale = startScale;
+
+  grpStart.dataset.x =
+    startX;
+
+  grpStart.dataset.y =
+    startY;
+
+  grpStart.dataset.scale =
+    startScale;
 }
+
 
 
 /* =====================================================
@@ -3382,6 +4054,7 @@ function getLayout() {
       ) / 100 || 1,
 
 
+
     b:
       Number(bRange.value),
 
@@ -3392,6 +4065,7 @@ function getLayout() {
       Number(
         bScaleRange.value
       ) / 100 || 1,
+
 
 
     a:
@@ -3406,6 +4080,7 @@ function getLayout() {
       ) / 100 || 1,
 
 
+
     small:
       Number(smallRange.value),
 
@@ -3416,6 +4091,7 @@ function getLayout() {
       Number(
         smallScaleRange.value
       ) / 100 || 1,
+
 
 
     selectX:
@@ -3430,6 +4106,7 @@ function getLayout() {
       ) || 1,
 
 
+
     startX:
       Number(grpStart.dataset.x) || 0,
 
@@ -3442,6 +4119,7 @@ function getLayout() {
       ) || 1
   };
 }
+
 
 
 /* =====================================================
@@ -3459,6 +4137,7 @@ function saveLayout() {
 }
 
 
+
 /* =====================================================
    CARREGAR LAYOUT
    ===================================================== */
@@ -3472,21 +4151,25 @@ function loadLayout() {
         'gb_controls_layout'
       );
 
+
     if (saved) {
 
       applyLayout(
         JSON.parse(saved)
       );
 
+
       return;
     }
 
   } catch {}
 
+
   applyLayout(
     defaultLayout
   );
 }
+
 
 
 /* =====================================================
@@ -3499,6 +4182,7 @@ function updateEditor() {
     getLayout()
   );
 }
+
 
 
 [
@@ -3518,7 +4202,9 @@ function updateEditor() {
     'input',
     updateEditor
   );
+
 });
+
 
 
 /* =====================================================
@@ -3555,6 +4241,7 @@ const draggableControls = [
 ];
 
 
+
 function clamp(
   value,
   minimum,
@@ -3571,10 +4258,12 @@ function clamp(
 }
 
 
+
 draggableControls.forEach(
   control => {
 
     let dragStart = null;
+
 
 
     control.element.addEventListener(
@@ -3589,6 +4278,7 @@ draggableControls.forEach(
 
           return;
         }
+
 
         event.preventDefault();
 
@@ -3622,8 +4312,10 @@ draggableControls.forEach(
         control.element.setPointerCapture(
           event.pointerId
         );
+
       }
     );
+
 
 
     control.element.addEventListener(
@@ -3631,6 +4323,7 @@ draggableControls.forEach(
       event => {
 
         if (!dragStart) {
+
           return;
         }
 
@@ -3659,13 +4352,17 @@ draggableControls.forEach(
 
         if (!dragStart.dragging) {
 
-          dragStart.dragging = true;
+          dragStart.dragging =
+            true;
+
 
           event.preventDefault();
+
 
           control.element.classList.remove(
             'pressed'
           );
+
 
           setTouchInput(
             control.element.dataset.key,
@@ -3713,8 +4410,10 @@ draggableControls.forEach(
 
 
         updateEditor();
+
       }
     );
+
 
 
     control.element.addEventListener(
@@ -3728,18 +4427,25 @@ draggableControls.forEach(
           saveLayout();
         }
 
-        dragStart = null;
+
+        dragStart =
+          null;
+
       }
     );
+
 
 
     control.element.addEventListener(
       'pointercancel',
       () => {
 
-        dragStart = null;
+        dragStart =
+          null;
+
       }
     );
+
 
 
     control.element.addEventListener(
@@ -3754,6 +4460,7 @@ draggableControls.forEach(
 
           return;
         }
+
 
         event.preventDefault();
 
@@ -3786,8 +4493,10 @@ draggableControls.forEach(
         passive: false
       }
     );
+
   }
 );
+
 
 
 /* =====================================================
@@ -3808,6 +4517,7 @@ btnEdit.addEventListener(
       'editing',
       editing
     );
+
 
     editor.classList.toggle(
       'open',
@@ -3836,8 +4546,10 @@ btnEdit.addEventListener(
         ? 'AJUSTES ATIVADOS'
         : 'AJUSTES DESATIVADOS'
     );
+
   }
 );
+
 
 
 /* =====================================================
@@ -3850,9 +4562,11 @@ doneEdit.addEventListener(
 
     saveLayout();
 
+
     app.classList.remove(
       'editing'
     );
+
 
     editor.classList.remove(
       'open'
@@ -3864,6 +4578,7 @@ doneEdit.addEventListener(
       'Ativar ajustes'
     );
 
+
     btnEdit.setAttribute(
       'title',
       'Ativar ajustes'
@@ -3873,8 +4588,10 @@ doneEdit.addEventListener(
     showStatus(
       'CONTROLES AJUSTADOS'
     );
+
   }
 );
+
 
 
 /* =====================================================
@@ -3889,9 +4606,12 @@ resetControls.addEventListener(
       defaultLayout
     );
 
+
     saveLayout();
+
   }
 );
+
 
 
 /* =====================================================
@@ -3913,6 +4633,7 @@ window.addEventListener(
         const saveData =
           gameboy.getCartridgeSaveRam();
 
+
         if (
           saveData &&
           saveData.byteLength
@@ -3922,6 +4643,7 @@ window.addEventListener(
             arrayBufferToBase64(
               saveData
             );
+
 
           localStorage.setItem(
             'gb_save_' +
@@ -3936,6 +4658,7 @@ window.addEventListener(
 );
 
 
+
 /* =====================================================
    INICIALIZAÇÃO
    ===================================================== */
@@ -3948,23 +4671,16 @@ async function init() {
       'CARREGANDO CORE...'
     );
 
+
     const { Gameboy } =
       await import(
         'https://esm.sh/gameboy-emulator@1.1.2'
       );
 
 
-    /*
-      Criamos o core normalmente.
-
-      Não substituímos AudioContext globalmente.
-
-      O áudio do nosso MP3 é independente
-      e utiliza HTMLAudioElement.
-    */
-
     gameboy =
       new Gameboy();
+
 
 
     /* =================================================
@@ -3977,6 +4693,7 @@ async function init() {
 
       const data =
         imageData.data;
+
 
       const palette = [
 
@@ -4000,8 +4717,10 @@ async function init() {
         const r =
           data[i];
 
+
         const g =
           data[i + 1];
+
 
         const b =
           data[i + 2];
@@ -4047,13 +4766,16 @@ async function init() {
         data[i] =
           shade[0];
 
+
         data[i + 1] =
           shade[1];
+
 
         data[i + 2] =
           shade[2];
       }
     }
+
 
 
     /* =================================================
@@ -4064,49 +4786,62 @@ async function init() {
       imageData => {
 
         if (!emulatorPoweredOn) {
+
           return;
         }
+
 
         applyDMGPalette(
           imageData
         );
+
 
         ctx.putImageData(
           imageData,
           0,
           0
         );
+
       }
     );
 
 
+
     /* =================================================
-       TECLADO DO EMULADOR
+       TECLADO
        ================================================= */
 
     gameboy.keyboardManager.left =
       'ArrowLeft';
 
+
     gameboy.keyboardManager.right =
       'ArrowRight';
+
 
     gameboy.keyboardManager.up =
       'ArrowUp';
 
+
     gameboy.keyboardManager.down =
       'ArrowDown';
+
 
     gameboy.keyboardManager.a =
       'KeyX';
 
+
     gameboy.keyboardManager.b =
       'KeyZ';
+
 
     gameboy.keyboardManager.start =
       'Enter';
 
+
     gameboy.keyboardManager.select =
       'ShiftLeft';
+
 
 
     /* =================================================
@@ -4114,6 +4849,7 @@ async function init() {
        ================================================= */
 
     loadLayout();
+
 
 
     /* =================================================
@@ -4124,6 +4860,7 @@ async function init() {
       await getFromDB(
         'active_rom_buffer'
       );
+
 
     const autoName =
       await getFromDB(
@@ -4139,8 +4876,10 @@ async function init() {
       currentRomBuffer =
         autoRom;
 
+
       currentRomName =
         autoName;
+
 
       showStatus(
         'SISTEMA DESLIGADO • ROM PRONTA'
@@ -4154,29 +4893,37 @@ async function init() {
     }
 
 
-    emulatorPoweredOn = false;
+    emulatorPoweredOn =
+      false;
+
 
     updatePowerVisual(
       false
     );
+
 
     paintPoweredOffScreen();
 
   } catch {
 
-    emulatorPoweredOn = false;
+    emulatorPoweredOn =
+      false;
+
 
     updatePowerVisual(
       false
     );
 
+
     paintPoweredOffScreen();
+
 
     showError(
       'NÃO FOI POSSÍVEL CARREGAR O EMULADOR'
     );
   }
 }
+
 
 
 /* =====================================================
@@ -4201,29 +4948,37 @@ async function prepareSprites() {
           await new Promise(
             resolve => {
 
-              let finished = false;
+              let finished =
+                false;
 
 
-              const finish = () => {
+              const finish =
+                () => {
 
-                if (finished) {
-                  return;
-                }
+                  if (finished) {
 
-                finished = true;
+                    return;
+                  }
 
-                image.removeEventListener(
-                  'load',
-                  finish
-                );
 
-                image.removeEventListener(
-                  'error',
-                  finish
-                );
+                  finished =
+                    true;
 
-                resolve();
-              };
+
+                  image.removeEventListener(
+                    'load',
+                    finish
+                  );
+
+
+                  image.removeEventListener(
+                    'error',
+                    finish
+                  );
+
+
+                  resolve();
+                };
 
 
               image.addEventListener(
@@ -4255,6 +5010,7 @@ async function prepareSprites() {
 
 
         if (!image.naturalWidth) {
+
           return;
         }
 
@@ -4266,8 +5022,10 @@ async function prepareSprites() {
               'canvas'
             );
 
+
           sourceCanvas.width =
             image.naturalWidth;
+
 
           sourceCanvas.height =
             image.naturalHeight;
@@ -4280,6 +5038,7 @@ async function prepareSprites() {
 
 
           if (!sourceContext) {
+
             return;
           }
 
@@ -4303,12 +5062,17 @@ async function prepareSprites() {
           let minX =
             sourceCanvas.width;
 
+
           let minY =
             sourceCanvas.height;
 
-          let maxX = -1;
 
-          let maxY = -1;
+          let maxX =
+            -1;
+
+
+          let maxY =
+            -1;
 
 
           for (
@@ -4336,10 +5100,12 @@ async function prepareSprites() {
                   index
                 ];
 
+
               const green =
                 sourceImage.data[
                   index + 1
                 ];
+
 
               const blue =
                 sourceImage.data[
@@ -4357,6 +5123,7 @@ async function prepareSprites() {
                   index + 3
                 ] = 0;
 
+
                 continue;
               }
 
@@ -4367,17 +5134,20 @@ async function prepareSprites() {
                   x
                 );
 
+
               minY =
                 Math.min(
                   minY,
                   y
                 );
 
+
               maxX =
                 Math.max(
                   maxX,
                   x
                 );
+
 
               maxY =
                 Math.max(
@@ -4389,6 +5159,7 @@ async function prepareSprites() {
 
 
           if (maxX < 0) {
+
             return;
           }
 
@@ -4409,6 +5180,7 @@ async function prepareSprites() {
           croppedCanvas.width =
             maxX - minX + 1;
 
+
           croppedCanvas.height =
             maxY - minY + 1;
 
@@ -4420,6 +5192,7 @@ async function prepareSprites() {
 
 
           if (!croppedContext) {
+
             return;
           }
 
@@ -4458,19 +5231,25 @@ async function prepareSprites() {
           }
 
         } catch {}
+
       }
     )
   );
 }
 
 
+
 /* =====================================================
    ESTADO INICIAL
    ===================================================== */
 
-updatePowerVisual(false);
+updatePowerVisual(
+  false
+);
+
 
 paintPoweredOffScreen();
+
 
 
 /* =====================================================
