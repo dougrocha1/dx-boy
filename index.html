@@ -870,7 +870,7 @@ button {
 
   position: absolute !important;
 
-  top: 14px !important;
+  top: 17px !important;
 
   left: 43px !important;
 
@@ -973,7 +973,7 @@ button {
 
   height: 20px;
 
-  top: 14px !important;
+  top: 17px !important;
 
   right: 43px !important;
 
@@ -1037,6 +1037,166 @@ button {
 
 
 
+/* =====================================================
+   AJUDA
+   ===================================================== */
+
+#helpContainer {
+
+  display: none;
+
+  position: absolute !important;
+
+  top: 45px !important;
+
+  left: 50% !important;
+
+  width: min(300px, calc(100% - 24px)) !important;
+
+  transform: translateX(-50%);
+
+  z-index: 99999 !important;
+}
+
+#helpContainer.open {
+
+  display: block !important;
+}
+
+#helpPanel {
+
+  position: static !important;
+
+  width: 100% !important;
+
+  background: #bcbaba;
+
+  color: #292b28;
+
+  border-radius: 12px;
+
+  padding: 12px;
+
+  box-shadow: 0 10px 25px #0008;
+
+  font-size: 14px;
+
+  line-height: 1.6;
+
+  text-align: left;
+
+}
+
+#helpPanel h3 {
+
+  margin: 0 0 8px;
+
+  font-size: 18px;
+
+  color: #07521b;
+
+  font-weight: 800;
+
+  text-align: center;
+
+  letter-spacing: 0.7px;
+
+}
+
+#helpPanel p {
+
+  margin: 5px 0;
+
+  font-weight: 600;
+
+  font-size: 16px;
+
+  color: #000000;
+
+  letter-spacing: 0.5px;
+
+}
+
+#helpPanel strong {
+
+  color: #092b87;
+  font-weight: 800;
+
+}
+
+.help-mobile {
+
+  display: none;
+
+}
+
+#closeHelp {
+
+  display: block;
+
+  width: 100%;
+
+  margin-top: 8px;
+
+  padding: 6px;
+
+  border-radius: 8px;
+
+  border: 1px solid #000;
+
+  background: #971e1e;
+
+  color: #fff;
+
+  font-size: 10px;
+
+  font-weight: 700;
+
+}
+
+#closeMenu {
+
+  flex: 1 1 100%;
+
+  width: 100%;
+
+  min-height: 24px;
+
+  margin-top: 4px;
+
+  padding: 4px 10px;
+
+  border: 1px solid #000;
+
+  border-radius: 8px;
+
+  background: #30342f;
+
+  color: #fff;
+
+  font-size: 13px;
+
+  font-weight: 800;
+
+  line-height: 1;
+
+}
+
+#closeMenu:active,
+#closeHelp:active {
+
+  transform: translateY(1px);
+
+}
+#helpPanel .help-pc {
+  display: block;
+}
+
+#helpPanel .help-mobile {
+  display: block;
+}
+
+
 .menu {
 
   position: absolute !important;
@@ -1090,7 +1250,7 @@ button {
 
 #app > .menuDrawer.open .menu {
 
-  max-height: 250px !important;
+  max-height: 320px !important;
 
   opacity: 1 !important;
 
@@ -1590,10 +1750,78 @@ button {
         ADJUST CONTROLS
       </button>
 
+
+
+      <button
+        id="btnHelp"
+        type="button"
+        aria-label="Abrir ajuda"
+      >
+        ? AJUDA
+      </button>
+
+
+      <button
+        id="closeMenu"
+        type="button"
+        aria-label="Fechar menu"
+      >
+        ✕
+      </button>
+
     </div>
 
   </div>
 
+
+
+  <div id="helpContainer">
+
+    <div
+      id="helpPanel"
+      role="dialog"
+      aria-modal="false"
+      aria-labelledby="helpTitle"
+    >
+
+      <h3 id="helpTitle">HELP DX EMULATOR GB</h3>
+
+      <div class="help-pc">
+
+        <p><strong>PC KEYBOARD</strong></p>
+
+        <p>PC arrow keys = DPAD </p>
+
+        <p>X = A &nbsp; • &nbsp; Z = B</p>
+
+        <p>Enter = START &nbsp; • &nbsp; Shift = SELECT</p>
+
+      </div>
+
+      <div class="help-mobile">
+
+        <p><strong>MOBILE CONTROLS</strong></p>
+
+        <p>The buttons on the screen are the same as the console controls.</p>
+
+        <p><strong>ADJUST CONTROLS</strong>
+          
+         <p> Allows you to move and resize the DPAD, buttons A and B, and SELECT / START.</p>
+
+        <p>Use the adjustment controls to position and resize the buttons to your preference.</p>
+
+      </div>
+
+    </div>
+
+    <button
+      id="closeHelp"
+      type="button"
+    >
+      ✕ FECHAR
+    </button>
+
+  </div>
 
 
   <div id="editor">
@@ -3590,6 +3818,57 @@ const menuToggle =
 
 
 
+const helpPanel =
+  document.getElementById(
+    'helpPanel'
+  );
+
+
+const helpContainer =
+  document.getElementById(
+    'helpContainer'
+  );
+
+
+const btnHelp =
+  document.getElementById(
+    'btnHelp'
+  );
+
+
+const closeHelp =
+  document.getElementById(
+    'closeHelp'
+  );
+
+
+function updateHelpMode() {
+
+  const touchDevice =
+    window.matchMedia('(hover: none) and (pointer: coarse)').matches ||
+    navigator.maxTouchPoints > 0;
+
+  helpPanel.classList.toggle(
+    'touch-mode',
+    touchDevice
+  );
+}
+
+updateHelpMode();
+window.addEventListener(
+  'resize',
+  updateHelpMode
+);
+
+
+
+const closeMenu =
+  document.getElementById(
+    'closeMenu'
+  );
+
+
+
 menuToggle.addEventListener(
   'click',
   () => {
@@ -3612,6 +3891,86 @@ menuToggle.addEventListener(
         ? 'Fechar menu'
         : 'Abrir menu'
     );
+  }
+);
+
+
+
+closeMenu.addEventListener(
+  'click',
+  () => {
+
+    menuDrawer.classList.remove(
+      'open'
+    );
+
+    menuToggle.setAttribute(
+      'aria-expanded',
+      'false'
+    );
+
+    menuToggle.setAttribute(
+      'aria-label',
+      'Abrir menu'
+    );
+  }
+);
+
+
+btnHelp.addEventListener(
+  'click',
+  event => {
+
+    event.preventDefault();
+    event.stopPropagation();
+
+    helpContainer.classList.add(
+      'open'
+    );
+
+    menuDrawer.classList.remove(
+      'open'
+    );
+
+    menuToggle.setAttribute(
+      'aria-expanded',
+      'false'
+    );
+
+    menuToggle.setAttribute(
+      'aria-label',
+      'Abrir menu'
+    );
+  }
+);
+
+
+
+closeHelp.addEventListener(
+  'click',
+  () => {
+
+    helpContainer.classList.remove(
+      'open'
+    );
+  }
+);
+
+
+
+document.addEventListener(
+  'keydown',
+  event => {
+
+    if (
+      event.key === 'Escape' &&
+      helpContainer.classList.contains('open')
+    ) {
+
+      helpContainer.classList.remove(
+        'open'
+      );
+    }
   }
 );
 
