@@ -649,53 +649,32 @@ canvas {
 
 
 .v {
-
   width: 37px;
-
   height: 37px;
-
   left: 36px;
 }
 
-
-
 .h {
-
   width: 37px;
-
   height: 37px;
-
   top: 36px;
 }
 
-
-
 .v[data-key="up"] {
-
   top: 0;
 }
 
-
-
 .v[data-key="down"] {
-
   top: 73px;
 }
 
-
-
 .h[data-key="left"] {
-
   left: 0;
 }
 
-
-
 .h[data-key="right"] {
-
   left: 73px;
 }
-
 
 
 .hub {
@@ -2653,7 +2632,7 @@ async function saveState(
       if (!isAuto) {
 
         showStatus(
-          'ESTE JOGO NÃO POSSUI SAVE SRAM'
+          'this game does not support saving'
         );
       }
 
@@ -2687,7 +2666,7 @@ async function saveState(
     if (!isAuto) {
 
       showStatus(
-        'PROGRESSO DO JOGO SALVO'
+        'GAME PROGRESS SAVED'
       );
     }
 
@@ -2699,7 +2678,7 @@ async function saveState(
     if (!isAuto) {
 
       showError(
-        'NÃO FOI POSSÍVEL SALVAR'
+        'FAILED TO SAVE GAME PROGRESS'
       );
     }
 
@@ -2879,7 +2858,7 @@ async function loadROM(
   if (!gameboy) {
 
     showError(
-      'EMULADOR NÃO INICIALIZADO'
+      'emulator not initialized'
     );
 
     return;
