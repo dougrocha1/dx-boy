@@ -4317,11 +4317,20 @@ function detectGamepadMapping() {
 
   for (const gamepad of gamepads) {
 
-    if (gamepad && gamepad.connected) {
-      activeGamepad = gamepad;
-      break;
-    }
+  if (!gamepad || !gamepad.connected) {
+    continue;
   }
+
+  const id =
+    String(gamepad.id || '').toLowerCase();
+
+  if (id.includes('consumer control')) {
+    continue;
+  }
+
+  activeGamepad = gamepad;
+  break;
+}
 
   if (!activeGamepad) {
     requestAnimationFrame(detectGamepadMapping);
@@ -4528,11 +4537,20 @@ function gamepadControlLoop() {
 
   for (const gamepad of gamepads) {
 
-    if (gamepad && gamepad.connected) {
-      activeGamepad = gamepad;
-      break;
-    }
+  if (!gamepad || !gamepad.connected) {
+    continue;
   }
+
+  const id =
+    String(gamepad.id || '').toLowerCase();
+
+  if (id.includes('consumer control')) {
+    continue;
+  }
+
+  activeGamepad = gamepad;
+  break;
+}
 
   if (activeGamepad) {
     applyGamepadInput(
