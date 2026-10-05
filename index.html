@@ -1516,6 +1516,135 @@ button {
   background: #9bbc0f;
 }
 
+#gamepadMapper {
+  display: none;
+
+  position: absolute;
+
+  top: 45px;
+
+  left: 50%;
+
+  width: min(
+    360px,
+    calc(100% - 24px)
+  );
+
+  transform: translateX(-50%);
+
+  padding: 14px;
+
+  background: #c3c5bf;
+
+  color: #292b28;
+
+  border-radius: 12px;
+
+  box-shadow:
+    0 10px 25px #0006;
+
+  z-index: 100000;
+
+  text-align: center;
+}
+
+#gamepadMapper.open {
+  display: block;
+}
+
+#gamepadMapper h3 {
+  margin:
+    0
+    0
+    8px;
+
+  font-size: 16px;
+
+  font-weight: 900;
+}
+
+#gamepadStatus {
+  margin:
+    0
+    0
+    12px;
+
+  font-size: 11px;
+
+  font-weight: 700;
+}
+
+.mapRow {
+  display: grid;
+
+  grid-template-columns:
+    70px
+    70px
+    1fr;
+
+  align-items: center;
+
+  gap: 8px;
+
+  margin-bottom: 8px;
+
+  padding: 6px;
+
+  background: #aaada7;
+
+  border-radius: 8px;
+
+  font-size: 12px;
+
+  font-weight: 900;
+}
+
+.mapRow button {
+  padding: 5px;
+
+  border-radius: 7px;
+
+  border: 1px solid #000;
+
+  background: #327f21;
+
+  color: #fff;
+
+  font-size: 11px;
+
+  font-weight: 900;
+}
+
+.mapRow span:last-child {
+  text-align: left;
+
+  font-size: 10px;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+}
+
+#closeGamepadMapper {
+  width: 100%;
+
+  margin-top: 8px;
+
+  padding: 7px;
+
+  border-radius: 8px;
+
+  border: 1px solid #000;
+
+  background: #30342f;
+
+  color: #fff;
+
+  font-size: 11px;
+
+  font-weight: 900;
+}
+
 </style>
 </head>
 
@@ -1745,6 +1874,16 @@ button {
       </button>
 
 
+<button
+  id="btnGamepad"
+  type="button"
+  aria-label="Map Bluetooth Controller"
+  title="Map your Bluetooth controller"
+>
+  MAP CONTROLLER
+</button>
+
+
 
       <button
         id="btnHelp"
@@ -1769,7 +1908,69 @@ button {
   </div>
 
 
-   
+   <div
+  id="gamepadMapper"
+  role="dialog"
+  aria-modal="false"
+  aria-labelledby="gamepadMapperTitle"
+>
+
+  <h3 id="gamepadMapperTitle">
+    CONTROLLER MAPPING
+  </h3>
+
+  <p id="gamepadStatus">
+    Connect your Bluetooth controller
+  </p>
+
+  <div class="mapRow">
+    <span>A</span>
+    <button type="button" data-map="a">
+      MAP
+    </button>
+    <span id="mapAValue">
+      —
+    </span>
+  </div>
+
+  <div class="mapRow">
+    <span>B</span>
+    <button type="button" data-map="b">
+      MAP
+    </button>
+    <span id="mapBValue">
+      —
+    </span>
+  </div>
+
+  <div class="mapRow">
+    <span>START</span>
+    <button type="button" data-map="start">
+      MAP
+    </button>
+    <span id="mapStartValue">
+      —
+    </span>
+  </div>
+
+  <div class="mapRow">
+    <span>SELECT</span>
+    <button type="button" data-map="select">
+      MAP
+    </button>
+    <span id="mapSelectValue">
+      —
+    </span>
+  </div>
+
+  <button
+    id="closeGamepadMapper"
+    type="button"
+  >
+    CLOSE
+  </button>
+
+</div>
 
 
   <div id="helpContainer">
@@ -3936,7 +4137,418 @@ btnHelp.addEventListener(
   }
 );
 
+const btnGamepad = document.getElementById('btnGamepad');
+const gamepadMapper = document.getElementById('gamepadMapper');
+const closeGamepadMapper = document.getElementById('closeGamepadMapper');
 
+if (btnGamepad && gamepadMapper) {
+  btnGamepad.addEventListener('click', () => {
+    gamepadMapper.classList.add('open');
+  });
+}
+
+if (closeGamepadMapper && gamepadMapper) {
+  closeGamepadMapper.addEventListener('click', () => {
+    gamepadMapper.classList.remove('open');
+  });
+}
+
+/* =====================================================
+   BLUETOOTH GAMEPAD • MAPEAMENTO
+   ===================================================== */
+
+const GAMEPAD_MAPPING_KEY = 'dougx_gamepad_mapping';
+
+const defaultGamepadMapping = {
+  a: null,
+  b: null,
+  start: null,
+  select: null
+};
+
+let gamepadMapping = loadGamepadMapping();
+let mappingTarget = null;
+let previousGamepadButtons = [];
+
+
+/* =====================================================
+   CARREGAR / SALVAR MAPEAMENTO
+   ===================================================== */
+
+function loadGamepadMapping() {
+  try {
+    const saved = localStorage.getItem(GAMEPAD_MAPPING_KEY);
+
+    if (!saved) {
+      return {
+        ...defaultGamepadMapping
+      };
+    }
+
+    return {
+      ...defaultGamepadMapping,
+      ...JSON.parse(saved)
+    };
+
+  } catch {
+    return {
+      ...defaultGamepadMapping
+    };
+  }
+}
+
+
+function saveGamepadMapping() {
+  localStorage.setItem(
+    GAMEPAD_MAPPING_KEY,
+    JSON.stringify(gamepadMapping)
+  );
+}
+
+
+/* =====================================================
+   ELEMENTOS
+   ===================================================== */
+
+const gamepadStatus =
+  document.getElementById('gamepadStatus');
+
+const mapButtons =
+  document.querySelectorAll('[data-map]');
+
+
+/* =====================================================
+   MOSTRAR MAPEAMENTO
+   ===================================================== */
+
+function updateGamepadMappingDisplay() {
+
+  const elements = {
+    a: document.getElementById('mapAValue'),
+    b: document.getElementById('mapBValue'),
+    start: document.getElementById('mapStartValue'),
+    select: document.getElementById('mapSelectValue')
+  };
+
+  Object.keys(elements).forEach(key => {
+
+    const element = elements[key];
+
+    if (!element) return;
+
+    const value = gamepadMapping[key];
+
+    element.textContent =
+      value === null
+        ? '—'
+        : `BUTTON ${value}`;
+  });
+}
+
+
+/* =====================================================
+   GAMEPAD CONECTADO
+   ===================================================== */
+
+window.addEventListener('gamepadconnected', event => {
+
+  const gamepad = event.gamepad;
+
+  if (gamepadStatus) {
+    gamepadStatus.textContent =
+      `CONTROLLER CONNECTED • ${gamepad.id}`;
+  }
+
+  previousGamepadButtons =
+    gamepad.buttons.map(() => false);
+});
+
+
+/* =====================================================
+   GAMEPAD DESCONECTADO
+   ===================================================== */
+
+window.addEventListener('gamepaddisconnected', event => {
+
+  if (gamepadStatus) {
+    gamepadStatus.textContent =
+      'CONTROLLER DISCONNECTED';
+  }
+
+  previousGamepadButtons = [];
+});
+
+
+/* =====================================================
+   COMEÇAR MAPEAMENTO
+   ===================================================== */
+
+mapButtons.forEach(button => {
+
+  button.addEventListener('click', event => {
+
+    event.preventDefault();
+
+    mappingTarget =
+      button.dataset.map;
+
+    if (gamepadStatus) {
+      gamepadStatus.textContent =
+        `PRESS A BUTTON FOR ${mappingTarget.toUpperCase()}`;
+    }
+
+    button.textContent = 'PRESS...';
+  });
+});
+
+
+/* =====================================================
+   DETECTAR BOTÃO PRESSIONADO
+   ===================================================== */
+
+function detectGamepadMapping() {
+
+  const gamepads =
+    navigator.getGamepads
+      ? navigator.getGamepads()
+      : [];
+
+  let activeGamepad = null;
+
+  for (const gamepad of gamepads) {
+
+    if (gamepad && gamepad.connected) {
+      activeGamepad = gamepad;
+      break;
+    }
+  }
+
+  if (!activeGamepad) {
+    requestAnimationFrame(detectGamepadMapping);
+    return;
+  }
+
+
+  /*
+    Detecta apenas quando o botão
+    muda de NÃO pressionado → pressionado.
+  */
+
+  activeGamepad.buttons.forEach((button, index) => {
+
+    const pressed = button.pressed;
+
+    const wasPressed =
+      previousGamepadButtons[index] || false;
+
+
+    if (
+      mappingTarget &&
+      pressed &&
+      !wasPressed
+    ) {
+
+      gamepadMapping[mappingTarget] =
+        index;
+
+      saveGamepadMapping();
+
+      const targetButton =
+        document.querySelector(
+          `[data-map="${mappingTarget}"]`
+        );
+
+      if (targetButton) {
+        targetButton.textContent = 'MAP';
+      }
+
+      if (gamepadStatus) {
+        gamepadStatus.textContent =
+          `${mappingTarget.toUpperCase()} → BUTTON ${index}`;
+      }
+
+      mappingTarget = null;
+
+      updateGamepadMappingDisplay();
+    }
+
+  });
+
+
+  previousGamepadButtons =
+    activeGamepad.buttons.map(
+      button => button.pressed
+    );
+
+
+  requestAnimationFrame(
+    detectGamepadMapping
+  );
+}
+
+
+/* =====================================================
+   INICIAR DETECÇÃO
+   ===================================================== */
+
+updateGamepadMappingDisplay();
+
+requestAnimationFrame(
+  detectGamepadMapping
+);
+
+
+
+/* =====================================================
+   BLUETOOTH GAMEPAD • CONTROLE DO GAME BOY
+   ===================================================== */
+
+function isMappedButtonPressed(gamepad, logical) {
+
+  const index =
+    gamepadMapping[logical];
+
+  if (
+    index === null ||
+    index === undefined
+  ) {
+    return false;
+  }
+
+  const button =
+    gamepad.buttons[index];
+
+  return !!(
+    button &&
+    button.pressed
+  );
+}
+
+
+function applyGamepadInput(gamepad) {
+
+  if (!gameboy || !gameboy.input) {
+    return;
+  }
+
+
+  /* =================================================
+     D-PAD
+     ================================================= */
+
+  let up = false;
+  let down = false;
+  let left = false;
+  let right = false;
+
+
+  /*
+    Controle padrão:
+    12 = UP
+    13 = DOWN
+    14 = LEFT
+    15 = RIGHT
+  */
+
+  if (gamepad.buttons[12]) {
+    up =
+      gamepad.buttons[12].pressed;
+  }
+
+  if (gamepad.buttons[13]) {
+    down =
+      gamepad.buttons[13].pressed;
+  }
+
+  if (gamepad.buttons[14]) {
+    left =
+      gamepad.buttons[14].pressed;
+  }
+
+  if (gamepad.buttons[15]) {
+    right =
+      gamepad.buttons[15].pressed;
+  }
+
+
+  /* =================================================
+     GAME BOY
+     ================================================= */
+
+  gameboy.input.isPressingUp =
+    up;
+
+  gameboy.input.isPressingDown =
+    down;
+
+  gameboy.input.isPressingLeft =
+    left;
+
+  gameboy.input.isPressingRight =
+    right;
+
+  gameboy.input.isPressingA =
+    isMappedButtonPressed(
+      gamepad,
+      'a'
+    );
+
+  gameboy.input.isPressingB =
+    isMappedButtonPressed(
+      gamepad,
+      'b'
+    );
+
+  gameboy.input.isPressingStart =
+    isMappedButtonPressed(
+      gamepad,
+      'start'
+    );
+
+  gameboy.input.isPressingSelect =
+    isMappedButtonPressed(
+      gamepad,
+      'select'
+    );
+}
+
+
+/* =====================================================
+   LOOP DO GAMEPAD
+   ===================================================== */
+
+function gamepadControlLoop() {
+
+  const gamepads =
+    navigator.getGamepads
+      ? navigator.getGamepads()
+      : [];
+
+  let activeGamepad = null;
+
+  for (const gamepad of gamepads) {
+
+    if (gamepad && gamepad.connected) {
+      activeGamepad = gamepad;
+      break;
+    }
+  }
+
+  if (activeGamepad) {
+    applyGamepadInput(
+      activeGamepad
+    );
+  }
+
+  requestAnimationFrame(
+    gamepadControlLoop
+  );
+}
+
+
+requestAnimationFrame(
+  gamepadControlLoop
+);
 
 closeHelp.addEventListener(
   'click',
