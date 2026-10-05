@@ -1581,7 +1581,7 @@ button {
     alt="DougX Boy"
   >
 
-
+<button onclick="testVibration()">TESTAR VIBRAÇÃO</button>
 
   <div class="controls">
 
@@ -3478,7 +3478,29 @@ const touchInputMap = {
   select: 'isPressingSelect'
 };
 
+function testVibration() {
+  if (!('vibrate' in navigator)) {
+    alert('VIBRAÇÃO: navegador não suporta');
+    return;
+  }
 
+  if (typeof navigator.vibrate !== 'function') {
+    alert('VIBRAÇÃO: API indisponível');
+    return;
+  }
+
+  try {
+    const result = navigator.vibrate(200);
+
+    alert(
+      result
+        ? 'VIBRAÇÃO: API disponível ✅'
+        : 'VIBRAÇÃO: navegador recusou ❌'
+    );
+  } catch (error) {
+    alert('VIBRAÇÃO: bloqueada pelo navegador ❌');
+  }
+}
 
 function setTouchInput(
   logical,
