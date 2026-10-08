@@ -1964,6 +1964,10 @@ button {
     </span>
   </div>
 
+  <button id="resetGamepadMapping" type="button">
+  RESET CONTROLLER
+</button>
+
   <button
     id="closeGamepadMapper"
     type="button"
@@ -2003,7 +2007,7 @@ button {
 
         <p>The buttons on the screen are the same as the console controls.</p>
 
-        <p><strong>ADJUST CONTROLS</strong>
+        <p><strong>ADJUST CONTROLS</strong></p>
           
          <p> Allows you to move and resize the DPAD, buttons A and B, SELECT and START.</p>
 
@@ -4207,6 +4211,29 @@ function saveGamepadMapping() {
 }
 
 
+function resetGamepadMapping() {
+
+  gamepadMapping = {
+    ...defaultGamepadMapping
+  };
+
+  localStorage.removeItem(
+    GAMEPAD_MAPPING_KEY
+  );
+
+  previousGamepadButtons = [];
+
+  mappingTarget = null;
+
+  updateGamepadMappingDisplay();
+
+  if (gamepadStatus) {
+    gamepadStatus.textContent =
+      'CONTROLLER MAPPING RESET';
+  }
+}
+
+
 /* =====================================================
    ELEMENTOS
    ===================================================== */
@@ -4216,6 +4243,9 @@ const gamepadStatus =
 
 const mapButtons =
   document.querySelectorAll('[data-map]');
+
+  const resetGamepadButton =
+  document.getElementById('resetGamepadMapping');
 
 
 /* =====================================================
@@ -4303,11 +4333,25 @@ mapButtons.forEach(button => {
 });
 
 
+if (resetGamepadButton) {
+
+  resetGamepadButton.addEventListener(
+    'click',
+    () => {
+      resetGamepadMapping();
+    }
+  );
+
+}
+
+
 /* =====================================================
    DETECTAR BOTÃO PRESSIONADO
    ===================================================== */
 
 function detectGamepadMapping() {
+
+  
 
   const gamepads =
     navigator.getGamepads
@@ -4325,9 +4369,7 @@ function detectGamepadMapping() {
   const id =
     String(gamepad.id || '').toLowerCase();
 
-  if (id.includes('consumer control')) {
-    continue;
-  }
+ 
 
   activeGamepad = gamepad;
   break;
