@@ -1067,6 +1067,13 @@ button {
 
   z-index: 99999 !important;
 
+max-height: 55vh;
+overflow-y: auto;
+overscroll-behavior: contain;
+box-sizing: border-box;
+
+
+
 }
 
 #helpPanel h3 {
@@ -1995,7 +2002,7 @@ button {
 
         <p>PC arrow keys = DPAD </p>
 
-        <p>X = A &nbsp; • &nbsp; Z = B</p>
+        <p>A = A &nbsp; • &nbsp; S = B</p>
 
         <p>Enter = START &nbsp; - &nbsp; Shift = SELECT</p>
 
@@ -3602,67 +3609,95 @@ powerButton.addEventListener(
 
 
 
+
 /* =====================================================
    TECLADO
    ===================================================== */
 
 const keyMap = {
 
+
   ArrowUp: 'up',
   ArrowDown: 'down',
   ArrowLeft: 'left',
   ArrowRight: 'right',
 
-  x: 'a',
-  X: 'a',
+  a: 'a',
+  A: 'a',
 
-  z: 'b',
-  Z: 'b',
+  s: 'b',
+  S: 'b',
 
   Enter: 'start',
 
+
   Shift: 'select'
+
+
 };
 
+const keyboardPressed = new Set();
 
+function handleKeyboard(event, pressed) {
+  const logical = keyMap[event.key];
 
-window.addEventListener(
-  'keydown',
-  event => {
+  if (!logical) return;
 
-    if (!keyMap[event.key]) {
+  event.preventDefault();
 
-      return;
-    }
-
-
-    event.preventDefault();
-
-  },
-  {
-    passive: false
+  if (pressed) {
+    keyboardPressed.add(logical);
+  } else {
+    keyboardPressed.delete(logical);
   }
-);
+
+  if (!gameboy || !gameboy.input) return;
+
+  const properties = {
+    up: 'isPressingUp',
+    down: 'isPressingDown',
+    left: 'isPressingLeft',
+    right: 'isPressingRight',
+    a: 'isPressingA',
+    b: 'isPressingB',
+    start: 'isPressingStart',
+    select: 'isPressingSelect'
+  };
+
+  gameboy.input[properties[logical]] = pressed;
+}
+
+window.addEventListener('keydown', event => {
+  handleKeyboard(event, true);
+}, { passive: false });
+
+window.addEventListener('keyup', event => {
+  handleKeyboard(event, false);
+}, { passive: false });
+
+window.addEventListener('blur', () => {
+  keyboardPressed.clear();
+
+  if (!gameboy || !gameboy.input) return;
+
+  Object.values(keyMap).forEach(logical => {
+    const properties = {
+      up: 'isPressingUp',
+      down: 'isPressingDown',
+      left: 'isPressingLeft',
+      right: 'isPressingRight',
+      a: 'isPressingA',
+      b: 'isPressingB',
+      start: 'isPressingStart',
+      select: 'isPressingSelect'
+    };
+
+    gameboy.input[properties[logical]] =
+      false;
+  });
+}, { passive: true });
 
 
-
-window.addEventListener(
-  'keyup',
-  event => {
-
-    if (!keyMap[event.key]) {
-
-      return;
-    }
-
-
-    event.preventDefault();
-
-  },
-  {
-    passive: false
-  }
-);
 
 
 
@@ -4350,65 +4385,57 @@ if (resetGamepadButton) {
    ===================================================== */
 
 function detectGamepadMapping() {
-
-  
-
-  const gamepads =
-    navigator.getGamepads
-      ? navigator.getGamepads()
-      : [];
+  const gamepads = navigator.getGamepads
+    ? navigator.getGamepads()
+    : [];
 
   let activeGamepad = null;
 
   for (const gamepad of gamepads) {
+    if (!gamepad || !gamepad.connected) continue;
 
-  if (!gamepad || !gamepad.connected) {
-    continue;
+    const id = String(gamepad.id || '').toLowerCase();
+
+    if (id.includes('consumer control')) continue;
+
+    activeGamepad = gamepad;
+    break;
   }
 
-  const id =
-    String(gamepad.id || '').toLowerCase();
-
- 
-
-  activeGamepad = gamepad;
-  break;
-}
-
   if (!activeGamepad) {
+    previousGamepadButtons = [];
     requestAnimationFrame(detectGamepadMapping);
     return;
   }
 
+  const currentButtons = Array.from(
+    activeGamepad.buttons,
+    button => Boolean(button.pressed || button.value > 0.5)
+  );
 
-  /*
-    Detecta apenas quando o botão
-    muda de NÃO pressionado → pressionado.
-  */
+  // Se mudou o tamanho da lista de botões,
+  // sincroniza o estado antes de detectar.
+  if (previousGamepadButtons.length !== currentButtons.length) {
+    previousGamepadButtons = currentButtons;
+    requestAnimationFrame(detectGamepadMapping);
+    return;
+  }
 
-  activeGamepad.buttons.forEach((button, index) => {
+  if (mappingTarget !== null) {
+    const index = currentButtons.findIndex(
+      (pressed, i) =>
+        pressed && !previousGamepadButtons[i]
+    );
 
-    const pressed = button.pressed;
+    if (index !== -1) {
+      const target = mappingTarget;
 
-    const wasPressed =
-      previousGamepadButtons[index] || false;
-
-
-    if (
-      mappingTarget &&
-      pressed &&
-      !wasPressed
-    ) {
-
-      gamepadMapping[mappingTarget] =
-        index;
-
+      gamepadMapping[target] = index;
       saveGamepadMapping();
 
-      const targetButton =
-        document.querySelector(
-          `[data-map="${mappingTarget}"]`
-        );
+      const targetButton = document.querySelector(
+        `[data-map="${target}"]`
+      );
 
       if (targetButton) {
         targetButton.textContent = 'MAP';
@@ -4416,26 +4443,17 @@ function detectGamepadMapping() {
 
       if (gamepadStatus) {
         gamepadStatus.textContent =
-          `${mappingTarget.toUpperCase()} → BUTTON ${index}`;
+          `${target.toUpperCase()} → BUTTON ${index}`;
       }
 
       mappingTarget = null;
-
       updateGamepadMappingDisplay();
     }
+  }
 
-  });
+  previousGamepadButtons = currentButtons;
 
-
-  previousGamepadButtons =
-    activeGamepad.buttons.map(
-      button => button.pressed
-    );
-
-
-  requestAnimationFrame(
-    detectGamepadMapping
-  );
+  requestAnimationFrame(detectGamepadMapping);
 }
 
 
