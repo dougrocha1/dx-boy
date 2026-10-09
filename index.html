@@ -4385,76 +4385,73 @@ if (resetGamepadButton) {
    ===================================================== */
 
 function detectGamepadMapping() {
-  const gamepads = navigator.getGamepads
-    ? navigator.getGamepads()
-    : [];
+const gamepads = navigator.getGamepads
+? navigator.getGamepads()
+: [];
 
-  let activeGamepad = null;
+let activeGamepad = null;
 
-  for (const gamepad of gamepads) {
-    if (!gamepad || !gamepad.connected) continue;
+for (const gamepad of gamepads) {
+if (!gamepad || !gamepad.connected) continue;
 
-    const id = String(gamepad.id || '').toLowerCase();
+```
+activeGamepad = gamepad;
+break;
+```
 
-    if (id.includes('consumer control')) continue;
+}
 
-    activeGamepad = gamepad;
-    break;
-  }
+if (!activeGamepad) {
+previousGamepadButtons = [];
+requestAnimationFrame(detectGamepadMapping);
+return;
+}
 
-  if (!activeGamepad) {
-    previousGamepadButtons = [];
-    requestAnimationFrame(detectGamepadMapping);
-    return;
-  }
+const currentButtons = Array.from(
+activeGamepad.buttons,
+button => Boolean(button.pressed || button.value > 0.5)
+);
 
-  const currentButtons = Array.from(
-    activeGamepad.buttons,
-    button => Boolean(button.pressed || button.value > 0.5)
+if (mappingTarget !== null) {
+const index = currentButtons.findIndex(
+pressed => pressed
+);
+
+
+if (index !== -1) {
+  const target = mappingTarget;
+
+  gamepadMapping[target] = index;
+  saveGamepadMapping();
+
+  const targetButton = document.querySelector(
+    `[data-map="${target}"]`
   );
 
-  // Se mudou o tamanho da lista de botões,
-  // sincroniza o estado antes de detectar.
-  if (previousGamepadButtons.length !== currentButtons.length) {
-    previousGamepadButtons = currentButtons;
-    requestAnimationFrame(detectGamepadMapping);
-    return;
+  if (targetButton) {
+    targetButton.textContent = 'MAP';
   }
 
-  if (mappingTarget !== null) {
-    const index = currentButtons.findIndex(
-      (pressed, i) =>
-        pressed && !previousGamepadButtons[i]
-    );
-
-    if (index !== -1) {
-      const target = mappingTarget;
-
-      gamepadMapping[target] = index;
-      saveGamepadMapping();
-
-      const targetButton = document.querySelector(
-        `[data-map="${target}"]`
-      );
-
-      if (targetButton) {
-        targetButton.textContent = 'MAP';
-      }
-
-      if (gamepadStatus) {
-        gamepadStatus.textContent =
-          `${target.toUpperCase()} → BUTTON ${index}`;
-      }
-
-      mappingTarget = null;
-      updateGamepadMappingDisplay();
-    }
+  if (gamepadStatus) {
+    gamepadStatus.textContent =
+      `${target.toUpperCase()} → BUTTON ${index}`;
   }
 
-  previousGamepadButtons = currentButtons;
-
-  requestAnimationFrame(detectGamepadMapping);
+  mappingTarget = null;
+  updateGamepadMappingDisplay();
+} else if (gamepadStatus) {
+  gamepadStatus.textContent =
+    `AGUARDANDO BOTÃO • ${activeGamepad.id} • ${currentButtons.length} BOTÕES`;
 }
+
+
+}
+
+previousGamepadButtons = currentButtons;
+
+requestAnimationFrame(detectGamepadMapping);
+}
+
 
 
 /* =====================================================
