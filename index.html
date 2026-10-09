@@ -4315,19 +4315,19 @@ function updateGamepadMappingDisplay() {
 /* =====================================================
    GAMEPAD CONECTADO
    ===================================================== */
-
 window.addEventListener('gamepadconnected', event => {
 
-  const gamepad = event.gamepad;
+const gamepad = event.gamepad;
 
-  if (gamepadStatus) {
-    gamepadStatus.textContent =
-      `CONTROLLER CONNECTED • ${gamepad.id}`;
-  }
+if (gamepadStatus) {
+gamepadStatus.textContent =
+`CONECTADO • ID: ${gamepad.id || 'VAZIO'} • ÍNDICE: ${gamepad.index} • BOTÕES: ${gamepad.buttons.length}`;
+}
 
-  previousGamepadButtons =
-    gamepad.buttons.map(() => false);
+previousGamepadButtons =
+gamepad.buttons.map(() => false);
 });
+
 
 
 /* =====================================================
