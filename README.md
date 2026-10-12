@@ -33,8 +33,8 @@ https://dougrocha1.github.io/dx-boy/
 | Key     | Action |
 | ------- | ------ |
 | ↑ ↓ ← → | D-Pad  |
-| X       | A      |
-| Z       | B      |
+| A       | A      |
+| S       | B      |
 | Enter   | START  |
 | Shift   | SELECT |
 

@@ -1,1658 +1,1651 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<script src="./coi-serviceworker.js"></script>
-<script>
-if ('serviceWorker' in navigator) {
+  <script src="./coi-serviceworker.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
 
-  navigator.serviceWorker.register(
-    './coi-serviceworker.js',
-    {
-      scope: './'
+      navigator.serviceWorker.register(
+        './coi-serviceworker.js',
+        {
+          scope: './'
+        }
+      )
+      .then(registration => {
+
+      })
+      .catch(error => {
+
+      });
+
     }
-  )
-  .then(registration => {
+  </script>
 
-  })
-  .catch(error => {
+  <meta charset="UTF-8">
 
-  });
+  <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+  >
 
-}
-</script>
+  <title>DougX Emulator GB</title>
 
-<meta charset="UTF-8">
+  <style>
 
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1.0, viewport-fit=cover"
->
+    * {
+      box-sizing: border-box;
+    }
 
-<title>DougX Emulator GB</title>
 
-<style>
 
-* {
-  box-sizing: border-box;
-}
+    html,
+    body {
 
+      margin: 0;
 
+      padding: 0;
 
-html,
-body {
+      width: 100%;
 
-  margin: 0;
+      height: 100%;
 
-  padding: 0;
+      overflow: hidden;
 
-  width: 100%;
+      background: #202124;
 
-  height: 100%;
+      font-family: system-ui, sans-serif;
 
-  overflow: hidden;
+      display: grid;
 
-  background: #202124;
+      place-items: center;
 
-  font-family: system-ui, sans-serif;
+      color: #eee;
 
-  display: grid;
+      user-select: none;
 
-  place-items: center;
+      -webkit-user-select: none;
 
-  color: #eee;
+      -webkit-touch-callout: none;
 
-  user-select: none;
+      -webkit-tap-highlight-color: transparent;
 
-  -webkit-user-select: none;
+      touch-action: none;
+    }
 
-  -webkit-touch-callout: none;
 
-  -webkit-tap-highlight-color: transparent;
 
-  touch-action: none;
-}
+    /* =====================================================
+       CORPO PRINCIPAL DO CONSOLE
+       ===================================================== */
 
+    #app {
 
+      position: relative;
 
-/* =====================================================
-   CORPO PRINCIPAL DO CONSOLE
-   ===================================================== */
+      isolation: isolate;
 
-#app {
+      width: 420px;
 
-  position: relative;
+      height: 700px;
 
-  isolation: isolate;
+      /*
+        TAMANHO BASE FIXO.
 
-  width: 420px;
+        O console mantém o mesmo
+        tamanho e proporção no desktop.
+      */
 
-  height: 700px;
+      background-color: #c3c5bf;
 
-  /*
-    TAMANHO BASE FIXO.
+      background-image:
+        url('./assets/corpo-dx-boy.png');
 
-    O console mantém o mesmo
-    tamanho e proporção no desktop.
-  */
+      background-position: center center;
 
-  background-color: #c3c5bf;
+      background-repeat: no-repeat;
 
-  background-image:
-    url('./assets/corpo-dx-boy.png');
+      /*
+        COVER preenche toda a área do console
+        mantendo a proporção original da imagem.
 
-  background-position: center center;
+        Isso evita que o corpo seja achatado
+        ou esticado verticalmente.
+      */
 
-  background-repeat: no-repeat;
+      background-size: cover;
 
-  /*
-    COVER preenche toda a área do console
-    mantendo a proporção original da imagem.
+      border-radius:
+        28px
+        28px
+        115px
+        28px;
 
-    Isso evita que o corpo seja achatado
-    ou esticado verticalmente.
-  */
+      padding:
+        30px
+        24px
+        80px;
 
-  background-size: cover;
+      box-shadow:
+        0 22px 50px #0008,
+        inset 2px 2px 5px #fff8;
 
-  border-radius:
-    28px
-    28px
-    115px
-    28px;
+      display: flex;
 
-  padding:
-    30px
-    24px
-    80px;
+      flex-direction: column;
 
-  box-shadow:
-    0 22px 50px #0008,
-    inset 2px 2px 5px #fff8;
+      justify-content: flex-start;
 
-  display: flex;
+      overflow: hidden !important;
+    }
 
-  flex-direction: column;
 
-  justify-content: flex-start;
 
-  overflow: hidden !important;
-}
+    #app > * {
 
+      position: relative;
 
+      z-index: 1;
 
-#app > * {
+    }
 
-  position: relative;
 
-  z-index: 1;
 
-}
+    #app::-webkit-scrollbar {
 
+      display: none;
 
+    }
 
-#app::-webkit-scrollbar {
 
-  display: none;
 
-}
+    #app {
 
+      -ms-overflow-style: none;
 
+      scrollbar-width: none;
 
-#app {
+    }
 
-  -ms-overflow-style: none;
 
-  scrollbar-width: none;
 
-}
+    /* =====================================================
+       MOBILE
+       ===================================================== */
 
+    @media (max-width: 768px) {
 
+      body {
 
-/* =====================================================
-   MOBILE
-   ===================================================== */
+        margin: 0;
 
-@media (max-width: 768px) {
+        padding: 0;
 
-  body {
+        width: 100%;
 
-    margin: 0;
+        height: 100dvh;
 
-    padding: 0;
+        display: flex;
 
-    width: 100%;
+        justify-content: center;
 
-    height: 100dvh;
+        align-items: center;
 
-    display: flex;
+        background-color: #121212;
 
-    justify-content: center;
+        overflow: hidden;
+      }
 
-    align-items: center;
 
-    background-color: #121212;
+      #app {
 
-    overflow: hidden;
-  }
+        width: 420px !important;
 
+        height: 700px !important;
 
-  #app {
+        max-width: none !important;
 
-    width: 420px !important;
+        max-height: none !important;
 
-    height: 700px !important;
+        /*
+          O corpo continua usando a mesma
+          proporção do desktop.
+        */
 
-    max-width: none !important;
+        background-position:
+          center center !important;
 
-    max-height: none !important;
+        background-size:
+          cover !important;
 
-    /*
-      O corpo continua usando a mesma
-      proporção do desktop.
-    */
+        border-radius:
+          28px
+          28px
+          90px
+          28px !important;
 
-    background-position:
-      center center !important;
+        box-shadow:
+          0 15px 35px #0009,
+          inset 2px 2px 5px #fff8 !important;
 
-    background-size:
-      cover !important;
+        overflow: hidden !important;
+      }
 
-    border-radius:
-      28px
-      28px
-      90px
-      28px !important;
+    }
 
-    box-shadow:
-      0 15px 35px #0009,
-      inset 2px 2px 5px #fff8 !important;
 
-    overflow: hidden !important;
-  }
 
-}
+    /* =====================================================
+       CAMADAS
+       ===================================================== */
 
+    #brand,
+    #screenWrap,
+    #app > .controls,
+    #app > .small,
+    #app > .menuDrawer,
+    #app > .menu,
+    #hint,
+    #editor {
 
+      position: relative;
 
-/* =====================================================
-   CAMADAS
-   ===================================================== */
+      z-index: 3 !important;
+    }
 
-#brand,
-#screenWrap,
-#app > .controls,
-#app > .small,
-#app > .menuDrawer,
-#app > .menu,
-#hint,
-#editor {
 
-  position: relative;
 
-  z-index: 3 !important;
-}
+    #brand {
 
+      font-weight: 800;
 
+      letter-spacing: 3px;
 
-#brand {
+      color: #30322f;
 
-  font-weight: 800;
+      font-size: 20px;
 
-  letter-spacing: 3px;
+      margin:
+        0
+        0
+        10px
+        6px;
+    }
 
-  color: #30322f;
 
-  font-size: 20px;
 
-  margin:
-    0
-    0
-    10px
-    6px;
-}
+    /* =====================================================
+       TELA
+       ===================================================== */
 
+    #screenWrap {
 
+      position: relative;
 
-/* =====================================================
-   TELA
-   ===================================================== */
+      margin-top: 5px;
 
-#screenWrap {
+      flex-shrink: 0;
 
-  position: relative;
+      background: #3d3e3c;
 
-  margin-top: 5px;
+      border-radius:
+        10px
+        10px
+        42px
+        10px;
 
-  flex-shrink: 0;
+      padding:
+        18px
+        40px
+        14px
+        40px;
 
-  background: #3d3e3c;
+      box-shadow:
+        inset 0 2px 7px #ffffff30,
+        inset 0 -4px 8px #20221f99,
+        0 2px 0 #858980;
+    }
 
-  border-radius:
-    10px
-    10px
-    42px
-    10px;
 
-  padding:
-    18px
-    40px
-    14px
-    40px;
 
-  box-shadow:
-    inset 0 2px 7px #ffffff30,
-    inset 0 -4px 8px #20221f99,
-    0 2px 0 #858980;
-}
+    .logoDX {
 
+      position: absolute;
 
+      width: 140px;
 
-.logoDX {
+      height: auto;
 
-  position: absolute;
+      left: 50%;
 
-  width: 140px;
+      transform: translateX(-50%);
 
-  height: auto;
+      margin-top: 5px;
 
-  left: 50%;
+      z-index: 1 !important;
 
-  transform: translateX(-50%);
+    }
 
-  margin-top: 5px;
 
-  z-index: 1 !important;
 
-}
+    .topImage {
 
+      position: absolute !important;
 
+      z-index: 2;
 
-.topImage {
+      top: 8px;
 
-  position: absolute !important;
+      left: 25px;
 
-  z-index: 2;
+      display: block;
 
-  top: 8px;
+      height: 28px;
 
-  left: 25px;
+      width: calc(100% - 50px);
 
-  display: block;
+      object-fit: contain;
 
-  height: 28px;
+      margin: 0;
+    }
 
-  width: calc(100% - 50px);
 
-  object-fit: contain;
 
-  margin: 0;
-}
+    #screenWrap > * {
 
+      position: relative;
+    }
 
 
-#screenWrap > * {
 
-  position: relative;
-}
+    .screenHeader {
 
+      display: flex;
 
+      justify-content: flex-start;
 
-.screenHeader {
+      min-height: 20px;
 
-  display: flex;
+      font-size: 8px;
 
-  justify-content: flex-start;
+      font-weight: 800;
 
-  min-height: 20px;
+      text-transform: uppercase;
+    }
 
-  font-size: 8px;
 
-  font-weight: 800;
 
-  text-transform: uppercase;
-}
+    #screenWrap > .screenHeader {
 
+      position: static;
+    }
 
 
-#screenWrap > .screenHeader {
 
-  position: static;
-}
+    .screenHeader small {
 
+      flex: 1;
 
+      color: #d5d8d3;
 
-.screenHeader small {
+      font-size: 7px;
 
-  flex: 1;
+      letter-spacing: 1px;
 
-  color: #d5d8d3;
+      text-align: center;
+    }
 
-  font-size: 7px;
 
-  letter-spacing: 1px;
 
-  text-align: center;
-}
+    /* =====================================================
+       POWER + LED
+       ===================================================== */
 
+    .powerIndicator {
 
+      display: inline-flex;
 
-/* =====================================================
-   POWER + LED
-   ===================================================== */
+      align-items: center;
 
-.powerIndicator {
+      gap: 1px;
 
-  display: inline-flex;
+      min-width: 45px;
 
-  align-items: center;
+      color: #c1c4bf;
 
-  gap: 1px;
+      font-size: 7px;
 
-  min-width: 45px;
+      letter-spacing: 2px;
 
-  color: #c1c4bf;
+      font-weight: 350;
+    }
 
-  font-size: 7px;
 
-  letter-spacing: 2px;
 
-  font-weight: 350;
-}
+    .screenHeader > .powerIndicator:first-child {
 
+      position: absolute !important;
 
+      left: 4px !important;
 
-.screenHeader > .powerIndicator:first-child {
+      top: 40%;
 
-  position: absolute !important;
+      z-index: 3;
 
-  left: 4px !important;
+      flex-direction: column;
 
-  top: 40%;
+      align-items: center;
 
-  z-index: 3;
+      gap: 1px;
 
-  flex-direction: column;
+      min-width: 15px;
 
-  align-items: center;
+      transform: translateY(-50%);
+    }
 
-  gap: 1px;
 
-  min-width: 15px;
 
-  transform: translateY(-50%);
-}
+    .screenHeader > .powerIndicator:first-child #powerLed {
 
+      width: 13px;
 
+      height: 13px;
+    }
 
-.screenHeader > .powerIndicator:first-child #powerLed {
 
-  width: 13px;
 
-  height: 13px;
-}
+    #powerLed {
 
+      width: 7px;
 
+      height: 7px;
 
-#powerLed {
+      border:
+        1px solid
+        #171b16;
 
-  width: 7px;
+      border-radius: 50%;
 
-  height: 7px;
+      background: #281719;
 
-  border:
-    1px solid
-    #171b16;
+      box-shadow:
+        inset 0 1px 1px #0008;
 
-  border-radius: 50%;
+      transform:
+        translateX(-1px);
+    }
 
-  background: #281719;
 
-  box-shadow:
-    inset 0 1px 1px #0008;
 
-  transform:
-    translateX(-1px);
-}
+    #powerLed.is-on {
 
+      background: #16bc0a;
 
+      box-shadow:
+        0 0 8px #2af03a,
+        inset 1px 1px 1px #6cfd64;
+    }
 
-#powerLed.is-on {
 
-  background: #16bc0a;
 
-  box-shadow:
-    0 0 8px #2af03a,
-    inset 1px 1px 1px #6cfd64;
-}
+    /* =====================================================
+       CANVAS
+       ===================================================== */
 
+    canvas {
 
+      display: block;
 
-/* =====================================================
-   CANVAS
-   ===================================================== */
+      width: 100%;
 
-canvas {
+      /*
+        Game Boy original:
+        160 x 144
+      */
 
-  display: block;
+      aspect-ratio: 160 / 144;
 
-  width: 100%;
+      image-rendering: pixelated;
 
-  /*
-    Game Boy original:
-    160 x 144
-  */
+      background: #20251f;
 
-  aspect-ratio: 160 / 144;
+      border:
+        5px solid
+        #272b25;
 
-  image-rendering: pixelated;
+      border-radius: 4px;
 
-  background: #20251f;
+      box-shadow:
+        inset 0 0 0 2px #10130f,
+        0 2px 2px #20221f99;
+    }
 
-  border:
-    5px solid
-    #272b25;
 
-  border-radius: 4px;
 
-  box-shadow:
-    inset 0 0 0 2px #10130f,
-    0 2px 2px #20221f99;
-}
+    #screenWrap.powered-off canvas {
 
+      background: #283603;
 
+      filter: none;
+    }
 
-#screenWrap.powered-off canvas {
 
-  background: #283603;
 
-  filter: none;
-}
+    #screenWrap.powered-off #status {
 
+      visibility: hidden;
+    }
 
 
-#screenWrap.powered-off #status {
 
-  visibility: hidden;
-}
+    #status {
 
+      text-align: center;
 
+      color: #b8cfa1;
 
-#status {
+      font-size: 9px;
 
-  text-align: center;
+      margin-top: 6px;
 
-  color: #b8cfa1;
+      letter-spacing: 0.7px;
 
-  font-size: 9px;
+      min-height: 13px;
+    }
 
-  margin-top: 6px;
 
-  letter-spacing: 0.7px;
 
-  min-height: 13px;
-}
+    /* =====================================================
+       CONTROLES
+       ===================================================== */
 
+    .controls {
 
+      display: flex;
 
-/* =====================================================
-   CONTROLES
-   ===================================================== */
+      justify-content: space-between;
 
-.controls {
+      align-items: center;
 
-  display: flex;
+      margin-top: 20px;
 
-  justify-content: space-between;
+      width: 100%;
 
-  align-items: center;
+      padding: 0 10px;
+    }
 
-  margin-top: 20px;
 
-  width: 100%;
 
-  padding: 0 10px;
-}
+    .dpadArea {
 
+      display: flex;
 
+      flex-direction: column;
 
-.dpadArea {
+      align-items: center;
 
-  display: flex;
+      gap: 10px;
+    }
 
-  flex-direction: column;
 
-  align-items: center;
 
-  gap: 10px;
-}
+    .dpad {
 
+      width: 110px;
 
+      height: 110px;
 
-.dpad {
+      position: relative;
 
-  width: 110px;
+      filter:
+        drop-shadow(
+          0 5px 4px #0006
+        );
+    }
 
-  height: 110px;
 
-  position: relative;
 
-  filter:
-    drop-shadow(
-      0 5px 4px #0006
-    );
-}
+    .dpadSprite {
 
+      position: absolute;
 
+      inset: 0;
 
-.dpadSprite {
+      z-index: 1;
 
-  position: absolute;
+      display: block;
 
-  inset: 0;
+      width: 100%;
 
-  z-index: 1;
+      height: 100%;
 
-  display: block;
+      object-fit: fill;
 
-  width: 100%;
+      pointer-events: none;
+    }
 
-  height: 100%;
 
-  object-fit: fill;
 
-  pointer-events: none;
-}
+    .pad {
 
+      position: absolute;
 
+      z-index: 2;
 
-.pad {
+      background: transparent !important;
 
-  position: absolute;
+      background-image: none !important;
 
-  z-index: 2;
+      border: none !important;
 
-  background: transparent !important;
+      box-shadow: none !important;
 
-  background-image: none !important;
+      outline: none !important;
 
-  border: none !important;
+      color: transparent;
 
-  box-shadow: none !important;
+      appearance: none;
+    }
 
-  outline: none !important;
 
-  color: transparent;
 
-  appearance: none;
-}
+    .v {
+      width: 37px;
+      height: 37px;
+      left: 36px;
+    }
 
+    .h {
+      width: 37px;
+      height: 37px;
+      top: 36px;
+    }
 
+    .v[data-key="up"] {
+      top: 0;
+    }
 
-.v {
-  width: 37px;
-  height: 37px;
-  left: 36px;
-}
+    .v[data-key="down"] {
+      top: 69px;
+    }
 
-.h {
-  width: 37px;
-  height: 37px;
-  top: 36px;
-}
+    .h[data-key="left"] {
+      left: 0;
+    }
 
-.v[data-key="up"] {
-  top: 0;
-}
+    .h[data-key="right"] {
+      left: 73px;
+    }
 
-.v[data-key="down"] {
-  top: 69px;
-}
 
-.h[data-key="left"] {
-  left: 0;
-}
+    .hub {
 
-.h[data-key="right"] {
-  left: 73px;
-}
+      display: none !important;
+    }
 
 
-.hub {
 
-  display: none !important;
-}
+    .pad[data-key]::after {
 
+      content: none !important;
+    }
 
 
-.pad[data-key]::after {
 
-  content: none !important;
-}
+    .actions {
 
+      display: flex;
 
+      gap: 10px;
 
-.actions {
+      transform: rotate(-18deg);
+    }
 
-  display: flex;
 
-  gap: 10px;
 
-  transform: rotate(-18deg);
-}
+    button {
 
+      font: inherit;
 
+      cursor: pointer;
 
-button {
+      touch-action: none;
 
-  font: inherit;
+      border: 0;
+    }
 
-  cursor: pointer;
 
-  touch-action: none;
 
-  border: 0;
-}
+    .ab {
 
+      width: 52px;
 
+      height: 52px;
 
-.ab {
+      border-radius: 50%;
 
-  width: 52px;
+      position: relative;
 
-  height: 52px;
+      background: transparent;
 
-  border-radius: 50%;
+      color: transparent;
 
-  position: relative;
+      font-weight: 800;
 
-  background: transparent;
+      box-shadow:
+        0 4px 4px #0006;
 
-  color: transparent;
+      overflow: hidden;
+    }
 
-  font-weight: 800;
 
-  box-shadow:
-    0 4px 4px #0006;
 
-  overflow: hidden;
-}
+    .buttonSprite {
 
+      position: absolute;
 
+      inset: 0;
 
-.buttonSprite {
+      z-index: 1;
 
-  position: absolute;
+      width: 100%;
 
-  inset: 0;
+      height: 100%;
 
-  z-index: 1;
+      object-fit: fill;
 
-  width: 100%;
+      pointer-events: none;
+    }
 
-  height: 100%;
 
-  object-fit: fill;
 
-  pointer-events: none;
-}
+    .small {
 
+      position: relative;
 
+      display: flex;
 
-.small {
+      justify-content: center;
 
-  position: relative;
+      gap: 20px;
 
-  display: flex;
+      margin-top: 20px;
+    }
 
-  justify-content: center;
 
-  gap: 20px;
 
-  margin-top: 20px;
-}
+    .smallControl {
 
+      position: relative;
 
+      display: block;
 
-.smallControl {
+      flex: 0 0 auto;
+    }
 
-  position: relative;
 
-  display: block;
 
-  flex: 0 0 auto;
-}
+    /* =====================================================
+       TOUCH
+       ===================================================== */
 
+    .dpad,
+    .ab,
+    .smallControl {
 
+      user-select: none;
 
-/* =====================================================
-   TOUCH
-   ===================================================== */
+      -webkit-user-select: none;
 
-.dpad,
-.ab,
-.smallControl {
+      -webkit-touch-callout: none;
 
-  user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
 
-  -webkit-user-select: none;
 
-  -webkit-touch-callout: none;
 
-  -webkit-tap-highlight-color: transparent;
-}
+    /* =====================================================
+       SELECT / START
+       ===================================================== */
 
+    .small button {
 
+      position: relative;
 
-/* =====================================================
-   SELECT / START
-   ===================================================== */
+      z-index: 2;
 
-.small button {
+      display: block;
 
-  position: relative;
+      background:
+        linear-gradient(
+          180deg,
+          #a8a8a8,
+          #3f433f
+        );
 
-  z-index: 2;
+      color: #032848;
 
-  display: block;
+      border-radius: 14px;
 
-  background:
-    linear-gradient(
-      180deg,
-      #a8a8a8,
-      #3f433f
-    );
+      padding:
+        4px
+        18px;
 
-  color: #032848;
+      font-size: 14px;
 
-  border-radius: 14px;
+      font-weight: 900;
 
-  padding:
-    4px
-    18px;
+      letter-spacing: 0.4px;
 
-  font-size: 14px;
+      box-shadow:
+        0 3px 3px #0005;
+    }
 
-  font-weight: 900;
 
-  letter-spacing: 0.4px;
 
-  box-shadow:
-    0 3px 3px #0005;
-}
+    /* =====================================================
+       POWER
+       ===================================================== */
 
+    #power {
 
+      position: absolute !important;
 
-/* =====================================================
-   POWER
-   ===================================================== */
+      top: 17px !important;
 
-#power {
+      left: 43px !important;
 
-  position: absolute !important;
+      width: 90px;
 
-  top: 17px !important;
+      height: 20px;
 
-  left: 43px !important;
+      z-index: 100 !important;
 
-  width: 90px;
+      border-radius: 14px;
 
-  height: 20px;
+      background:
+        linear-gradient(
+          180deg,
+          #899089,
+          #20231f
+        );
 
-  z-index: 100 !important;
+      color: #aeb3aa;
 
-  border-radius: 14px;
+      font-size: 14px;
 
-  background:
-    linear-gradient(
-      180deg,
-      #899089,
-      #20231f
-    );
+      font-weight: 700;
 
-  color: #aeb3aa;
+      letter-spacing: 1px;
 
-  font-size: 14px;
+      box-shadow:
+        0 3px 3px #0005,
+        inset 0 1px 1px #ffffff20;
 
-  font-weight: 700;
+      transition:
+        background 0.15s ease,
+        transform 0.1s ease;
+    }
 
-  letter-spacing: 1px;
 
-  box-shadow:
-    0 3px 3px #0005,
-    inset 0 1px 1px #ffffff20;
 
-  transition:
-    background 0.15s ease,
-    transform 0.1s ease;
-}
+    #power.is-on {
 
+      background:
+        linear-gradient(
+          180deg,
+          #3d3e3c,
+          #313231
+        );
 
+      color: #59b100;
+    }
 
-#power.is-on {
 
-  background:
-    linear-gradient(
-      180deg,
-      #3d3e3c,
-      #313231
-    );
 
-  color: #59b100;
-}
+    #power.is-off {
 
+      background:
+        linear-gradient(
+          180deg,
+          #666a64,
+          #3f433f
+        );
 
+      color: #fcfdfc;
+    }
 
-#power.is-off {
 
-  background:
-    linear-gradient(
-      180deg,
-      #666a64,
-      #3f433f
-    );
 
-  color: #fcfdfc;
-}
+    #power:active {
 
+      transform: translateY(1px);
+    }
 
 
-#power:active {
 
-  transform: translateY(1px);
-}
+    /* =====================================================
+       MENU
+       ===================================================== */
 
+    .menuDrawer {
 
+      margin-top: 16px;
+    }
 
-/* =====================================================
-   MENU
-   ===================================================== */
 
-.menuDrawer {
 
-  margin-top: 16px;
-}
+    #app > .menuDrawer {
 
+      position: static !important;
 
+      margin-top: 16px;
+    }
 
-#app > .menuDrawer {
 
-  position: static !important;
 
-  margin-top: 16px;
-}
+    #menuToggle {
 
+      position: absolute !important;
 
+      display: block;
 
-#menuToggle {
+      width: 90px;
 
-  position: absolute !important;
+      height: 20px;
 
-  display: block;
+      top: 17px !important;
 
-  width: 90px;
+      right: 43px !important;
 
-  height: 20px;
+      left: auto !important;
 
-  top: 17px !important;
+      transform: none !important;
 
-  right: 43px !important;
+      margin: 0 !important;
 
-  left: auto !important;
+      border-radius: 14px;
 
-  transform: none !important;
+      background:
+        linear-gradient(
+          180deg,
+          #666a64,
+          #3f433f
+        );
 
-  margin: 0 !important;
+      color: #e2e5df;
 
-  border-radius: 14px;
+      font-size: 16px;
 
-  background:
-    linear-gradient(
-      180deg,
-      #666a64,
-      #3f433f
-    );
+      font-weight: 600;
 
-  color: #e2e5df;
+      line-height: 1;
 
-  font-size: 16px;
+      letter-spacing: 1px;
 
-  font-weight: 600;
+      box-shadow:
+        0 3px 3px #0005;
 
-  line-height: 1;
+      z-index: 100 !important;
 
-  letter-spacing: 1px;
+      transition:
+        transform 0.1s ease,
+        box-shadow 0.1s ease;
+    }
 
-  box-shadow:
-    0 3px 3px #0005;
 
-  z-index: 100 !important;
 
-  transition:
-    transform 0.1s ease,
-    box-shadow 0.1s ease;
-}
+    #menuToggle:active {
 
+      transform:
+        translateY(2px) !important;
 
+      box-shadow:
+        0 1px 2px #0005;
+    }
 
-#menuToggle:active {
 
-  transform:
-    translateY(2px) !important;
 
-  box-shadow:
-    0 1px 2px #0005;
-}
+    #menuToggle[aria-expanded="true"] {
 
+      background:
+        linear-gradient(
+          180deg,
+          #454943,
+          #292c29
+        );
+    }
 
 
-#menuToggle[aria-expanded="true"] {
 
-  background:
-    linear-gradient(
-      180deg,
-      #454943,
-      #292c29
-    );
-}
+    /* =====================================================
+       AJUDA
+       ===================================================== */
 
+    #helpContainer {
 
+      display: none;
 
-/* =====================================================
-   AJUDA
-   ===================================================== */
+      position: absolute !important;
 
-#helpContainer {
+      top: 45px !important;
 
-  display: none;
+      left: 50% !important;
 
-  position: absolute !important;
+      width: min(300px, calc(100% - 24px)) !important;
 
-  top: 45px !important;
+      transform: translateX(-50%);
 
-  left: 50% !important;
+      z-index: 99999 !important;
+    }
 
-  width: min(300px, calc(100% - 24px)) !important;
+    #helpContainer.open {
 
-  transform: translateX(-50%);
+      display: block !important;
+    }
 
-  z-index: 99999 !important;
-}
+    #helpPanel {
 
-#helpContainer.open {
+      position: static !important;
 
-  display: block !important;
-}
+      width: 100% !important;
 
-#helpPanel {
+      background: #bcbaba;
 
-  position: static !important;
+      color: #292b28;
 
-  width: 100% !important;
+      border-radius: 12px;
 
-  background: #bcbaba;
+      padding: 12px;
 
-  color: #292b28;
+      box-shadow: 0 10px 25px #0008;
 
-  border-radius: 12px;
+      font-size: 14px;
 
-  padding: 12px;
+      line-height: 1.6;
 
-  box-shadow: 0 10px 25px #0008;
+      text-align: left;
 
-  font-size: 14px;
+      z-index: 99999 !important;
 
-  line-height: 1.6;
+    }
 
-  text-align: left;
+    #helpPanel h3 {
 
-  z-index: 99999 !important;
+      margin: 0 0 8px;
 
-max-height: 55vh;
-overflow-y: auto;
-overscroll-behavior: contain;
-box-sizing: border-box;
+      font-size: 18px;
 
+      color: #07521b;
 
+      font-weight: 800;
 
-}
+      text-align: center;
 
-#helpPanel h3 {
+      letter-spacing: 0.7px;
 
-  margin: 0 0 8px;
+    }
 
-  font-size: 18px;
+    #helpPanel p {
 
-  color: #07521b;
+      margin: 5px 0;
 
-  font-weight: 800;
+      font-weight: 600;
 
-  text-align: center;
+      font-size: 16px;
 
-  letter-spacing: 0.7px;
+      color: #000000;
 
-}
+      letter-spacing: 0.5px;
 
-#helpPanel p {
+    }
 
-  margin: 5px 0;
+    #helpPanel strong {
 
-  font-weight: 600;
+      color: #092b87;
+      font-weight: 800;
 
-  font-size: 16px;
+    }
 
-  color: #000000;
+    .help-mobile {
 
-  letter-spacing: 0.5px;
+      display: none;
 
-}
+    }
 
-#helpPanel strong {
 
-  color: #092b87;
-  font-weight: 800;
 
-}
+    #closeHelp {
 
-.help-mobile {
+      display: block;
+      width: 70px;
+      margin: 4px auto 0;
 
-  display: none;
+      padding: 6px 10px;
 
-}
+      text-align: center;
 
+      border-radius: 25px;
+      border: 2px solid #000;
 
+      background: #fee000;
+      color: #000000;
 
-#closeHelp {
+      box-shadow: 0 6px 6px rgba(0, 0, 0, 0.3);
 
-  display: block;
-  width: 70px;
-  margin: 4px auto 0;
+      font-size: 14px;
+      font-weight: 800;
 
-  padding: 6px 10px;
+      cursor: pointer;
+    }
 
-  text-align: center;
+    .menu-close-row {
+      flex: 0 0 100%;
+      display: flex;
+      justify-content: center;
+      margin-top: 6px;
+    }
 
-  border-radius: 25px;
-  border: 2px solid #000;
+    #closeMenu {
+      flex: 0 0 120px;
+      width: 120px;
+      margin: 0;
+      padding: 6px 10px;
+      text-align: center;
+      border-radius: 25px;
+      border: 2px solid #000;
+      background: #fee000;
+      color: #000000;
+      box-shadow: 0 6px 6px rgba(197, 195, 195, 0.473);
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+    }
 
-  background: #fee000;
-  color: #000000;
 
-  box-shadow: 0 6px 6px rgba(0, 0, 0, 0.3);
+    #closeMenu:active,
+    #closeHelp:active {
 
-  font-size: 14px;
-  font-weight: 800;
+      transform: translateY(1px);
 
-  cursor: pointer;
-}
+    }
+    #helpPanel .help-pc {
+      display: block;
+    }
 
-.menu-close-row {
-  flex: 0 0 100%;
-  display: flex;
-  justify-content: center;
-  margin-top: 6px;
-}
+    #helpPanel .help-mobile {
+      display: block;
+    }
 
-#closeMenu {
-  flex: 0 0 120px;
-  width: 120px;
-  margin: 0;
-  padding: 6px 10px;
-  text-align: center;
-  border-radius: 25px;
-  border: 2px solid #000;
-  background: #fee000;
-  color: #000000;
-  box-shadow: 0 6px 6px rgba(197, 195, 195, 0.473);
-  font-size: 14px;
-  font-weight: 800;
-  cursor: pointer;
-}
 
+    /*botoes do menu*/
 
-#closeMenu:active,
-#closeHelp:active {
+    .menu {
 
-  transform: translateY(1px);
+      position: absolute !important;
 
-}
-#helpPanel .help-pc {
-  display: block;
-}
+      top: 45px !important;
 
-#helpPanel .help-mobile {
-  display: block;
-}
+      left: 20px !important;
 
+      right: 20px !important;
 
-/*botoes do menu*/
+      width: auto !important;
 
-.menu {
+      display: flex;
 
-  position: absolute !important;
+      flex-wrap: wrap;
 
-  top: 45px !important;
+      gap: 16px;
 
-  left: 20px !important;
+      max-height: 0;
 
-  right: 20px !important;
+      margin-top: 0 !important;
 
-  width: auto !important;
+      overflow: hidden;
 
-  display: flex;
+      opacity: 0;
 
-  flex-wrap: wrap;
+      visibility: hidden;
 
-  gap: 16px;
+      z-index: 99999 !important;
 
-  max-height: 0;
+      background:
+        rgba(
+          35,
+          38,
+          35,
+          0.95
+        );
 
-  margin-top: 0 !important;
+      padding: 0 10px;
 
-  overflow: hidden;
+      border-radius: 10px;
 
-  opacity: 0;
+      transition:
+        max-height 0.25s ease,
+        opacity 0.2s ease,
+        visibility 0.2s ease,
+        padding 0.2s ease;
+    }
 
-  visibility: hidden;
 
-  z-index: 99999 !important;
 
-  background:
-    rgba(
-      35,
-      38,
-      35,
-      0.95
-    );
+    #app > .menuDrawer.open .menu {
 
-  padding: 0 10px;
+      max-height: 320px !important;
 
-  border-radius: 10px;
+      opacity: 1 !important;
 
-  transition:
-    max-height 0.25s ease,
-    opacity 0.2s ease,
-    visibility 0.2s ease,
-    padding 0.2s ease;
-}
+      visibility: visible !important;
 
+      padding: 10px !important;
+    }
 
 
-#app > .menuDrawer.open .menu {
 
-  max-height: 320px !important;
+    .menu button {
 
-  opacity: 1 !important;
+      flex:
+        1 1
+        calc(30% - 4px);
 
-  visibility: visible !important;
+        margin-top: 12px;
 
-  padding: 10px !important;
-}
+      background: #327f21;
 
+      color: #ffffff;
 
+      border-radius: 8px;
 
-.menu button {
+      border:
+        solid 2px
+        #000000;
 
-  flex:
-    1 1
-    calc(30% - 4px);
+      box-shadow:
+        0 6px 6px
+        rgba(246, 246, 246, 0.566);
 
-    margin-top: 12px;
+      padding: 5px;
 
-  background: #327f21;
+      font-size: 14px;
 
-  color: #ffffff;
+      font-weight: 500;
+    }
 
-  border-radius: 8px;
+    #btnHelp {
+      padding: 12px 7px;
 
-  border:
-    solid 2px
-    #000000;
+      font-size: 19px;
+    }
 
-  box-shadow:
-    0 6px 6px
-    rgba(246, 246, 246, 0.566);
 
-  padding: 5px;
 
-  font-size: 14px;
+    #hint {
 
-  font-weight: 500;
-}
+      text-align: center;
 
-#btnHelp {
-  padding: 12px 7px;
+      color: #3d403b;
 
-  font-size: 19px;
-}
+      font-size: 9px;
 
+      margin-top: 12px;
 
+      line-height: 1.2;
+    }
 
-#hint {
 
-  text-align: center;
 
-  color: #3d403b;
+    /* =====================================================
+       EDITOR
+       ===================================================== */
 
-  font-size: 9px;
+    #editor {
 
-  margin-top: 12px;
+      display: none;
 
-  line-height: 1.2;
-}
+      position: absolute !important;
 
+      top: 45px !important;
 
+      left: 50% !important;
 
-/* =====================================================
-   EDITOR
-   ===================================================== */
+      right: auto !important;
 
-#editor {
+      width:
+        min(
+          520px,
+          calc(100% - 24px)
+        ) !important;
 
-  display: none;
+      transform:
+        translateX(-50%);
 
-  position: absolute !important;
+      margin-top: 0 !important;
 
-  top: 45px !important;
+      background: #c3c5bf;
 
-  left: 50% !important;
+      border-radius: 12px;
 
-  right: auto !important;
+      padding: 14px;
 
-  width:
-    min(
-      520px,
-      calc(100% - 24px)
-    ) !important;
+      color: #292b28;
 
-  transform:
-    translateX(-50%);
+      box-shadow:
+        0 10px 25px #0006;
 
-  margin-top: 0 !important;
+      z-index: 99999 !important;
 
-  background: #c3c5bf;
+      max-height:
+        calc(100% - 58px);
 
-  border-radius: 12px;
+      overflow-y: auto;
 
-  padding: 14px;
+      scrollbar-width: none;
+    }
 
-  color: #292b28;
 
-  box-shadow:
-    0 10px 25px #0006;
 
-  z-index: 99999 !important;
+    #editor::-webkit-scrollbar {
 
-  max-height:
-    calc(100% - 58px);
+      display: none;
+    }
 
-  overflow-y: auto;
 
-  scrollbar-width: none;
-}
 
+    #editor.open {
 
+      display: block !important;
+    }
 
-#editor::-webkit-scrollbar {
 
-  display: none;
-}
 
+    #editor .editRow > label:has(+ #dpadRange),
+    #editor .editRow > label:has(+ #bRange),
+    #editor .editRow > label:has(+ #aRange),
+    #editor .editRow > label:has(+ #smallRange),
+    #dpadRange,
+    #bRange,
+    #aRange,
+    #smallRange {
 
+      display: none !important;
+    }
 
-#editor.open {
 
-  display: block !important;
-}
 
+    #app.editing .dpad,
+    #app.editing .ab,
+    #app.editing .smallControl {
 
+      cursor: move;
 
-#editor .editRow > label:has(+ #dpadRange),
-#editor .editRow > label:has(+ #bRange),
-#editor .editRow > label:has(+ #aRange),
-#editor .editRow > label:has(+ #smallRange),
-#dpadRange,
-#bRange,
-#aRange,
-#smallRange {
+      outline:
+        2px dashed
+        #7b2841;
 
-  display: none !important;
-}
+      outline-offset: 2px;
+    }
 
 
 
-#app.editing .dpad,
-#app.editing .ab,
-#app.editing .smallControl {
+    #app.editing .smallControl [data-key] {
 
-  cursor: move;
+      pointer-events: none;
+    }
 
-  outline:
-    2px dashed
-    #7b2841;
 
-  outline-offset: 2px;
-}
 
+    #editor h3 {
 
+      margin:
+        0
+        0
+        8px;
 
-#app.editing .smallControl [data-key] {
+        text-align: center;
 
-  pointer-events: none;
-}
+        font-size: 20px;
 
+        font-weight: 800;
 
+        color: #07521b;
 
-#editor h3 {
+        box-shadow:
+          0 2px 2px
+          rgba(0, 0, 0, 0.3);
+    }
 
-  margin:
-    0
-    0
-    8px;
 
-    text-align: center;
 
-    font-size: 20px;
+    .editRow {
 
-    font-weight: 800;
+      margin-bottom: 6px;
+    }
 
-    color: #07521b;
 
-    box-shadow:
-      0 2px 2px
-      rgba(0, 0, 0, 0.3);
-}
 
+    .editRow label {
 
+      display: flex;
 
-.editRow {
+      justify-content: space-between;
+      font-size: 13px;
+      margin-bottom: 5px;
+      font-weight: 700;
+    }
 
-  margin-bottom: 6px;
-}
 
 
+    .editRow input[type="range"] {
+      width: 100%;
+      height: 34px;
+      accent-color: #0a51f8;
+    }
 
-.editRow label {
 
-  display: flex;
 
-  justify-content: space-between;
-  font-size: 13px;
-  margin-bottom: 5px;
-  font-weight: 700;
-}
+    .editorButtons {
 
+      display: flex;
 
+      gap: 5px;
 
-.editRow input[type="range"] {
-  width: 100%;
-  height: 34px;
-  accent-color: #0a51f8;
-}
+      margin-top: 7px;
+    }
 
 
 
-.editorButtons {
+    .editorButtons button {
 
-  display: flex;
+      flex: 1;
+      padding: 9px 8px;
+      border: 4px solid #000000;
+      border-radius: 9px;
+      background: #fee000;
+      box-shadow: 0 8px 8px rgba(0, 0, 0, 0.3);
+      color: rgb(5, 5, 5);
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+    }
 
-  gap: 5px;
 
-  margin-top: 7px;
-}
 
+    #grpDpad {
 
+      transform:
+        translate(0px, 0px);
+    }
 
-.editorButtons button {
 
-  flex: 1;
-  padding: 9px 8px;
-  border: 4px solid #000000;
-  border-radius: 9px;
-  background: #fee000;
-  box-shadow: 0 8px 8px rgba(0, 0, 0, 0.3);
-  color: rgb(5, 5, 5);
-  font-size: 16px;
-  font-weight: 800;
-  cursor: pointer;
-}
 
+    #grpB {
 
+      transform:
+        translate(0px, 0px);
+    }
 
-#grpDpad {
 
-  transform:
-    translate(0px, 0px);
-}
 
+    #grpA {
 
+      transform:
+        translate(0px, 0px);
+    }
 
-#grpB {
 
-  transform:
-    translate(0px, 0px);
-}
 
+    #grpSmall {
 
+      transform:
+        translate(0px, 0px);
+    }
 
-#grpA {
 
-  transform:
-    translate(0px, 0px);
-}
 
+    .pressed {
 
+      filter:
+        brightness(0.75);
+    }
 
-#grpSmall {
 
-  transform:
-    translate(0px, 0px);
-}
 
+    #screenWrap.booting canvas {
 
+      background: #9bbc0f;
+    }
 
-.pressed {
+    #gamepadMapper {
+      display: none;
 
-  filter:
-    brightness(0.75);
-}
+      position: absolute;
 
+      top: 45px;
 
+      left: 50%;
 
-#screenWrap.booting canvas {
+      width: min(
+        360px,
+        calc(100% - 24px)
+      );
 
-  background: #9bbc0f;
-}
+      transform: translateX(-50%);
 
-#gamepadMapper {
-  display: none;
+      padding: 14px;
 
-  position: absolute;
+      background: #c3c5bf;
 
-  top: 45px;
+      color: #292b28;
 
-  left: 50%;
+      border-radius: 12px;
 
-  width: min(
-    360px,
-    calc(100% - 24px)
-  );
+      box-shadow:
+        0 10px 25px #0006;
 
-  transform: translateX(-50%);
+      z-index: 100000;
 
-  padding: 14px;
+      text-align: center;
+    }
 
-  background: #c3c5bf;
+    #gamepadMapper.open {
+      display: block;
+    }
 
-  color: #292b28;
+    #gamepadMapper h3 {
+      margin:
+        0
+        0
+        8px;
 
-  border-radius: 12px;
+      font-size: 16px;
 
-  box-shadow:
-    0 10px 25px #0006;
+      font-weight: 900;
+    }
 
-  z-index: 100000;
+    #gamepadStatus {
+      margin:
+        0
+        0
+        12px;
 
-  text-align: center;
-}
+      font-size: 11px;
 
-#gamepadMapper.open {
-  display: block;
-}
+      font-weight: 700;
+    }
 
-#gamepadMapper h3 {
-  margin:
-    0
-    0
-    8px;
+    .mapRow {
+      display: grid;
 
-  font-size: 16px;
+      grid-template-columns:
+        70px
+        70px
+        1fr;
 
-  font-weight: 900;
-}
+      align-items: center;
 
-#gamepadStatus {
-  margin:
-    0
-    0
-    12px;
+      gap: 8px;
 
-  font-size: 11px;
+      margin-bottom: 8px;
 
-  font-weight: 700;
-}
+      padding: 6px;
 
-.mapRow {
-  display: grid;
+      background: #aaada7;
 
-  grid-template-columns:
-    70px
-    70px
-    1fr;
+      border-radius: 8px;
 
-  align-items: center;
+      font-size: 12px;
 
-  gap: 8px;
+      font-weight: 900;
+    }
 
-  margin-bottom: 8px;
+    .mapRow button {
+      padding: 5px;
 
-  padding: 6px;
+      border-radius: 7px;
 
-  background: #aaada7;
+      border: 1px solid #000;
 
-  border-radius: 8px;
+      background: #327f21;
 
-  font-size: 12px;
+      color: #fff;
 
-  font-weight: 900;
-}
+      font-size: 11px;
 
-.mapRow button {
-  padding: 5px;
+      font-weight: 900;
+    }
 
-  border-radius: 7px;
+    .mapRow span:last-child {
+      text-align: left;
 
-  border: 1px solid #000;
+      font-size: 10px;
 
-  background: #327f21;
+      overflow: hidden;
 
-  color: #fff;
+      text-overflow: ellipsis;
+    }
 
-  font-size: 11px;
+    #closeGamepadMapper {
+      width: 100%;
 
-  font-weight: 900;
-}
+      margin-top: 8px;
 
-.mapRow span:last-child {
-  text-align: left;
+      padding: 7px;
 
-  font-size: 10px;
+      border-radius: 8px;
 
-  overflow: hidden;
+      border: 1px solid #000;
 
-  text-overflow: ellipsis;
-}
+      background: #30342f;
 
-#closeGamepadMapper {
-  width: 100%;
+      color: #fff;
 
-  margin-top: 8px;
+      font-size: 11px;
 
-  padding: 7px;
+      font-weight: 900;
+    }
 
-  border-radius: 8px;
-
-  border: 1px solid #000;
-
-  background: #30342f;
-
-  color: #fff;
-
-  font-size: 11px;
-
-  font-weight: 900;
-}
-
-</style>
+  </style>
 </head>
 
 <body>
@@ -1663,10 +1656,10 @@ box-sizing: border-box;
 
 
   <button
-    id="power"
-    class="is-off"
-    type="button"
-    aria-pressed="false"
+          id="power"
+          class="is-off"
+          type="button"
+          aria-pressed="false"
   >
     OFF
   </button>
@@ -1675,9 +1668,9 @@ box-sizing: border-box;
   <div id="screenWrap">
 
     <img
-      class="topImage"
-      src="./assets/logo-developed-by-dougx.png"
-      alt="Developed by DougX"
+            class="topImage"
+            src="./assets/logo-developed-by-dougx.png"
+            alt="Developed by DougX"
     >
 
 
@@ -1686,8 +1679,8 @@ box-sizing: border-box;
       <span class="powerIndicator">
 
         <span
-          id="powerLed"
-          aria-label="System Off"
+                id="powerLed"
+                aria-label="System Off"
         ></span>
 
         POWER
@@ -1698,9 +1691,9 @@ box-sizing: border-box;
 
 
     <canvas
-      id="screen"
-      width="160"
-      height="144"
+            id="screen"
+            width="160"
+            height="144"
     ></canvas>
 
 
@@ -1712,9 +1705,9 @@ box-sizing: border-box;
 
 
   <img
-    class="logoDX"
-    src="./assets/logo-dx.png"
-    alt="DougX Boy"
+          class="logoDX"
+          src="./assets/logo-dx.png"
+          alt="DougX Boy"
   >
 
 
@@ -1724,43 +1717,43 @@ box-sizing: border-box;
     <div class="dpadArea">
 
       <div
-        class="dpad"
-        id="grpDpad"
+              class="dpad"
+              id="grpDpad"
       >
 
         <img
-          class="dpadSprite"
-          src="./assets/dpad.png"
-          alt=""
+                class="dpadSprite"
+                src="./assets/dpad.png"
+                alt=""
         >
 
         <div
-          class="pad hub"
-          aria-hidden="true"
+                class="pad hub"
+                aria-hidden="true"
         ></div>
 
 
         <button
-          class="pad v"
-          data-key="up"
+                class="pad v"
+                data-key="up"
         ></button>
 
 
         <button
-          class="pad h"
-          data-key="left"
+                class="pad h"
+                data-key="left"
         ></button>
 
 
         <button
-          class="pad v"
-          data-key="down"
+                class="pad v"
+                data-key="down"
         ></button>
 
 
         <button
-          class="pad h"
-          data-key="right"
+                class="pad h"
+                data-key="right"
         ></button>
 
       </div>
@@ -1771,15 +1764,15 @@ box-sizing: border-box;
     <div class="actions">
 
       <button
-        class="ab"
-        id="grpB"
-        data-key="b"
+              class="ab"
+              id="grpB"
+              data-key="b"
       >
 
         <img
-          class="buttonSprite"
-          src="./assets/botao-b.png"
-          alt=""
+                class="buttonSprite"
+                src="./assets/botao-b.png"
+                alt=""
         >
 
         B
@@ -1788,15 +1781,15 @@ box-sizing: border-box;
 
 
       <button
-        class="ab"
-        id="grpA"
-        data-key="a"
+              class="ab"
+              id="grpA"
+              data-key="a"
       >
 
         <img
-          class="buttonSprite"
-          src="./assets/botao-A.png"
-          alt=""
+                class="buttonSprite"
+                src="./assets/botao-A.png"
+                alt=""
         >
 
         A
@@ -1810,13 +1803,13 @@ box-sizing: border-box;
 
 
   <div
-    class="small"
-    id="grpSmall"
+          class="small"
+          id="grpSmall"
   >
 
     <span
-      class="smallControl"
-      id="grpSelect"
+            class="smallControl"
+            id="grpSelect"
     >
 
       <button data-key="select">
@@ -1827,8 +1820,8 @@ box-sizing: border-box;
 
 
     <span
-      class="smallControl"
-      id="grpStart"
+            class="smallControl"
+            id="grpStart"
     >
 
       <button data-key="start">
@@ -1842,24 +1835,24 @@ box-sizing: border-box;
 
 
   <div
-    class="menuDrawer"
-    id="menuDrawer"
+          class="menuDrawer"
+          id="menuDrawer"
   >
 
     <button
-      id="menuToggle"
-      type="button"
-      aria-expanded="false"
-      aria-controls="menu"
-      aria-label="Open Menu"
+            id="menuToggle"
+            type="button"
+            aria-expanded="false"
+            aria-controls="menu"
+            aria-label="Open Menu"
     >
       Menu
     </button>
 
 
     <div
-      class="menu"
-      id="menu"
+            class="menu"
+            id="menu"
     >
 
       <button id="load">
@@ -1873,980 +1866,1105 @@ box-sizing: border-box;
 
 
       <button
-        id="btnEdit"
-        aria-label="Adjustments"
-        title=" Adjust your controls position and size "
+              id="btnEdit"
+              aria-label="Adjustments"
+              title=" Adjust your controls position and size "
       >
         ADJUST CONTROLS
       </button>
 
 
-<button
-  id="btnGamepad"
-  type="button"
-  aria-label="Map Bluetooth Controller"
-  title="Map your Bluetooth controller"
->
-  MAP CONTROLLER
-</button>
+      <button
+              id="btnGamepad"
+              type="button"
+              aria-label="Map Bluetooth Controller"
+              title="Map your Bluetooth controller"
+      >
+        MAP CONTROLLER
+      </button>
 
 
 
       <button
-        id="btnHelp"
-        type="button"
-        aria-label="Open Help"
+              id="btnHelp"
+              type="button"
+              aria-label="Open Help"
       >
-         HELP ?
+        HELP ?
       </button>
 
 
       <div class="menu-close-row">
         <button
-          id="closeMenu"
-          type="button"
-          aria-label=" CLOSE MENU "
+                id="closeMenu"
+                type="button"
+                aria-label=" CLOSE MENU "
         >
           CLOSE MENU
-      </button>
+        </button>
+
+      </div>
 
     </div>
 
-  </div>
-
-</div>
-
-   <div
-  id="gamepadMapper"
-  role="dialog"
-  aria-modal="false"
-  aria-labelledby="gamepadMapperTitle"
->
-
-  <h3 id="gamepadMapperTitle">
-    CONTROLLER MAPPING
-  </h3>
-
-  <p id="gamepadStatus">
-    Connect your Bluetooth controller
-  </p>
-
-  <div class="mapRow">
-    <span>A</span>
-    <button type="button" data-map="a">
-      MAP
-    </button>
-    <span id="mapAValue">
-      —
-    </span>
-  </div>
-
-  <div class="mapRow">
-    <span>B</span>
-    <button type="button" data-map="b">
-      MAP
-    </button>
-    <span id="mapBValue">
-      —
-    </span>
-  </div>
-
-  <div class="mapRow">
-    <span>START</span>
-    <button type="button" data-map="start">
-      MAP
-    </button>
-    <span id="mapStartValue">
-      —
-    </span>
-  </div>
-
-  <div class="mapRow">
-    <span>SELECT</span>
-    <button type="button" data-map="select">
-      MAP
-    </button>
-    <span id="mapSelectValue">
-      —
-    </span>
-  </div>
-
-  <button id="resetGamepadMapping" type="button">
-  RESET CONTROLLER
-</button>
-
-  <button
-    id="closeGamepadMapper"
-    type="button"
-  >
-    CLOSE
-  </button>
-
-</div>
-
-
-  <div id="helpContainer">
 
     <div
-      id="helpPanel"
-      role="dialog"
-      aria-modal="false"
-      aria-labelledby="helpTitle"
+            id="gamepadMapper"
+            role="dialog"
+            aria-modal="false"
+            aria-labelledby="gamepadMapperTitle"
     >
 
-      <h3 id="helpTitle">HELP DX EMULATOR GB</h3>
+      <h3 id="gamepadMapperTitle">
+        CONTROLLER MAPPING
+      </h3>
 
-      <div class="help-pc">
+      <p id="gamepadStatus">
+        Connect your Bluetooth controller
+      </p>
 
-        <p><strong>PC KEYBOARD</strong></p>
-
-        <p>PC arrow keys = DPAD </p>
-
-        <p>A = A &nbsp; • &nbsp; S = B</p>
-
-        <p>Enter = START &nbsp; - &nbsp; Shift = SELECT</p>
-
+      <div class="mapRow">
+        <span>A</span>
+        <button type="button" data-map="a">
+          MAP
+        </button>
+        <span id="mapAValue">
+      —
+    </span>
       </div>
 
-      <div class="help-mobile">
-
-        <p><strong>MOBILE CONTROLS</strong></p>
-
-        <p>The buttons on the screen are the same as the console controls.</p>
-
-        <p><strong>ADJUST CONTROLS</strong></p>
-          
-         <p> Allows you to move and resize the DPAD, buttons A and B, SELECT and START.</p>
-
-        <p>Use the adjustment controls to position and resize the buttons to your preference.</p>
-
+      <div class="mapRow">
+        <span>B</span>
+        <button type="button" data-map="b">
+          MAP
+        </button>
+        <span id="mapBValue">
+      —
+    </span>
       </div>
 
-    </div>
+      <div class="mapRow">
+        <span>START</span>
+        <button type="button" data-map="start">
+          MAP
+        </button>
+        <span id="mapStartValue">
+      —
+    </span>
+      </div>
 
-    <button
-      id="closeHelp"
-      type="button"
-    >
-      CLOSE
-    </button>
+      <div class="mapRow">
+        <span>SELECT</span>
+        <button type="button" data-map="select">
+          MAP
+        </button>
+        <span id="mapSelectValue">
+      —
+    </span>
+      </div>
 
-  </div>
-
-
-  <div id="editor">
-
-    <h3>ADJUST CONTROLS</h3>
-
-
-    <div class="editRow">
-
-      <label>
-        D-PAD
-        <span id="dpadValue">0</span>
-      </label>
-
-
-      <input
-        id="dpadRange"
-        type="range"
-        min="-100"
-        max="100"
-        value="0"
+      <button
+              id="closeGamepadMapper"
+              type="button"
       >
-
-
-      <label>
-        SIZE OF THE CROSS
-        <span id="dpadScaleValue">100%</span>
-      </label>
-
-
-      <input
-        id="dpadScaleRange"
-        type="range"
-        min="60"
-        max="150"
-        value="100"
-      >
-
-    </div>
-
-
-
-    <div class="editRow">
-
-      <label>
-        B BUTTON
-        <span id="bValue">0</span>
-      </label>
-
-
-      <input
-        id="bRange"
-        type="range"
-        min="-100"
-        max="100"
-        value="0"
-      >
-
-
-      <label>
-        SIZE OF B BUTTON
-        <span id="bScaleValue">100%</span>
-      </label>
-
-
-      <input
-        id="bScaleRange"
-        type="range"
-        min="60"
-        max="150"
-        value="100"
-      >
-
-    </div>
-
-
-
-    <div class="editRow">
-
-      <label>
-        A BUTTON
-        <span id="aValue">0</span>
-      </label>
-
-
-      <input
-        id="aRange"
-        type="range"
-        min="-100"
-        max="100"
-        value="0"
-      >
-
-
-      <label>
-        SIZE OF A BUTTON
-        <span id="aScaleValue">100%</span>
-      </label>
-
-
-      <input
-        id="aScaleRange"
-        type="range"
-        min="60"
-        max="150"
-        value="100"
-      >
-
-    </div>
-
-
-
-    <div class="editRow">
-
-      <label>
-        SELECT / START
-        <span id="smallValue">0</span>
-      </label>
-
-
-      <input
-        id="smallRange"
-        type="range"
-        min="-100"
-        max="100"
-        value="0"
-      >
-
-
-      <label>
-        SIZE OF SELECT / START
-        <span id="smallScaleValue">100%</span>
-      </label>
-
-
-      <input
-        id="smallScaleRange"
-        type="range"
-        min="60"
-        max="150"
-        value="100"
-      >
-
-    </div>
-
-
-
-    <div class="editorButtons">
-
-      <button id="resetControls">
-        RESET
-      </button>
-
-
-      <button id="doneEdit">
-        DONE
+        CLOSE
       </button>
 
     </div>
 
+
+    <div id="helpContainer">
+
+      <div
+              id="helpPanel"
+              role="dialog"
+              aria-modal="false"
+              aria-labelledby="helpTitle"
+      >
+
+        <h3 id="helpTitle">HELP DX EMULATOR GB</h3>
+
+        <div class="help-pc">
+
+          <p><strong>PC KEYBOARD</strong></p>
+
+          <p>PC arrow keys = DPAD </p>
+
+          <p>A = A &nbsp; • &nbsp; S = B</p>
+
+          <p>Enter = START &nbsp; - &nbsp; Shift = SELECT</p>
+
+        </div>
+
+        <div class="help-mobile">
+
+          <p><strong>MOBILE CONTROLS</strong></p>
+
+          <p>The buttons on the screen are the same as the console controls.</p>
+
+          <p><strong>ADJUST CONTROLS</strong>
+
+          <p> Allows you to move and resize the DPAD, buttons A and B, SELECT and START.</p>
+
+          <p>Use the adjustment controls to position and resize the buttons to your preference.</p>
+
+        </div>
+
+      </div>
+
+      <button
+              id="closeHelp"
+              type="button"
+      >
+        CLOSE
+      </button>
+
+    </div>
+
+
+    <div id="editor">
+
+      <h3>ADJUST CONTROLS</h3>
+
+
+      <div class="editRow">
+
+        <label>
+          D-PAD
+          <span id="dpadValue">0</span>
+        </label>
+
+
+        <input
+                id="dpadRange"
+                type="range"
+                min="-100"
+                max="100"
+                value="0"
+        >
+
+
+        <label>
+          SIZE OF THE CROSS
+          <span id="dpadScaleValue">100%</span>
+        </label>
+
+
+        <input
+                id="dpadScaleRange"
+                type="range"
+                min="60"
+                max="150"
+                value="100"
+        >
+
+      </div>
+
+
+
+      <div class="editRow">
+
+        <label>
+          B BUTTON
+          <span id="bValue">0</span>
+        </label>
+
+
+        <input
+                id="bRange"
+                type="range"
+                min="-100"
+                max="100"
+                value="0"
+        >
+
+
+        <label>
+          SIZE OF B BUTTON
+          <span id="bScaleValue">100%</span>
+        </label>
+
+
+        <input
+                id="bScaleRange"
+                type="range"
+                min="60"
+                max="150"
+                value="100"
+        >
+
+      </div>
+
+
+
+      <div class="editRow">
+
+        <label>
+          A BUTTON
+          <span id="aValue">0</span>
+        </label>
+
+
+        <input
+                id="aRange"
+                type="range"
+                min="-100"
+                max="100"
+                value="0"
+        >
+
+
+        <label>
+          SIZE OF A BUTTON
+          <span id="aScaleValue">100%</span>
+        </label>
+
+
+        <input
+                id="aScaleRange"
+                type="range"
+                min="60"
+                max="150"
+                value="100"
+        >
+
+      </div>
+
+
+
+      <div class="editRow">
+
+        <label>
+          SELECT / START
+          <span id="smallValue">0</span>
+        </label>
+
+
+        <input
+                id="smallRange"
+                type="range"
+                min="-100"
+                max="100"
+                value="0"
+        >
+
+
+        <label>
+          SIZE OF SELECT / START
+          <span id="smallScaleValue">100%</span>
+        </label>
+
+
+        <input
+                id="smallScaleRange"
+                type="range"
+                min="60"
+                max="150"
+                value="100"
+        >
+
+      </div>
+
+
+
+      <div class="editorButtons">
+
+        <button id="resetControls">
+          RESET
+        </button>
+
+
+        <button id="doneEdit">
+          DONE
+        </button>
+
+      </div>
+
+    </div>
+
   </div>
 
-</div>
+  </div>
 
 
 
-<script type="module">
+  <script type="module">
 
-'use strict';
+    'use strict';
 
 
 
-/* =====================================================
-   ELEMENTOS PRINCIPAIS
-   ===================================================== */
+    /* =====================================================
+       ELEMENTOS PRINCIPAIS
+       ===================================================== */
 
-const canvas =
-  document.getElementById('screen');
+    const canvas =
+      document.getElementById('screen');
 
-const ctx =
-  canvas.getContext('2d');
+    const ctx =
+      canvas.getContext('2d');
 
-ctx.imageSmoothingEnabled = false;
+    ctx.imageSmoothingEnabled = false;
 
 
-const statusEl =
-  document.getElementById('status');
+    const statusEl =
+      document.getElementById('status');
 
 
-const screenWrap =
-  document.getElementById('screenWrap');
+    const screenWrap =
+      document.getElementById('screenWrap');
 
 
-const powerLed =
-  document.getElementById('powerLed');
+    const powerLed =
+      document.getElementById('powerLed');
 
 
-const powerButton =
-  document.getElementById('power');
+    const powerButton =
+      document.getElementById('power');
 
 
 
-/* =====================================================
-   STATUS / TELA
-   ===================================================== */
+    /* =====================================================
+       STATUS / TELA
+       ===================================================== */
 
-function showStatus(text) {
+    function showStatus(text) {
 
-  statusEl.textContent =
-    text;
-}
-
-
-
-function showError(text) {
-
-  statusEl.textContent =
-    'ERRO • ' + text;
-}
-
-
-
-function paintPoweredOffScreen() {
-
-  ctx.fillStyle =
-    '#283603';
-
-  ctx.fillRect(
-    0,
-    0,
-    canvas.width,
-    canvas.height
-  );
-}
-
-
-
-function paintBootScreen() {
-
-  ctx.fillStyle =
-    '#9bbc0f';
-
-  ctx.fillRect(
-    0,
-    0,
-    canvas.width,
-    canvas.height
-  );
-
-
-  ctx.fillStyle =
-    '#0f380f';
-
-
-  ctx.textAlign =
-    'center';
-
-
-  ctx.textBaseline =
-    'middle';
-
-
-  ctx.font =
-    'bold 19px Arial, sans-serif';
-
-
-  ctx.fillText(
-    'DX Boy',
-    canvas.width / 2,
-    canvas.height / 2 - 8
-  );
-
-
-  ctx.fillText(
-    'DX Boy',
-    canvas.width / 2 + 1,
-    canvas.height / 2 - 8
-  );
-
-
-  ctx.font =
-    'bold 9px Arial, sans-serif';
-
-
-  ctx.fillText(
-    'by DougX',
-    canvas.width / 2,
-    canvas.height / 2 + 13
-  );
-}
-
-
-
-function updatePowerVisual(isPoweredOn) {
-
-  screenWrap.classList.toggle(
-    'powered-off',
-    !isPoweredOn
-  );
-
-
-  screenWrap.classList.toggle(
-    'booting',
-    false
-  );
-
-
-  powerLed.classList.toggle(
-    'is-on',
-    isPoweredOn
-  );
-
-
-  powerLed.setAttribute(
-    'aria-label',
-    isPoweredOn
-      ? 'Ligado'
-      : 'Desligado'
-  );
-
-
-  powerButton.classList.toggle(
-    'is-on',
-    isPoweredOn
-  );
-
-
-  powerButton.classList.toggle(
-    'is-off',
-    !isPoweredOn
-  );
-
-
-  powerButton.textContent =
-    isPoweredOn
-      ? ' ON'
-      : ' OFF';
-
-
-  powerButton.setAttribute(
-    'aria-pressed',
-    String(isPoweredOn)
-  );
-}
-
-
-
-/* =====================================================
-   ESTADO DO EMULADOR
-   ===================================================== */
-
-let gameboy = null;
-
-let currentRomName = null;
-
-let currentRomBuffer = null;
-
-let emulatorPoweredOn = false;
-
-let pendingFrameId = null;
-
-
-
-const nativeRequestAnimationFrame =
-  window.requestAnimationFrame.bind(window);
-
-
-const nativeCancelAnimationFrame =
-  window.cancelAnimationFrame.bind(window);
-
-
-
-window.requestAnimationFrame =
-  callback => {
-
-    if (!emulatorPoweredOn) {
-
-      return 0;
+      statusEl.textContent =
+        text;
     }
 
 
-    pendingFrameId =
-      nativeRequestAnimationFrame(
-        timestamp => {
 
-          pendingFrameId = null;
+    function showError(text) {
 
-          callback(timestamp);
-        }
+      statusEl.textContent =
+        'ERRO • ' + text;
+    }
+
+
+
+    function paintPoweredOffScreen() {
+
+      ctx.fillStyle =
+        '#283603';
+
+      ctx.fillRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+      );
+    }
+
+
+
+    function paintBootScreen() {
+
+      ctx.fillStyle =
+        '#9bbc0f';
+
+      ctx.fillRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
       );
 
 
-    return pendingFrameId;
-  };
+      ctx.fillStyle =
+        '#0f380f';
 
 
-
-/* =====================================================
-   AUTOSAVE
-   ===================================================== */
-
-let autosaveTimer = null;
-
-let sramSaveTimer = null;
+      ctx.textAlign =
+        'center';
 
 
-
-/* =====================================================
-   ÁUDIO
-   ===================================================== */
-
-let soundEnabled = true;
-
-let audioUnlocked = false;
+      ctx.textBaseline =
+        'middle';
 
 
-
-const bootAudio =
-  new Audio(
-    './assets/dx-timm.mp3'
-  );
+      ctx.font =
+        'bold 19px Arial, sans-serif';
 
 
-bootAudio.preload =
-  'auto';
+      ctx.fillText(
+        'DX Boy',
+        canvas.width / 2,
+        canvas.height / 2 - 8
+      );
 
 
-bootAudio.playsInline =
-  true;
+      ctx.fillText(
+        'DX Boy',
+        canvas.width / 2 + 1,
+        canvas.height / 2 - 8
+      );
 
 
-bootAudio.setAttribute(
-  'playsinline',
-  ''
-);
+      ctx.font =
+        'bold 9px Arial, sans-serif';
 
 
-bootAudio.setAttribute(
-  'webkit-playsinline',
-  ''
-);
-
-
-bootAudio.volume =
-  0.8;
-
-
-bootAudio.load();
-
-
-
-async function unlockAudio() {
-
-  if (audioUnlocked) {
-
-    return true;
-  }
-
-
-  try {
-
-    bootAudio.muted =
-      true;
-
-
-    bootAudio.currentTime =
-      0;
-
-
-    const promise =
-      bootAudio.play();
-
-
-    if (promise) {
-
-      await promise;
+      ctx.fillText(
+        'by DougX',
+        canvas.width / 2,
+        canvas.height / 2 + 13
+      );
     }
 
 
-    bootAudio.pause();
+
+    function updatePowerVisual(isPoweredOn) {
+
+      screenWrap.classList.toggle(
+        'powered-off',
+        !isPoweredOn
+      );
 
 
-    bootAudio.currentTime =
-      0;
+      screenWrap.classList.toggle(
+        'booting',
+        false
+      );
 
 
-    bootAudio.muted =
-      false;
+      powerLed.classList.toggle(
+        'is-on',
+        isPoweredOn
+      );
 
 
-    audioUnlocked =
+      powerLed.setAttribute(
+        'aria-label',
+        isPoweredOn
+          ? 'Ligado'
+          : 'Desligado'
+      );
+
+
+      powerButton.classList.toggle(
+        'is-on',
+        isPoweredOn
+      );
+
+
+      powerButton.classList.toggle(
+        'is-off',
+        !isPoweredOn
+      );
+
+
+      powerButton.textContent =
+        isPoweredOn
+          ? ' ON'
+          : ' OFF';
+
+
+      powerButton.setAttribute(
+        'aria-pressed',
+        String(isPoweredOn)
+      );
+    }
+
+
+
+    /* =====================================================
+       ESTADO DO EMULADOR
+       ===================================================== */
+
+    let gameboy = null;
+
+    let currentRomName = null;
+
+    let currentRomBuffer = null;
+
+    let emulatorPoweredOn = false;
+
+    let pendingFrameId = null;
+
+    const nativeRequestAnimationFrame =
+      window.requestAnimationFrame.bind(window);
+
+
+    const nativeCancelAnimationFrame =
+      window.cancelAnimationFrame.bind(window);
+
+
+
+    window.requestAnimationFrame =
+      callback => {
+
+        if (!emulatorPoweredOn) {
+
+          return 0;
+        }
+
+
+        pendingFrameId =
+          nativeRequestAnimationFrame(
+            timestamp => {
+
+              pendingFrameId = null;
+
+              callback(timestamp);
+            }
+          );
+
+
+        return pendingFrameId;
+      };
+
+
+
+    /* =====================================================
+       AUTOSAVE
+       ===================================================== */
+
+    let autosaveTimer = null;
+
+    let sramSaveTimer = null;
+
+
+
+    /* =====================================================
+       ÁUDIO
+       ===================================================== */
+
+    let soundEnabled = true;
+
+    let audioUnlocked = false;
+
+
+
+    const bootAudio =
+      new Audio(
+        './assets/dx-timm.mp3'
+      );
+
+
+    bootAudio.preload =
+      'auto';
+
+
+    bootAudio.playsInline =
       true;
 
 
-    return true;
-
-  } catch (error) {
-
-    bootAudio.pause();
-
-    bootAudio.currentTime =
-      0;
-
-    bootAudio.muted =
-      false;
-
-    return false;
-  }
-}
+    bootAudio.setAttribute(
+      'playsinline',
+      ''
+    );
 
 
+    bootAudio.setAttribute(
+      'webkit-playsinline',
+      ''
+    );
 
-function playGameBoyBootSound() {
-
-  if (!soundEnabled) {
-
-    return;
-  }
-
-
-  try {
-
-    bootAudio.pause();
-
-    bootAudio.currentTime =
-      0;
-
-    bootAudio.muted =
-      false;
 
     bootAudio.volume =
       0.8;
 
 
-    const playPromise =
-      bootAudio.play();
+    bootAudio.load();
 
 
-    if (playPromise) {
 
-      playPromise.catch(() => {
+    async function unlockAudio() {
 
-      });
+      if (audioUnlocked) {
+
+        return true;
+      }
+
+
+      try {
+
+        bootAudio.muted =
+          true;
+
+
+        bootAudio.currentTime =
+          0;
+
+
+        const promise =
+          bootAudio.play();
+
+
+        if (promise) {
+
+          await promise;
+        }
+
+
+        bootAudio.pause();
+
+
+        bootAudio.currentTime =
+          0;
+
+
+        bootAudio.muted =
+          false;
+
+
+        audioUnlocked =
+          true;
+
+
+        return true;
+
+      } catch (error) {
+
+        bootAudio.pause();
+
+        bootAudio.currentTime =
+          0;
+
+        bootAudio.muted =
+          false;
+
+        return false;
+      }
     }
 
-  } catch {
-
-  }
-}
 
 
+    function playGameBoyBootSound() {
 
-/* =====================================================
-   DATABASE
-   ===================================================== */
+      if (!soundEnabled) {
 
-const DB_NAME =
-  'GB_Emulator_Storage';
-
-
-const STORE_NAME =
-  'rom_data';
+        return;
+      }
 
 
+      try {
 
-function openDB() {
+        bootAudio.pause();
 
-  return new Promise(
-    (resolve, reject) => {
+        bootAudio.currentTime =
+          0;
 
-      const request =
-        indexedDB.open(
-          DB_NAME,
-          1
-        );
+        bootAudio.muted =
+          false;
 
-
-      request.onupgradeneeded =
-        () => {
-
-          const db =
-            request.result;
+        bootAudio.volume =
+          0.8;
 
 
-          if (
-            !db.objectStoreNames.contains(
-              STORE_NAME
-            )
-          ) {
+        const playPromise =
+          bootAudio.play();
 
-            db.createObjectStore(
-              STORE_NAME
+
+        if (playPromise) {
+
+          playPromise.catch(() => {
+
+          });
+        }
+
+      } catch {
+
+      }
+    }
+
+
+
+    /* =====================================================
+       DATABASE
+       ===================================================== */
+
+    const DB_NAME =
+      'GB_Emulator_Storage';
+
+
+    const STORE_NAME =
+      'rom_data';
+
+
+
+    function openDB() {
+
+      return new Promise(
+        (resolve, reject) => {
+
+          const request =
+            indexedDB.open(
+              DB_NAME,
+              1
             );
-          }
-        };
 
 
-      request.onsuccess =
-        () =>
-          resolve(
-            request.result
-          );
+          request.onupgradeneeded =
+            () => {
+
+              const db =
+                request.result;
 
 
-      request.onerror =
-        () =>
-          reject(
-            request.error
-          );
-    }
-  );
-}
+              if (
+                !db.objectStoreNames.contains(
+                  STORE_NAME
+                )
+              ) {
+
+                db.createObjectStore(
+                  STORE_NAME
+                );
+              }
+            };
 
 
-
-async function saveToDB(
-  key,
-  value
-) {
-
-  const db =
-    await openDB();
+          request.onsuccess =
+            () =>
+              resolve(
+                request.result
+              );
 
 
-  return new Promise(
-    (resolve, reject) => {
-
-      const tx =
-        db.transaction(
-          STORE_NAME,
-          'readwrite'
-        );
-
-
-      tx
-        .objectStore(STORE_NAME)
-        .put(
-          value,
-          key
-        );
-
-
-      tx.oncomplete =
-        () => {
-
-          db.close();
-
-          resolve();
-        };
-
-
-      tx.onerror =
-        () => {
-
-          db.close();
-
-          reject(
-            tx.error
-          );
-        };
-    }
-  );
-}
-
-
-
-async function getFromDB(key) {
-
-  const db =
-    await openDB();
-
-
-  return new Promise(
-    (resolve, reject) => {
-
-      const tx =
-        db.transaction(
-          STORE_NAME,
-          'readonly'
-        );
-
-
-      const request =
-        tx
-          .objectStore(STORE_NAME)
-          .get(key);
-
-
-      request.onsuccess =
-        () => {
-
-          db.close();
-
-          resolve(
-            request.result
-          );
-        };
-
-
-      request.onerror =
-        () => {
-
-          db.close();
-
-          reject(
-            request.error
-          );
-        };
-    }
-  );
-}
-
-
-
-/* =====================================================
-   SAVE CONVERSÃO
-   ===================================================== */
-
-function arrayBufferToBase64(buffer) {
-
-  const bytes =
-    new Uint8Array(buffer);
-
-
-  let binary =
-    '';
-
-
-  const chunk =
-    0x8000;
-
-
-  for (
-    let i = 0;
-    i < bytes.length;
-    i += chunk
-  ) {
-
-    binary +=
-      String.fromCharCode(
-        ...bytes.subarray(
-          i,
-          i + chunk
-        )
+          request.onerror =
+            () =>
+              reject(
+                request.error
+              );
+        }
       );
-  }
-
-
-  return btoa(binary);
-}
+    }
 
 
 
-function base64ToArrayBuffer(base64) {
-
-  const binary =
-    atob(base64);
-
-
-  const bytes =
-    new Uint8Array(
-      binary.length
-    );
-
-
-  for (
-    let i = 0;
-    i < binary.length;
-    i++
-  ) {
-
-    bytes[i] =
-      binary.charCodeAt(i);
-  }
-
-
-  return bytes.buffer;
-}
-
-
-
-/* =====================================================
-   SAVE STATE
-   ===================================================== */
-
-async function saveState(
-  isAuto = false
-) {
-
-  if (
-    !gameboy ||
-    !currentRomName ||
-    !gameboy.cartridge
-  ) {
-
-    return false;
-  }
-
-
-  try {
-
-    const saveData =
-      gameboy.getCartridgeSaveRam();
-
-
-    if (
-      !saveData ||
-      saveData.byteLength === 0
+    async function saveToDB(
+      key,
+      value
     ) {
 
-      if (!isAuto) {
+      const db =
+        await openDB();
 
-        showStatus(
-          'this game does not support saving'
+
+      return new Promise(
+        (resolve, reject) => {
+
+          const tx =
+            db.transaction(
+              STORE_NAME,
+              'readwrite'
+            );
+
+
+          tx
+            .objectStore(STORE_NAME)
+            .put(
+              value,
+              key
+            );
+
+
+          tx.oncomplete =
+            () => {
+
+              db.close();
+
+              resolve();
+            };
+
+
+          tx.onerror =
+            () => {
+
+              db.close();
+
+              reject(
+                tx.error
+              );
+            };
+        }
+      );
+    }
+
+
+
+    async function getFromDB(key) {
+
+      const db =
+        await openDB();
+
+
+      return new Promise(
+        (resolve, reject) => {
+
+          const tx =
+            db.transaction(
+              STORE_NAME,
+              'readonly'
+            );
+
+
+          const request =
+            tx
+              .objectStore(STORE_NAME)
+              .get(key);
+
+
+          request.onsuccess =
+            () => {
+
+              db.close();
+
+              resolve(
+                request.result
+              );
+            };
+
+
+          request.onerror =
+            () => {
+
+              db.close();
+
+              reject(
+                request.error
+              );
+            };
+        }
+      );
+    }
+
+
+
+    /* =====================================================
+       SAVE CONVERSÃO
+       ===================================================== */
+
+    function arrayBufferToBase64(buffer) {
+
+      const bytes =
+        new Uint8Array(buffer);
+
+
+      let binary =
+        '';
+
+
+      const chunk =
+        0x8000;
+
+
+      for (
+        let i = 0;
+        i < bytes.length;
+        i += chunk
+      ) {
+
+        binary +=
+          String.fromCharCode(
+            ...bytes.subarray(
+              i,
+              i + chunk
+            )
+          );
+      }
+
+
+      return btoa(binary);
+    }
+
+
+
+    function base64ToArrayBuffer(base64) {
+
+      const binary =
+        atob(base64);
+
+
+      const bytes =
+        new Uint8Array(
+          binary.length
         );
+
+
+      for (
+        let i = 0;
+        i < binary.length;
+        i++
+      ) {
+
+        bytes[i] =
+          binary.charCodeAt(i);
+      }
+
+
+      return bytes.buffer;
+    }
+
+
+
+    /* =====================================================
+       SAVE STATE
+       ===================================================== */
+
+    async function saveState(
+      isAuto = false
+    ) {
+
+      if (
+        !gameboy ||
+        !currentRomName ||
+        !gameboy.cartridge
+      ) {
+
+        return false;
+      }
+
+
+      try {
+
+        const saveData =
+          gameboy.getCartridgeSaveRam();
+
+
+        if (
+          !saveData ||
+          saveData.byteLength === 0
+        ) {
+
+          if (!isAuto) {
+
+            showStatus(
+              'this game does not support saving'
+            );
+          }
+
+
+          return false;
+        }
+
+
+        await saveToDB(
+          'save_' + currentRomName,
+          saveData
+        );
+
+
+        try {
+
+          const base64 =
+            arrayBufferToBase64(
+              saveData
+            );
+
+
+          localStorage.setItem(
+            'gb_save_' + currentRomName,
+            base64
+          );
+
+        } catch {}
+
+
+        if (!isAuto) {
+
+          showStatus(
+            'GAME PROGRESS SAVED'
+          );
+        }
+
+
+        return true;
+
+      } catch {
+
+        if (!isAuto) {
+
+          showError(
+            'FAILED TO SAVE GAME PROGRESS'
+          );
+        }
+
+
+        return false;
+      }
+    }
+
+
+
+    /* =====================================================
+       LOAD SAVE
+       ===================================================== */
+
+    async function loadSaveState(
+      isAuto = false
+    ) {
+
+      if (
+        !gameboy ||
+        !currentRomName ||
+        !gameboy.cartridge
+      ) {
+
+        return false;
+      }
+
+
+      try {
+
+        let saveData =
+          await getFromDB(
+            'save_' + currentRomName
+          );
+
+
+        if (!saveData) {
+
+          try {
+
+            const raw =
+              localStorage.getItem(
+                'gb_save_' +
+                currentRomName
+              );
+
+
+            if (raw) {
+
+              saveData =
+                base64ToArrayBuffer(
+                  raw
+                );
+            }
+
+          } catch {}
+        }
+
+
+        if (saveData) {
+
+          gameboy.setCartridgeSaveRam(
+            saveData
+          );
+
+
+          if (!isAuto) {
+
+            showStatus(
+              'SAVE DO JOGO RESTAURADO'
+            );
+          }
+
+
+          return true;
+        }
+
+      } catch {
+
+        if (!isAuto) {
+
+          showError(
+            'ERRO AO RESTAURAR SAVE'
+          );
+        }
       }
 
 
@@ -2854,455 +2972,103 @@ async function saveState(
     }
 
 
-    await saveToDB(
-      'save_' + currentRomName,
-      saveData
-    );
 
+    /* =====================================================
+       SRAM AUTO SAVE
+       ===================================================== */
 
-    try {
-
-      const base64 =
-        arrayBufferToBase64(
-          saveData
-        );
-
-
-      localStorage.setItem(
-        'gb_save_' + currentRomName,
-        base64
-      );
-
-    } catch {}
-
-
-    if (!isAuto) {
-
-      showStatus(
-        'GAME PROGRESS SAVED'
-      );
-    }
-
-
-    return true;
-
-  } catch {
-
-    if (!isAuto) {
-
-      showError(
-        'FAILED TO SAVE GAME PROGRESS'
-      );
-    }
-
-
-    return false;
-  }
-}
-
-
-
-/* =====================================================
-   LOAD SAVE
-   ===================================================== */
-
-async function loadSaveState(
-  isAuto = false
-) {
-
-  if (
-    !gameboy ||
-    !currentRomName ||
-    !gameboy.cartridge
-  ) {
-
-    return false;
-  }
-
-
-  try {
-
-    let saveData =
-      await getFromDB(
-        'save_' + currentRomName
-      );
-
-
-    if (!saveData) {
-
-      try {
-
-        const raw =
-          localStorage.getItem(
-            'gb_save_' +
-            currentRomName
-          );
-
-
-        if (raw) {
-
-          saveData =
-            base64ToArrayBuffer(
-              raw
-            );
-        }
-
-      } catch {}
-    }
-
-
-    if (saveData) {
-
-      gameboy.setCartridgeSaveRam(
-        saveData
-      );
-
-
-      if (!isAuto) {
-
-        showStatus(
-          'SAVE DO JOGO RESTAURADO'
-        );
-      }
-
-
-      return true;
-    }
-
-  } catch {
-
-    if (!isAuto) {
-
-      showError(
-        'ERRO AO RESTAURAR SAVE'
-      );
-    }
-  }
-
-
-  return false;
-}
-
-
-
-/* =====================================================
-   SRAM AUTO SAVE
-   ===================================================== */
-
-function setupSramAutoSave() {
-
-  if (
-    !gameboy ||
-    !gameboy.cartridge
-  ) {
-
-    return;
-  }
-
-
-  try {
-
-    gameboy.setOnWriteToCartridgeRam(
-      () => {
-
-        clearTimeout(
-          sramSaveTimer
-        );
-
-
-        sramSaveTimer =
-          setTimeout(
-            () => {
-
-              saveState(true);
-
-            },
-            500
-          );
-      }
-    );
-
-  } catch {}
-}
-
-
-
-function startAutosave() {
-
-  stopAutosave();
-
-
-  autosaveTimer =
-    setInterval(
-      () => {
-
-        saveState(true);
-
-      },
-      8000
-    );
-}
-
-
-
-function stopAutosave() {
-
-  if (autosaveTimer) {
-
-    clearInterval(
-      autosaveTimer
-    );
-
-    autosaveTimer = null;
-  }
-}
-
-
-
-/* =====================================================
-   CARREGAR ROM
-   ===================================================== */
-
-async function loadROM(
-  buffer,
-  name
-) {
-
-  if (!gameboy) {
-
-    showError(
-      'emulator not initialized'
-    );
-
-    return;
-  }
-
-
-  try {
-
-    stopAutosave();
-
-
-    if (
-      pendingFrameId !== null
-    ) {
-
-      nativeCancelAnimationFrame(
-        pendingFrameId
-      );
-
-      pendingFrameId = null;
-    }
-
-
-    emulatorPoweredOn =
-      false;
-
-
-    updatePowerVisual(
-      false
-    );
-
-
-    paintPoweredOffScreen();
-
-
-    currentRomBuffer =
-      buffer;
-
-
-    currentRomName =
-      name.replace(
-        /[^a-zA-Z0-9]/g,
-        '_'
-      );
-
-
-    await saveToDB(
-      'active_rom_buffer',
-      buffer
-    );
-
-
-    await saveToDB(
-      'active_rom_name',
-      currentRomName
-    );
-
-
-    gameboy.loadGame(
-      buffer
-    );
-
-
-    if (
-      gameboy.apu &&
-      typeof gameboy.apu.enableSound === 'function'
-    ) {
-
-      try {
-
-        gameboy.apu.enableSound();
-
-      } catch {}
-    }
-
-
-    setupSramAutoSave();
-
-
-    await loadSaveState(true);
-
-
-    showStatus(
-      'ROM PRONTA • APERTE ON'
-    );
-
-  } catch {
-
-    showError(
-      'ERRO AO CARREGAR ROM'
-    );
-  }
-}
-
-
-
-/* =====================================================
-   INPUT DE ROM
-   ===================================================== */
-
-const fileInput =
-  document.createElement(
-    'input'
-  );
-
-
-fileInput.type =
-  'file';
-
-
-fileInput.accept =
-  '.gb,.gbc,application/octet-stream';
-
-
-fileInput.style.display =
-  'none';
-
-
-document.body.appendChild(
-  fileInput
-);
-
-
-
-document
-  .getElementById('load')
-  .addEventListener(
-    'click',
-    () => {
-
-      unlockAudio();
-
-      fileInput.click();
-    }
-  );
-
-
-
-fileInput.addEventListener(
-  'change',
-  async () => {
-
-    const file =
-      fileInput.files?.[0];
-
-
-    if (!file) {
-
-      return;
-    }
-
-
-    try {
-
-      const buffer =
-        await file.arrayBuffer();
-
-
-      await loadROM(
-        buffer,
-        file.name
-      );
-
-    } catch {
-
-      showError(
-        'ERRO AO LER ROM'
-      );
-    }
-
-
-    fileInput.value =
-      '';
-  }
-);
-
-
-
-/* =====================================================
-   RESET
-   ===================================================== */
-
-document
-  .getElementById('reset')
-  ?.addEventListener(
-    'click',
-    async () => {
+    function setupSramAutoSave() {
 
       if (
-        !currentRomBuffer ||
-        !currentRomName
+        !gameboy ||
+        !gameboy.cartridge
       ) {
-
-        showStatus(
-          'NENHUMA ROM CARREGADA'
-        );
 
         return;
       }
 
+
+      try {
+
+        gameboy.setOnWriteToCartridgeRam(
+          () => {
+
+            clearTimeout(
+              sramSaveTimer
+            );
+
+
+            sramSaveTimer =
+              setTimeout(
+                () => {
+
+                  saveState(true);
+
+                },
+                500
+              );
+          }
+        );
+
+      } catch {}
+    }
+
+
+
+    function startAutosave() {
+
+      stopAutosave();
+
+
+      autosaveTimer =
+        setInterval(
+          () => {
+
+            saveState(true);
+
+          },
+          8000
+        );
+    }
+
+
+
+    function stopAutosave() {
+
+      if (autosaveTimer) {
+
+        clearInterval(
+          autosaveTimer
+        );
+
+        autosaveTimer = null;
+      }
+    }
+
+
+
+    /* =====================================================
+       CARREGAR ROM
+       ===================================================== */
+
+    async function loadROM(
+      buffer,
+      name
+    ) {
 
       if (!gameboy) {
 
-        showStatus(
-          'EMULADOR NÃO INICIALIZADO'
+        showError(
+          'emulator not initialized'
         );
 
         return;
       }
-
-
-      if (!emulatorPoweredOn) {
-
-        showStatus(
-          'CONSOLE DESLIGADO • APERTE ON'
-        );
-
-        return;
-      }
-
-
-      unlockAudio();
-
-
-      await saveState(true);
 
 
       try {
 
         stopAutosave();
-
 
         if (
           pendingFrameId !== null
@@ -3316,8 +3082,43 @@ document
         }
 
 
+        emulatorPoweredOn =
+          false;
+
+
+        updatePowerVisual(
+          false
+        );
+
+
+        paintPoweredOffScreen();
+
+
+        currentRomBuffer =
+          buffer;
+
+
+        currentRomName =
+          name.replace(
+            /[^a-zA-Z0-9]/g,
+            '_'
+          );
+
+
+        await saveToDB(
+          'active_rom_buffer',
+          buffer
+        );
+
+
+        await saveToDB(
+          'active_rom_name',
+          currentRomName
+        );
+
+
         gameboy.loadGame(
-          currentRomBuffer
+          buffer
         );
 
 
@@ -3326,8 +3127,11 @@ document
           typeof gameboy.apu.enableSound === 'function'
         ) {
 
-          gameboy.apu.enableSound();
+          try {
 
+            gameboy.apu.enableSound();
+
+          } catch {}
         }
 
 
@@ -3337,2195 +3141,495 @@ document
         await loadSaveState(true);
 
 
+        showStatus(
+          'ROM PRONTA • APERTE ON'
+        );
+
+      } catch {
+
+        showError(
+          'ERRO AO CARREGAR ROM'
+        );
+      }
+    }
+
+
+
+    /* =====================================================
+       INPUT DE ROM
+       ===================================================== */
+
+    const fileInput =
+      document.createElement(
+        'input'
+      );
+
+
+    fileInput.type =
+      'file';
+
+
+    fileInput.accept =
+      '.gb,.gbc,application/octet-stream';
+
+
+    fileInput.style.display =
+      'none';
+
+
+    document.body.appendChild(
+      fileInput
+    );
+
+
+
+    document
+      .getElementById('load')
+      .addEventListener(
+        'click',
+        () => {
+
+          unlockAudio();
+
+          fileInput.click();
+        }
+      );
+
+
+
+    fileInput.addEventListener(
+      'change',
+      async () => {
+
+        const file =
+          fileInput.files?.[0];
+
+
+        if (!file) {
+
+          return;
+        }
+
+
+        try {
+
+          const buffer =
+            await file.arrayBuffer();
+
+
+          await loadROM(
+            buffer,
+            file.name
+          );
+
+        } catch {
+
+          showError(
+            'ERRO AO LER ROM'
+          );
+        }
+
+
+        fileInput.value =
+          '';
+      }
+    );
+
+
+
+    /* =====================================================
+       RESET
+       ===================================================== */
+
+    document
+      .getElementById('reset')
+      ?.addEventListener(
+        'click',
+        async () => {
+
+          if (
+            !currentRomBuffer ||
+            !currentRomName
+          ) {
+
+            showStatus(
+              'NENHUMA ROM CARREGADA'
+            );
+
+            return;
+          }
+
+
+          if (!gameboy) {
+
+            showStatus(
+              'EMULADOR NÃO INICIALIZADO'
+            );
+
+            return;
+          }
+
+
+          if (!emulatorPoweredOn) {
+
+            showStatus(
+              'CONSOLE DESLIGADO • APERTE ON'
+            );
+
+            return;
+          }
+
+
+          unlockAudio();
+
+
+          await saveState(true);
+
+
+          try {
+
+            stopAutosave();
+
+
+            if (
+              pendingFrameId !== null
+            ) {
+
+              nativeCancelAnimationFrame(
+                pendingFrameId
+              );
+
+              pendingFrameId = null;
+            }
+
+
+            gameboy.loadGame(
+              currentRomBuffer
+            );
+
+
+            if (
+              gameboy.apu &&
+              typeof gameboy.apu.enableSound === 'function'
+            ) {
+
+              gameboy.apu.enableSound();
+
+            }
+
+
+            setupSramAutoSave();
+
+
+            await loadSaveState(true);
+
+
+            if (!emulatorPoweredOn) {
+
+              return;
+            }
+
+
+            gameboy.run();
+
+
+            startAutosave();
+
+
+            showStatus(
+              ' GAME RESTARTED'
+            );
+
+          } catch {
+
+            showError(
+              'ERROR RESTARTING GAME'
+            );
+          }
+        }
+      );
+
+
+
+    /* =====================================================
+       BOTÃO POWER
+       ===================================================== */
+
+    powerButton.addEventListener(
+      'click',
+      async () => {
+
+        /* =================================================
+           DESLIGAR
+           ================================================= */
+
+        if (emulatorPoweredOn) {
+
+          bootAudio.pause();
+
+          bootAudio.currentTime =
+            0;
+
+
+          if (
+            gameboy &&
+            gameboy.apu &&
+            typeof gameboy.apu.disableSound === 'function'
+          ) {
+
+            try {
+
+              gameboy.apu.disableSound();
+
+            } catch {}
+          }
+
+
+          try {
+
+            await saveState(true);
+
+          } catch {}
+
+
+          emulatorPoweredOn =
+            false;
+
+
+          if (
+            pendingFrameId !== null
+          ) {
+
+            nativeCancelAnimationFrame(
+              pendingFrameId
+            );
+
+            pendingFrameId =
+              null;
+          }
+
+
+          stopAutosave();
+
+
+          paintPoweredOffScreen();
+
+
+          updatePowerVisual(
+            false
+          );
+
+
+          showStatus(
+            'EMULADOR DESLIGADO'
+          );
+
+
+          return;
+        }
+
+
+
+        /* =================================================
+           LIGAR
+           ================================================= */
+
+        emulatorPoweredOn =
+          true;
+
+
+        updatePowerVisual(
+          true
+        );
+
+
+        screenWrap.classList.add(
+          'booting'
+        );
+
+
+        screenWrap.classList.remove(
+          'powered-off'
+        );
+
+
+        paintBootScreen();
+
+
+        playGameBoyBootSound();
+
+
+        showStatus(
+          'DX • by DougX'
+        );
+
+
+        await new Promise(
+          resolve =>
+            setTimeout(
+              resolve,
+              3000
+            )
+        );
+
+
         if (!emulatorPoweredOn) {
 
           return;
         }
 
 
-        gameboy.run();
-
-
-        startAutosave();
-
-
-        showStatus(
-          ' GAME RESTARTED'
+        screenWrap.classList.remove(
+          'booting'
         );
 
-      } catch {
 
-        showError(
-          'ERROR RESTARTING GAME'
-        );
-      }
-    }
-  );
 
+        if (!currentRomBuffer) {
 
-
-/* =====================================================
-   BOTÃO POWER
-   ===================================================== */
-
-powerButton.addEventListener(
-  'click',
-  async () => {
-
-
-    /* =================================================
-       DESLIGAR
-       ================================================= */
-
-    if (emulatorPoweredOn) {
-
-      bootAudio.pause();
-
-      bootAudio.currentTime =
-        0;
-
-
-      if (
-        gameboy &&
-        gameboy.apu &&
-        typeof gameboy.apu.disableSound === 'function'
-      ) {
-
-        try {
-
-          gameboy.apu.disableSound();
-
-        } catch {}
-      }
-
-
-      try {
-
-        await saveState(true);
-
-      } catch {}
-
-
-      emulatorPoweredOn =
-        false;
-
-
-      if (
-        pendingFrameId !== null
-      ) {
-
-        nativeCancelAnimationFrame(
-          pendingFrameId
-        );
-
-        pendingFrameId =
-          null;
-      }
-
-
-      stopAutosave();
-
-
-      paintPoweredOffScreen();
-
-
-      updatePowerVisual(
-        false
-      );
-
-
-      showStatus(
-        'EMULADOR DESLIGADO'
-      );
-
-
-      return;
-    }
-
-
-
-    /* =================================================
-       LIGAR
-       ================================================= */
-
-    emulatorPoweredOn =
-      true;
-
-
-    updatePowerVisual(
-      true
-    );
-
-
-    screenWrap.classList.add(
-      'booting'
-    );
-
-
-    screenWrap.classList.remove(
-      'powered-off'
-    );
-
-
-    paintBootScreen();
-
-
-    playGameBoyBootSound();
-
-
-    showStatus(
-      'DX • by DougX'
-    );
-
-
-    await new Promise(
-      resolve =>
-        setTimeout(
-          resolve,
-          3000
-        )
-    );
-
-
-    if (!emulatorPoweredOn) {
-
-      return;
-    }
-
-
-    screenWrap.classList.remove(
-      'booting'
-    );
-
-
-
-    if (!currentRomBuffer) {
-
-      showStatus(
-        'SYSTEM READY • LOAD A ROM'
-      );
-
-      return;
-    }
-
-
-
-    try {
-
-      stopAutosave();
-
-
-      if (
-        pendingFrameId !== null
-      ) {
-
-        nativeCancelAnimationFrame(
-          pendingFrameId
-        );
-
-        pendingFrameId = null;
-      }
-
-
-      gameboy.loadGame(
-        currentRomBuffer
-      );
-
-
-      if (
-        gameboy.apu &&
-        typeof gameboy.apu.enableSound === 'function'
-      ) {
-
-        try {
-
-          gameboy.apu.enableSound();
-
-        } catch {}
-      }
-
-
-      setupSramAutoSave();
-
-
-      const restored =
-        await loadSaveState(true);
-
-
-      if (!emulatorPoweredOn) {
-
-        return;
-      }
-
-
-      gameboy.run();
-
-
-      startAutosave();
-
-
-      if (restored) {
-
-        showStatus(
-          'LOADING • SAVE RESTORED'
-        );
-
-      } else {
-
-        showStatus(
-          'PLAYING • ' +
-          currentRomName
-            .toUpperCase()
-            .replace(
-              /_/g,
-              ' '
-            )
-        );
-      }
-
-    } catch {
-
-      emulatorPoweredOn =
-        false;
-
-
-      bootAudio.pause();
-
-
-      updatePowerVisual(
-        false
-      );
-
-
-      paintPoweredOffScreen();
-
-
-      showError(
-        'ERROR STARTING EMULATOR'
-      );
-    }
-  }
-);
-
-
-
-
-/* =====================================================
-   TECLADO
-   ===================================================== */
-
-const keyMap = {
-
-
-  ArrowUp: 'up',
-  ArrowDown: 'down',
-  ArrowLeft: 'left',
-  ArrowRight: 'right',
-
-  a: 'a',
-  A: 'a',
-
-  s: 'b',
-  S: 'b',
-
-  Enter: 'start',
-
-
-  Shift: 'select'
-
-
-};
-
-const keyboardPressed = new Set();
-
-function handleKeyboard(event, pressed) {
-  const logical = keyMap[event.key];
-
-  if (!logical) return;
-
-  event.preventDefault();
-
-  if (pressed) {
-    keyboardPressed.add(logical);
-  } else {
-    keyboardPressed.delete(logical);
-  }
-
-  if (!gameboy || !gameboy.input) return;
-
-  const properties = {
-    up: 'isPressingUp',
-    down: 'isPressingDown',
-    left: 'isPressingLeft',
-    right: 'isPressingRight',
-    a: 'isPressingA',
-    b: 'isPressingB',
-    start: 'isPressingStart',
-    select: 'isPressingSelect'
-  };
-
-  gameboy.input[properties[logical]] = pressed;
-}
-
-window.addEventListener('keydown', event => {
-  handleKeyboard(event, true);
-}, { passive: false });
-
-window.addEventListener('keyup', event => {
-  handleKeyboard(event, false);
-}, { passive: false });
-
-window.addEventListener('blur', () => {
-  keyboardPressed.clear();
-
-  if (!gameboy || !gameboy.input) return;
-
-  Object.values(keyMap).forEach(logical => {
-    const properties = {
-      up: 'isPressingUp',
-      down: 'isPressingDown',
-      left: 'isPressingLeft',
-      right: 'isPressingRight',
-      a: 'isPressingA',
-      b: 'isPressingB',
-      start: 'isPressingStart',
-      select: 'isPressingSelect'
-    };
-
-    gameboy.input[properties[logical]] =
-      false;
-  });
-}, { passive: true });
-
-
-
-
-
-/* =====================================================
-   CONTROLES TOUCH
-   ===================================================== */
-
-const touchInputMap = {
-
-  up: 'isPressingUp',
-  down: 'isPressingDown',
-  left: 'isPressingLeft',
-  right: 'isPressingRight',
-
-  a: 'isPressingA',
-  b: 'isPressingB',
-
-  start: 'isPressingStart',
-  select: 'isPressingSelect'
-};
-
-
-
-function setTouchInput(
-  logical,
-  pressed
-) {
-
-  if (
-    !gameboy ||
-    !gameboy.input
-  ) {
-
-    return;
-  }
-
-
-  const property =
-    touchInputMap[logical];
-
-
-  if (!property) {
-
-    return;
-  }
-
-
-  gameboy.input[property] =
-    pressed;
-}
-
-
-
-document
-  .querySelectorAll(
-    '[data-key]'
-  )
-  .forEach(button => {
-
-    const logical =
-      button.dataset.key;
-
-
-
-    function press(event) {
-
-      event.preventDefault();
-
-      event.stopPropagation();
-
-
-      if (['up','down','left','right','a','b'].includes(logical)) {
-  try {
-    if (
-      'vibrate' in navigator &&
-      typeof navigator.vibrate === 'function'
-    ) {
-      navigator.vibrate(60);
-    }
-  } catch {}
-}
-
-      button.classList.add(
-        'pressed'
-      );
-
-
-      setTouchInput(
-        logical,
-        true
-      );
-
-
-      if (
-        event.pointerId !== undefined &&
-        button.setPointerCapture
-      ) {
-
-        try {
-
-          button.setPointerCapture(
-            event.pointerId
+          showStatus(
+            'SYSTEM READY • LOAD A ROM'
           );
-
-        } catch {}
-      }
-    }
-
-
-
-    function release(event) {
-
-      if (event) {
-
-        event.preventDefault();
-
-        event.stopPropagation();
-      }
-
-
-      button.classList.remove(
-        'pressed'
-      );
-
-
-      setTouchInput(
-        logical,
-        false
-      );
-
-
-      if (
-        event &&
-        event.pointerId !== undefined &&
-        button.hasPointerCapture &&
-        button.hasPointerCapture(
-          event.pointerId
-        ) &&
-        button.releasePointerCapture
-      ) {
-
-        try {
-
-          button.releasePointerCapture(
-            event.pointerId
-          );
-
-        } catch {}
-      }
-    }
-
-
-
-    button.addEventListener(
-      'pointerdown',
-      press,
-      {
-        passive: false
-      }
-    );
-
-
-    button.addEventListener(
-      'pointerup',
-      release,
-      {
-        passive: false
-      }
-    );
-
-
-    button.addEventListener(
-      'pointercancel',
-      release,
-      {
-        passive: false
-      }
-    );
-
-
-    button.addEventListener(
-      'lostpointercapture',
-      release,
-      {
-        passive: false
-      }
-    );
-
-  });
-
-
-
-function releaseEverything() {
-
-  document
-    .querySelectorAll(
-      '[data-key].pressed'
-    )
-    .forEach(button => {
-
-      const logical =
-        button.dataset.key;
-
-
-      button.classList.remove(
-        'pressed'
-      );
-
-
-      setTouchInput(
-        logical,
-        false
-      );
-
-    });
-
-
-  if (
-    gameboy &&
-    gameboy.input
-  ) {
-
-    gameboy.input.isPressingUp =
-      false;
-
-    gameboy.input.isPressingDown =
-      false;
-
-    gameboy.input.isPressingLeft =
-      false;
-
-    gameboy.input.isPressingRight =
-      false;
-
-    gameboy.input.isPressingA =
-      false;
-
-    gameboy.input.isPressingB =
-      false;
-
-    gameboy.input.isPressingStart =
-      false;
-
-    gameboy.input.isPressingSelect =
-      false;
-  }
-}
-
-
-
-window.addEventListener(
-  'blur',
-  releaseEverything
-);
-
-
-
-document.addEventListener(
-  'visibilitychange',
-  () => {
-
-    if (
-      document.visibilityState !==
-      'visible'
-    ) {
-
-      releaseEverything();
-
-
-      if (
-        gameboy &&
-        gameboy.apu &&
-        typeof gameboy.apu.disableSound === 'function'
-      ) {
-
-        try {
-
-          gameboy.apu.disableSound();
-
-        } catch {}
-      }
-
-
-      return;
-    }
-
-
-    if (
-      emulatorPoweredOn &&
-      gameboy &&
-      gameboy.apu &&
-      typeof gameboy.apu.enableSound === 'function'
-    ) {
-
-      try {
-
-        gameboy.apu.enableSound();
-
-      } catch {}
-    }
-
-  }
-);
-
-
-
-/* =====================================================
-   EDITOR
-   ===================================================== */
-
-const editor =
-  document.getElementById(
-    'editor'
-  );
-
-
-const app =
-  document.getElementById(
-    'app'
-  );
-
-
-const btnEdit =
-  document.getElementById(
-    'btnEdit'
-  );
-
-
-const doneEdit =
-  document.getElementById(
-    'doneEdit'
-  );
-
-
-const resetControls =
-  document.getElementById(
-    'resetControls'
-  );
-
-
-const menuDrawer =
-  document.getElementById(
-    'menuDrawer'
-  );
-
-
-const menuToggle =
-  document.getElementById(
-    'menuToggle'
-  );
-
-
-
-const helpPanel =
-  document.getElementById(
-    'helpPanel'
-  );
-
-
-const helpContainer =
-  document.getElementById(
-    'helpContainer'
-  );
-
-
-const btnHelp =
-  document.getElementById(
-    'btnHelp'
-  );
-
-
-const closeHelp =
-  document.getElementById(
-    'closeHelp'
-  );
-
-
-function updateHelpMode() {
-
-  const touchDevice =
-    window.matchMedia('(hover: none) and (pointer: coarse)').matches ||
-    navigator.maxTouchPoints > 0;
-
-  helpPanel.classList.toggle(
-    'touch-mode',
-    touchDevice
-  );
-}
-
-updateHelpMode();
-window.addEventListener(
-  'resize',
-  updateHelpMode
-);
-
-
-
-const closeMenu =
-  document.getElementById(
-    'closeMenu'
-  );
-
-
-
-menuToggle.addEventListener(
-  'click',
-  () => {
-
-    const isOpen =
-      menuDrawer.classList.toggle(
-        'open'
-      );
-
-
-    menuToggle.setAttribute(
-      'aria-expanded',
-      String(isOpen)
-    );
-
-
-    menuToggle.setAttribute(
-      'aria-label',
-      isOpen
-        ? 'Close menu'
-        : 'Open menu'
-    );
-  }
-);
-
-
-
-closeMenu.addEventListener(
-  'click',
-  () => {
-
-    menuDrawer.classList.remove(
-      'open'
-    );
-
-    menuToggle.setAttribute(
-      'aria-expanded',
-      'false'
-    );
-
-    menuToggle.setAttribute(
-      'aria-label',
-      'Open menu'
-    );
-  }
-);
-
-
-btnHelp.addEventListener(
-  'click',
-  event => {
-
-    event.preventDefault();
-    event.stopPropagation();
-
-    helpContainer.classList.add(
-      'open'
-    );
-
-    menuDrawer.classList.remove(
-      'open'
-    );
-
-    menuToggle.setAttribute(
-      'aria-expanded',
-      'false'
-    );
-
-    menuToggle.setAttribute(
-      'aria-label',
-      'Open menu'
-    );
-  }
-);
-
-const btnGamepad = document.getElementById('btnGamepad');
-const gamepadMapper = document.getElementById('gamepadMapper');
-const closeGamepadMapper = document.getElementById('closeGamepadMapper');
-
-if (btnGamepad && gamepadMapper) {
-  btnGamepad.addEventListener('click', () => {
-    gamepadMapper.classList.add('open');
-  });
-}
-
-if (closeGamepadMapper && gamepadMapper) {
-  closeGamepadMapper.addEventListener('click', () => {
-    gamepadMapper.classList.remove('open');
-  });
-}
-
-/* =====================================================
-   BLUETOOTH GAMEPAD • MAPEAMENTO
-   ===================================================== */
-
-const GAMEPAD_MAPPING_KEY = 'dougx_gamepad_mapping';
-
-const defaultGamepadMapping = {
-  a: null,
-  b: null,
-  start: null,
-  select: null
-};
-
-let gamepadMapping = loadGamepadMapping();
-let mappingTarget = null;
-let previousGamepadButtons = [];
-
-
-/* =====================================================
-   CARREGAR / SALVAR MAPEAMENTO
-   ===================================================== */
-
-function loadGamepadMapping() {
-  try {
-    const saved = localStorage.getItem(GAMEPAD_MAPPING_KEY);
-
-    if (!saved) {
-      return {
-        ...defaultGamepadMapping
-      };
-    }
-
-    return {
-      ...defaultGamepadMapping,
-      ...JSON.parse(saved)
-    };
-
-  } catch {
-    return {
-      ...defaultGamepadMapping
-    };
-  }
-}
-
-
-function saveGamepadMapping() {
-  localStorage.setItem(
-    GAMEPAD_MAPPING_KEY,
-    JSON.stringify(gamepadMapping)
-  );
-}
-
-
-function resetGamepadMapping() {
-
-  gamepadMapping = {
-    ...defaultGamepadMapping
-  };
-
-  localStorage.removeItem(
-    GAMEPAD_MAPPING_KEY
-  );
-
-  previousGamepadButtons = [];
-
-  mappingTarget = null;
-
-  updateGamepadMappingDisplay();
-
-  if (gamepadStatus) {
-    gamepadStatus.textContent =
-      'CONTROLLER MAPPING RESET';
-  }
-}
-
-
-/* =====================================================
-   ELEMENTOS
-   ===================================================== */
-
-const gamepadStatus =
-  document.getElementById('gamepadStatus');
-
-const mapButtons =
-  document.querySelectorAll('[data-map]');
-
-  const resetGamepadButton =
-  document.getElementById('resetGamepadMapping');
-
-
-/* =====================================================
-   MOSTRAR MAPEAMENTO
-   ===================================================== */
-
-function updateGamepadMappingDisplay() {
-
-  const elements = {
-    a: document.getElementById('mapAValue'),
-    b: document.getElementById('mapBValue'),
-    start: document.getElementById('mapStartValue'),
-    select: document.getElementById('mapSelectValue')
-  };
-
-  Object.keys(elements).forEach(key => {
-
-    const element = elements[key];
-
-    if (!element) return;
-
-    const value = gamepadMapping[key];
-
-    element.textContent =
-      value === null
-        ? '—'
-        : `BUTTON ${value}`;
-  });
-}
-
-
-/* =====================================================
-   GAMEPAD CONECTADO
-   ===================================================== */
-window.addEventListener('gamepadconnected', event => {
-
-const gamepad = event.gamepad;
-
-if (gamepadStatus) {
-gamepadStatus.textContent =
-`CONECTADO • ID: ${gamepad.id || 'VAZIO'} • ÍNDICE: ${gamepad.index} • BOTÕES: ${gamepad.buttons.length}`;
-}
-
-previousGamepadButtons =
-gamepad.buttons.map(() => false);
-});
-
-
-
-/* =====================================================
-   GAMEPAD DESCONECTADO
-   ===================================================== */
-
-window.addEventListener('gamepaddisconnected', event => {
-
-  if (gamepadStatus) {
-    gamepadStatus.textContent =
-      'CONTROLLER DISCONNECTED';
-  }
-
-  previousGamepadButtons = [];
-});
-
-
-/* =====================================================
-   COMEÇAR MAPEAMENTO
-   ===================================================== */
-
-mapButtons.forEach(button => {
-
-  button.addEventListener('click', event => {
-
-    event.preventDefault();
-
-    mappingTarget =
-      button.dataset.map;
-
-    if (gamepadStatus) {
-      gamepadStatus.textContent =
-        `PRESS A BUTTON FOR ${mappingTarget.toUpperCase()}`;
-    }
-
-    button.textContent = 'PRESS...';
-  });
-});
-
-
-if (resetGamepadButton) {
-
-  resetGamepadButton.addEventListener(
-    'click',
-    () => {
-      resetGamepadMapping();
-    }
-  );
-
-}
-
-
-/* =====================================================
-   DETECTAR BOTÃO PRESSIONADO
-   ===================================================== */
-
-function detectGamepadMapping() {
-const gamepads = navigator.getGamepads
-? navigator.getGamepads()
-: [];
-
-let activeGamepad = null;
-
-for (const gamepad of gamepads) {
-if (!gamepad || !gamepad.connected) continue;
-
-
-activeGamepad = gamepad;
-break;
-
-
-}
-
-if (!activeGamepad) {
-previousGamepadButtons = [];
-requestAnimationFrame(detectGamepadMapping);
-return;
-}
-
-const currentButtons = Array.from(
-activeGamepad.buttons,
-button => Boolean(button.pressed || button.value > 0.5)
-);
-
-if (mappingTarget !== null) {
-const index = currentButtons.findIndex(
-pressed => pressed
-);
-
-
-if (index !== -1) {
-  const target = mappingTarget;
-
-  gamepadMapping[target] = index;
-  saveGamepadMapping();
-
-  const targetButton = document.querySelector(
-    `[data-map="${target}"]`
-  );
-
-  if (targetButton) {
-    targetButton.textContent = 'MAP';
-  }
-
-  if (gamepadStatus) {
-    gamepadStatus.textContent =
-      `${target.toUpperCase()} → BUTTON ${index}`;
-  }
-
-  mappingTarget = null;
-  updateGamepadMappingDisplay();
-} else if (gamepadStatus) {
-  gamepadStatus.textContent =
-    `AGUARDANDO BOTÃO • ${activeGamepad.id} • ${currentButtons.length} BOTÕES`;
-}
-
-
-}
-
-previousGamepadButtons = currentButtons;
-
-requestAnimationFrame(detectGamepadMapping);
-}
-
-
-
-/* =====================================================
-   INICIAR DETECÇÃO
-   ===================================================== */
-
-updateGamepadMappingDisplay();
-
-requestAnimationFrame(
-  detectGamepadMapping
-);
-
-
-
-/* =====================================================
-   BLUETOOTH GAMEPAD • CONTROLE DO GAME BOY
-   ===================================================== */
-
-function isMappedButtonPressed(gamepad, logical) {
-
-  const index =
-    gamepadMapping[logical];
-
-  if (
-    index === null ||
-    index === undefined
-  ) {
-    return false;
-  }
-
-  const button =
-    gamepad.buttons[index];
-
-  return !!(
-    button &&
-    button.pressed
-  );
-}
-
-
-function applyGamepadInput(gamepad) {
-
-  if (!gameboy || !gameboy.input) {
-    return;
-  }
-
-
-  /* =================================================
-     D-PAD
-     ================================================= */
-
-  let up = false;
-  let down = false;
-  let left = false;
-  let right = false;
-
-
-  /*
-    Controle padrão:
-    12 = UP
-    13 = DOWN
-    14 = LEFT
-    15 = RIGHT
-  */
-
-  if (gamepad.buttons[12]) {
-    up =
-      gamepad.buttons[12].pressed;
-  }
-
-  if (gamepad.buttons[13]) {
-    down =
-      gamepad.buttons[13].pressed;
-  }
-
-  if (gamepad.buttons[14]) {
-    left =
-      gamepad.buttons[14].pressed;
-  }
-
-  if (gamepad.buttons[15]) {
-    right =
-      gamepad.buttons[15].pressed;
-  }
-
-
-  /* =================================================
-     GAME BOY
-     ================================================= */
-
-  gameboy.input.isPressingUp =
-    up;
-
-  gameboy.input.isPressingDown =
-    down;
-
-  gameboy.input.isPressingLeft =
-    left;
-
-  gameboy.input.isPressingRight =
-    right;
-
-  gameboy.input.isPressingA =
-    isMappedButtonPressed(
-      gamepad,
-      'a'
-    );
-
-  gameboy.input.isPressingB =
-    isMappedButtonPressed(
-      gamepad,
-      'b'
-    );
-
-  gameboy.input.isPressingStart =
-    isMappedButtonPressed(
-      gamepad,
-      'start'
-    );
-
-  gameboy.input.isPressingSelect =
-    isMappedButtonPressed(
-      gamepad,
-      'select'
-    );
-}
-
-
-/* =====================================================
-   LOOP DO GAMEPAD
-   ===================================================== */
-
-function gamepadControlLoop() {
-
-  const gamepads =
-    navigator.getGamepads
-      ? navigator.getGamepads()
-      : [];
-
-  let activeGamepad = null;
-
-  for (const gamepad of gamepads) {
-
-  if (!gamepad || !gamepad.connected) {
-    continue;
-  }
-
-  const id =
-    String(gamepad.id || '').toLowerCase();
-
-  if (id.includes('consumer control')) {
-    continue;
-  }
-
-  activeGamepad = gamepad;
-  break;
-}
-
-  if (activeGamepad) {
-    applyGamepadInput(
-      activeGamepad
-    );
-  }
-
-  requestAnimationFrame(
-    gamepadControlLoop
-  );
-}
-
-
-requestAnimationFrame(
-  gamepadControlLoop
-);
-
-closeHelp.addEventListener(
-  'click',
-  () => {
-
-    helpContainer.classList.remove(
-      'open'
-    );
-  }
-);
-
-
-
-document.addEventListener(
-  'keydown',
-  event => {
-
-    if (
-      event.key === 'Escape' &&
-      helpContainer.classList.contains('open')
-    ) {
-
-      helpContainer.classList.remove(
-        'open'
-      );
-    }
-  }
-);
-
-
-
-const dpadRange =
-  document.getElementById(
-    'dpadRange'
-  );
-
-
-const bRange =
-  document.getElementById(
-    'bRange'
-  );
-
-
-const aRange =
-  document.getElementById(
-    'aRange'
-  );
-
-
-const smallRange =
-  document.getElementById(
-    'smallRange'
-  );
-
-
-
-const dpadScaleRange =
-  document.getElementById(
-    'dpadScaleRange'
-  );
-
-
-const bScaleRange =
-  document.getElementById(
-    'bScaleRange'
-  );
-
-
-const aScaleRange =
-  document.getElementById(
-    'aScaleRange'
-  );
-
-
-const smallScaleRange =
-  document.getElementById(
-    'smallScaleRange'
-  );
-
-
-
-const dpadValue =
-  document.getElementById(
-    'dpadValue'
-  );
-
-
-const bValue =
-  document.getElementById(
-    'bValue'
-  );
-
-
-const aValue =
-  document.getElementById(
-    'aValue'
-  );
-
-
-const smallValue =
-  document.getElementById(
-    'smallValue'
-  );
-
-
-
-const dpadScaleValue =
-  document.getElementById(
-    'dpadScaleValue'
-  );
-
-
-const bScaleValue =
-  document.getElementById(
-    'bScaleValue'
-  );
-
-
-const aScaleValue =
-  document.getElementById(
-    'aScaleValue'
-  );
-
-
-const smallScaleValue =
-  document.getElementById(
-    'smallScaleValue'
-  );
-
-
-
-const grpDpad =
-  document.getElementById(
-    'grpDpad'
-  );
-
-
-const grpB =
-  document.getElementById(
-    'grpB'
-  );
-
-
-const grpA =
-  document.getElementById(
-    'grpA'
-  );
-
-
-const grpSmall =
-  document.getElementById(
-    'grpSmall'
-  );
-
-
-const grpSelect =
-  document.getElementById(
-    'grpSelect'
-  );
-
-
-const grpStart =
-  document.getElementById(
-    'grpStart'
-  );
-
-
-
-/* =====================================================
-   LAYOUT PADRÃO
-   ===================================================== */
-
-const defaultLayout = {
-
-  dpad: 0,
-  dpadY: 0,
-  dpadScale: 1,
-
-  b: 0,
-  bY: 0,
-  bScale: 1,
-
-  a: 0,
-  aY: 0,
-  aScale: 1,
-
-  small: 0,
-  smallY: 0,
-  smallScale: 1,
-
-  selectX: 0,
-  selectY: 0,
-  selectScale: 1,
-
-  startX: 0,
-  startY: 0,
-  startScale: 1
-};
-
-
-
-/* =====================================================
-   APLICAR LAYOUT
-   ===================================================== */
-
-function applyLayout(layout) {
-
-  const d =
-    Number(layout.dpad) || 0;
-
-
-  const dY =
-    Number(layout.dpadY) || 0;
-
-
-  const dScale =
-    Number(layout.dpadScale) || 1;
-
-
-  const b =
-    Number(layout.b) || 0;
-
-
-  const bY =
-    Number(layout.bY) || 0;
-
-
-  const bScale =
-    Number(layout.bScale) || 1;
-
-
-  const a =
-    Number(layout.a) || 0;
-
-
-  const aY =
-    Number(layout.aY) || 0;
-
-
-  const aScale =
-    Number(layout.aScale) || 1;
-
-
-  const s =
-    Number(layout.small) || 0;
-
-
-  const sY =
-    Number(layout.smallY) || 0;
-
-
-  const sScale =
-    Number(layout.smallScale) || 1;
-
-
-  const selectX =
-    Number(layout.selectX) || 0;
-
-
-  const selectY =
-    Number(layout.selectY) || 0;
-
-
-  const selectScale =
-    Number(layout.selectScale) || 1;
-
-
-  const startX =
-    Number(layout.startX) || 0;
-
-
-  const startY =
-    Number(layout.startY) || 0;
-
-
-  const startScale =
-    Number(layout.startScale) || 1;
-
-
-
-  grpDpad.style.transform =
-    `translate(${d}px, ${dY}px) scale(${dScale})`;
-
-
-  grpB.style.transform =
-    `translate(${b}px, ${bY}px) rotate(-2deg) scale(${bScale})`;
-
-
-  grpA.style.transform =
-    `translate(${a}px, ${aY}px) scale(${aScale})`;
-
-
-  grpSmall.style.transform =
-    `translate(${s}px, ${sY}px) scale(${sScale})`;
-
-
-  grpSelect.style.transform =
-    `translate(${selectX}px, ${selectY}px) rotate(-26deg) scale(${selectScale})`;
-
-
-  grpStart.style.transform =
-    `translate(${startX}px, ${startY}px) rotate(-26deg) scale(${startScale})`;
-
-
-
-  dpadRange.value =
-    d;
-
-
-  bRange.value =
-    b;
-
-
-  aRange.value =
-    a;
-
-
-  smallRange.value =
-    s;
-
-
-
-  dpadValue.textContent =
-    d;
-
-
-  bValue.textContent =
-    b;
-
-
-  aValue.textContent =
-    a;
-
-
-  smallValue.textContent =
-    s;
-
-
-
-  dpadScaleRange.value =
-    Math.round(
-      dScale * 100
-    );
-
-
-  bScaleRange.value =
-    Math.round(
-      bScale * 100
-    );
-
-
-  aScaleRange.value =
-    Math.round(
-      aScale * 100
-    );
-
-
-  smallScaleRange.value =
-    Math.round(
-      sScale * 100
-    );
-
-
-
-  dpadScaleValue.textContent =
-    `${Math.round(dScale * 100)}%`;
-
-
-  bScaleValue.textContent =
-    `${Math.round(bScale * 100)}%`;
-
-
-  aScaleValue.textContent =
-    `${Math.round(aScale * 100)}%`;
-
-
-  smallScaleValue.textContent =
-    `${Math.round(sScale * 100)}%`;
-
-
-
-  grpDpad.dataset.y =
-    dY;
-
-  grpDpad.dataset.scale =
-    dScale;
-
-  grpDpad.dataset.x =
-    d;
-
-
-
-  grpB.dataset.y =
-    bY;
-
-  grpB.dataset.scale =
-    bScale;
-
-  grpB.dataset.x =
-    b;
-
-
-
-  grpA.dataset.y =
-    aY;
-
-  grpA.dataset.scale =
-    aScale;
-
-  grpA.dataset.x =
-    a;
-
-
-
-  grpSmall.dataset.y =
-    sY;
-
-  grpSmall.dataset.scale =
-    sScale;
-
-  grpSmall.dataset.x =
-    s;
-
-
-
-  grpSelect.dataset.x =
-    selectX;
-
-  grpSelect.dataset.y =
-    selectY;
-
-  grpSelect.dataset.scale =
-    selectScale;
-
-
-
-  grpStart.dataset.x =
-    startX;
-
-  grpStart.dataset.y =
-    startY;
-
-  grpStart.dataset.scale =
-    startScale;
-}
-
-
-
-/* =====================================================
-   PEGAR LAYOUT
-   ===================================================== */
-
-function getLayout() {
-
-  return {
-
-    dpad:
-      Number(dpadRange.value),
-
-    dpadY:
-      Number(grpDpad.dataset.y) || 0,
-
-    dpadScale:
-      Number(
-        dpadScaleRange.value
-      ) / 100 || 1,
-
-
-
-    b:
-      Number(bRange.value),
-
-    bY:
-      Number(grpB.dataset.y) || 0,
-
-    bScale:
-      Number(
-        bScaleRange.value
-      ) / 100 || 1,
-
-
-
-    a:
-      Number(aRange.value),
-
-    aY:
-      Number(grpA.dataset.y) || 0,
-
-    aScale:
-      Number(
-        aScaleRange.value
-      ) / 100 || 1,
-
-
-
-    small:
-      Number(smallRange.value),
-
-    smallY:
-      Number(grpSmall.dataset.y) || 0,
-
-    smallScale:
-      Number(
-        smallScaleRange.value
-      ) / 100 || 1,
-
-
-
-    selectX:
-      Number(grpSelect.dataset.x) || 0,
-
-    selectY:
-      Number(grpSelect.dataset.y) || 0,
-
-    selectScale:
-      Number(
-        grpSelect.dataset.scale
-      ) || 1,
-
-
-
-    startX:
-      Number(grpStart.dataset.x) || 0,
-
-    startY:
-      Number(grpStart.dataset.y) || 0,
-
-    startScale:
-      Number(
-        grpStart.dataset.scale
-      ) || 1
-  };
-}
-
-
-
-/* =====================================================
-   SALVAR LAYOUT
-   ===================================================== */
-
-function saveLayout() {
-
-  localStorage.setItem(
-    'gb_controls_layout',
-    JSON.stringify(
-      getLayout()
-    )
-  );
-}
-
-
-
-/* =====================================================
-   CARREGAR LAYOUT
-   ===================================================== */
-
-function loadLayout() {
-
-  try {
-
-    const saved =
-      localStorage.getItem(
-        'gb_controls_layout'
-      );
-
-
-    if (saved) {
-
-      applyLayout(
-        JSON.parse(saved)
-      );
-
-
-      return;
-    }
-
-  } catch {}
-
-
-  applyLayout(
-    defaultLayout
-  );
-}
-
-
-
-/* =====================================================
-   EDITOR UPDATE
-   ===================================================== */
-
-function updateEditor() {
-
-  applyLayout(
-    getLayout()
-  );
-}
-
-
-
-[
-  dpadRange,
-  bRange,
-  aRange,
-  smallRange,
-
-  dpadScaleRange,
-  bScaleRange,
-  aScaleRange,
-  smallScaleRange
-
-].forEach(range => {
-
-  range.addEventListener(
-    'input',
-    updateEditor
-  );
-
-});
-
-
-
-/* =====================================================
-   CONTROLES ARRASTÁVEIS
-   ===================================================== */
-
-const draggableControls = [
-
-  {
-    element: grpDpad,
-    range: dpadRange
-  },
-
-  {
-    element: grpB,
-    range: bRange
-  },
-
-  {
-    element: grpA,
-    range: aRange
-  },
-
-  {
-    element: grpSelect,
-    range: null
-  },
-
-  {
-    element: grpStart,
-    range: null
-  }
-
-];
-
-
-
-function clamp(
-  value,
-  minimum,
-  maximum
-) {
-
-  return Math.min(
-    Math.max(
-      value,
-      minimum
-    ),
-    maximum
-  );
-}
-
-
-
-draggableControls.forEach(
-  control => {
-
-    let dragStart = null;
-
-
-
-    control.element.addEventListener(
-      'pointerdown',
-      event => {
-
-        if (
-          !app.classList.contains(
-            'editing'
-          )
-        ) {
 
           return;
         }
 
 
-        event.preventDefault();
 
-        event.stopPropagation();
+        try {
 
-
-        dragStart = {
-
-          x: event.clientX,
-
-          y: event.clientY,
-
-          offsetX:
-            control.range
-              ? Number(
-                  control.range.value
-                ) || 0
-              : Number(
-                  control.element.dataset.x
-                ) || 0,
-
-          offsetY:
-            Number(
-              control.element.dataset.y
-            ) || 0,
-
-          dragging: false
-        };
+          stopAutosave();
 
 
-        control.element.setPointerCapture(
-          event.pointerId
-        );
+          if (
+            pendingFrameId !== null
+          ) {
 
-      }
-    );
-
-
-
-    control.element.addEventListener(
-      'pointermove',
-      event => {
-
-        if (!dragStart) {
-
-          return;
-        }
-
-
-        const deltaX =
-          event.clientX -
-          dragStart.x;
-
-
-        const deltaY =
-          event.clientY -
-          dragStart.y;
-
-
-        if (
-          !dragStart.dragging &&
-          Math.hypot(
-            deltaX,
-            deltaY
-          ) < 5
-        ) {
-
-          return;
-        }
-
-
-        if (!dragStart.dragging) {
-
-          dragStart.dragging =
-            true;
-
-
-          event.preventDefault();
-
-
-          control.element.classList.remove(
-            'pressed'
-          );
-
-
-          setTouchInput(
-            control.element.dataset.key,
-            false
-          );
-        }
-
-
-        const nextX =
-          clamp(
-            dragStart.offsetX +
-              deltaX,
-            -100,
-            100
-          );
-
-
-        if (control.range) {
-
-          control.range.value =
-            clamp(
-              nextX,
-              Number(
-                control.range.min
-              ),
-              Number(
-                control.range.max
-              )
+            nativeCancelAnimationFrame(
+              pendingFrameId
             );
 
-        } else {
-
-          control.element.dataset.x =
-            nextX;
-        }
+            pendingFrameId = null;
+          }
 
 
-        control.element.dataset.y =
-          clamp(
-            dragStart.offsetY +
-              deltaY,
-            -100,
-            100
+          gameboy.loadGame(
+            currentRomBuffer
           );
 
 
-        updateEditor();
+          if (
+            gameboy.apu &&
+            typeof gameboy.apu.enableSound === 'function'
+          ) {
 
-      }
-    );
+            try {
+
+              gameboy.apu.enableSound();
+
+            } catch {}
+          }
 
 
+          setupSramAutoSave();
 
-    control.element.addEventListener(
-      'pointerup',
-      () => {
 
-        if (
-          dragStart?.dragging
-        ) {
+          const restored =
+            await loadSaveState(true);
 
-          saveLayout();
+
+          if (!emulatorPoweredOn) {
+
+            return;
+          }
+
+
+          gameboy.run();
+
+
+          startAutosave();
+
+
+          if (restored) {
+
+            showStatus(
+              'LOADING • SAVE RESTORED'
+            );
+
+          } else {
+
+            showStatus(
+              'PLAYING • ' +
+              currentRomName
+                .toUpperCase()
+                .replace(
+                  /_/g,
+                  ' '
+                )
+            );
+          }
+
+        } catch {
+
+          emulatorPoweredOn =
+            false;
+
+
+          bootAudio.pause();
+
+
+          updatePowerVisual(
+            false
+          );
+
+
+          paintPoweredOffScreen();
+
+
+          showError(
+            'ERROR STARTING EMULATOR'
+          );
         }
-
-
-        dragStart =
-          null;
-
       }
     );
 
 
 
-    control.element.addEventListener(
-      'pointercancel',
-      () => {
+    /* =====================================================
+       TECLADO
+       ===================================================== */
 
-        dragStart =
-          null;
+    const keyMap = {
 
-      }
-    );
+      ArrowUp: 'up',
+      ArrowDown: 'down',
+      ArrowLeft: 'left',
+      ArrowRight: 'right',
+
+      a: 'a',
+      A: 'a',
+
+      s: 'b',
+      S: 'b',
+
+      Enter: 'start',
+
+      Shift: 'select'
+    };
 
 
 
-    control.element.addEventListener(
-      'wheel',
+    window.addEventListener(
+      'keydown',
       event => {
 
-        if (
-          !app.classList.contains(
-            'editing'
-          )
-        ) {
+        if (!keyMap[event.key]) {
 
           return;
         }
 
 
         event.preventDefault();
-
-        event.stopPropagation();
-
-
-        const currentScale =
-          Number(
-            control.element.dataset.scale
-          ) || 1;
-
-
-        control.element.dataset.scale =
-          clamp(
-            currentScale +
-              (
-                event.deltaY < 0
-                  ? 0.05
-                  : -0.05
-              ),
-            0.6,
-            1.5
-          ).toFixed(2);
-
-
-        updateEditor();
 
       },
       {
@@ -5533,772 +3637,2608 @@ draggableControls.forEach(
       }
     );
 
-  }
-);
+
+
+    window.addEventListener(
+      'keyup',
+      event => {
+
+        if (!keyMap[event.key]) {
+
+          return;
+        }
+
+
+        event.preventDefault();
+
+      },
+      {
+        passive: false
+      }
+    );
 
 
 
-/* =====================================================
-   BOTÃO EDITAR
-   ===================================================== */
+    /* =====================================================
+       CONTROLES TOUCH
+       ===================================================== */
 
-btnEdit.addEventListener(
-  'click',
-  () => {
+    const touchInputMap = {
 
-    const editing =
-      !app.classList.contains(
-        'editing'
+      up: 'isPressingUp',
+      down: 'isPressingDown',
+      left: 'isPressingLeft',
+      right: 'isPressingRight',
+
+      a: 'isPressingA',
+      b: 'isPressingB',
+
+      start: 'isPressingStart',
+      select: 'isPressingSelect'
+    };
+
+
+
+    function setTouchInput(
+      logical,
+      pressed
+    ) {
+
+      if (
+        !gameboy ||
+        !gameboy.input
+      ) {
+
+        return;
+      }
+
+
+      const property =
+        touchInputMap[logical];
+
+
+      if (!property) {
+
+        return;
+      }
+
+
+      gameboy.input[property] =
+        pressed;
+    }
+
+
+
+    document
+      .querySelectorAll(
+        '[data-key]'
+      )
+      .forEach(button => {
+
+        const logical =
+          button.dataset.key;
+
+
+
+        function press(event) {
+
+          event.preventDefault();
+
+          event.stopPropagation();
+
+
+          if (['up','down','left','right','a','b'].includes(logical)) {
+      try {
+        if (
+          'vibrate' in navigator &&
+          typeof navigator.vibrate === 'function'
+        ) {
+          navigator.vibrate(60);
+        }
+      } catch {}
+    }
+
+          button.classList.add(
+            'pressed'
+          );
+
+
+          setTouchInput(
+            logical,
+            true
+          );
+
+
+          if (
+            event.pointerId !== undefined &&
+            button.setPointerCapture
+          ) {
+
+            try {
+
+              button.setPointerCapture(
+                event.pointerId
+              );
+
+            } catch {}
+          }
+        }
+
+
+
+        function release(event) {
+
+          if (event) {
+
+            event.preventDefault();
+
+            event.stopPropagation();
+          }
+
+
+          button.classList.remove(
+            'pressed'
+          );
+
+
+          setTouchInput(
+            logical,
+            false
+          );
+
+
+          if (
+            event &&
+            event.pointerId !== undefined &&
+            button.hasPointerCapture &&
+            button.hasPointerCapture(
+              event.pointerId
+            ) &&
+            button.releasePointerCapture
+          ) {
+
+            try {
+
+              button.releasePointerCapture(
+                event.pointerId
+              );
+
+            } catch {}
+          }
+        }
+
+
+
+        button.addEventListener(
+          'pointerdown',
+          press,
+          {
+            passive: false
+          }
+        );
+
+
+        button.addEventListener(
+          'pointerup',
+          release,
+          {
+            passive: false
+          }
+        );
+
+
+        button.addEventListener(
+          'pointercancel',
+          release,
+          {
+            passive: false
+          }
+        );
+
+
+        button.addEventListener(
+          'lostpointercapture',
+          release,
+          {
+            passive: false
+          }
+        );
+
+      });
+
+
+
+    function releaseEverything() {
+
+      document
+        .querySelectorAll(
+          '[data-key].pressed'
+        )
+        .forEach(button => {
+
+          const logical =
+            button.dataset.key;
+
+
+          button.classList.remove(
+            'pressed'
+          );
+
+
+          setTouchInput(
+            logical,
+            false
+          );
+
+        });
+
+
+      if (
+        gameboy &&
+        gameboy.input
+      ) {
+
+        gameboy.input.isPressingUp =
+          false;
+
+        gameboy.input.isPressingDown =
+          false;
+
+        gameboy.input.isPressingLeft =
+          false;
+
+        gameboy.input.isPressingRight =
+          false;
+
+        gameboy.input.isPressingA =
+          false;
+
+        gameboy.input.isPressingB =
+          false;
+
+        gameboy.input.isPressingStart =
+          false;
+
+        gameboy.input.isPressingSelect =
+          false;
+      }
+    }
+
+
+
+    window.addEventListener(
+      'blur',
+      releaseEverything
+    );
+
+
+
+    document.addEventListener(
+      'visibilitychange',
+      () => {
+
+        if (
+          document.visibilityState !==
+          'visible'
+        ) {
+
+          releaseEverything();
+
+
+          if (
+            gameboy &&
+            gameboy.apu &&
+            typeof gameboy.apu.disableSound === 'function'
+          ) {
+
+            try {
+
+              gameboy.apu.disableSound();
+
+            } catch {}
+          }
+
+
+          return;
+        }
+
+
+        if (
+          emulatorPoweredOn &&
+          gameboy &&
+          gameboy.apu &&
+          typeof gameboy.apu.enableSound === 'function'
+        ) {
+
+          try {
+
+            gameboy.apu.enableSound();
+
+          } catch {}
+        }
+
+      }
+    );
+
+
+
+    /* =====================================================
+       EDITOR
+       ===================================================== */
+
+    const editor =
+      document.getElementById(
+        'editor'
       );
 
 
-    app.classList.toggle(
-      'editing',
-      editing
+    const app =
+      document.getElementById(
+        'app'
+      );
+
+
+    const btnEdit =
+      document.getElementById(
+        'btnEdit'
+      );
+
+
+    const doneEdit =
+      document.getElementById(
+        'doneEdit'
+      );
+
+
+    const resetControls =
+      document.getElementById(
+        'resetControls'
+      );
+
+
+    const menuDrawer =
+      document.getElementById(
+        'menuDrawer'
+      );
+
+
+    const menuToggle =
+      document.getElementById(
+        'menuToggle'
+      );
+
+
+
+    const helpPanel =
+      document.getElementById(
+        'helpPanel'
+      );
+
+
+    const helpContainer =
+      document.getElementById(
+        'helpContainer'
+      );
+
+
+    const btnHelp =
+      document.getElementById(
+        'btnHelp'
+      );
+
+
+    const closeHelp =
+      document.getElementById(
+        'closeHelp'
+      );
+
+
+    function updateHelpMode() {
+
+      const touchDevice =
+        window.matchMedia('(hover: none) and (pointer: coarse)').matches ||
+        navigator.maxTouchPoints > 0;
+
+      helpPanel.classList.toggle(
+        'touch-mode',
+        touchDevice
+      );
+    }
+
+    updateHelpMode();
+    window.addEventListener(
+      'resize',
+      updateHelpMode
     );
 
 
-    editor.classList.toggle(
-      'open',
-      editing
+
+    const closeMenu =
+      document.getElementById(
+        'closeMenu'
+      );
+
+
+
+    menuToggle.addEventListener(
+      'click',
+      () => {
+
+        const isOpen =
+          menuDrawer.classList.toggle(
+            'open'
+          );
+
+
+        menuToggle.setAttribute(
+          'aria-expanded',
+          String(isOpen)
+        );
+
+
+        menuToggle.setAttribute(
+          'aria-label',
+          isOpen
+            ? 'Close menu'
+            : 'Open menu'
+        );
+      }
     );
 
 
-    btnEdit.setAttribute(
-      'aria-label',
-      editing
-        ? ' Ajustments'
-        : ' Ajust your controls position and size'
+
+    closeMenu.addEventListener(
+      'click',
+      () => {
+
+        menuDrawer.classList.remove(
+          'open'
+        );
+
+        menuToggle.setAttribute(
+          'aria-expanded',
+          'false'
+        );
+
+        menuToggle.setAttribute(
+          'aria-label',
+          'Open menu'
+        );
+      }
     );
 
 
-    btnEdit.setAttribute(
-      'title',
-      editing
-        ? 'Desativar ajustes'
-        : 'Ativar ajustes'
+    btnHelp.addEventListener(
+      'click',
+      event => {
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        helpContainer.classList.add(
+          'open'
+        );
+
+        menuDrawer.classList.remove(
+          'open'
+        );
+
+        menuToggle.setAttribute(
+          'aria-expanded',
+          'false'
+        );
+
+        menuToggle.setAttribute(
+          'aria-label',
+          'Open menu'
+        );
+      }
+    );
+
+    const btnGamepad = document.getElementById('btnGamepad');
+    const gamepadMapper = document.getElementById('gamepadMapper');
+    const closeGamepadMapper = document.getElementById('closeGamepadMapper');
+
+    if (btnGamepad && gamepadMapper) {
+      btnGamepad.addEventListener('click', () => {
+        gamepadMapper.classList.add('open');
+      });
+    }
+
+    if (closeGamepadMapper && gamepadMapper) {
+      closeGamepadMapper.addEventListener('click', () => {
+        gamepadMapper.classList.remove('open');
+      });
+    }
+
+    /* =====================================================
+       BLUETOOTH GAMEPAD • MAPEAMENTO
+       ===================================================== */
+
+    const GAMEPAD_MAPPING_KEY = 'dougx_gamepad_mapping';
+
+    const defaultGamepadMapping = {
+      a: null,
+      b: null,
+      start: null,
+      select: null
+    };
+
+    let gamepadMapping = loadGamepadMapping();
+    let mappingTarget = null;
+    let previousGamepadButtons = [];
+
+
+    /* =====================================================
+       CARREGAR / SALVAR MAPEAMENTO
+       ===================================================== */
+
+    function loadGamepadMapping() {
+      try {
+        const saved = localStorage.getItem(GAMEPAD_MAPPING_KEY);
+
+        if (!saved) {
+          return {
+            ...defaultGamepadMapping
+          };
+        }
+
+        return {
+          ...defaultGamepadMapping,
+          ...JSON.parse(saved)
+        };
+
+      } catch {
+        return {
+          ...defaultGamepadMapping
+        };
+      }
+    }
+
+
+    function saveGamepadMapping() {
+      localStorage.setItem(
+        GAMEPAD_MAPPING_KEY,
+        JSON.stringify(gamepadMapping)
+      );
+    }
+
+
+    /* =====================================================
+       ELEMENTOS
+       ===================================================== */
+
+    const gamepadStatus =
+      document.getElementById('gamepadStatus');
+
+    const mapButtons =
+      document.querySelectorAll('[data-map]');
+
+
+    /* =====================================================
+       MOSTRAR MAPEAMENTO
+       ===================================================== */
+
+    function updateGamepadMappingDisplay() {
+
+      const elements = {
+        a: document.getElementById('mapAValue'),
+        b: document.getElementById('mapBValue'),
+        start: document.getElementById('mapStartValue'),
+        select: document.getElementById('mapSelectValue')
+      };
+
+      Object.keys(elements).forEach(key => {
+
+        const element = elements[key];
+
+        if (!element) return;
+
+        const value = gamepadMapping[key];
+
+        element.textContent =
+          value === null
+            ? '—'
+            : `BUTTON ${value}`;
+      });
+    }
+
+
+    /* =====================================================
+       GAMEPAD CONECTADO
+       ===================================================== */
+
+    window.addEventListener('gamepadconnected', event => {
+
+      const gamepad = event.gamepad;
+
+      if (gamepadStatus) {
+        gamepadStatus.textContent =
+          `CONTROLLER CONNECTED • ${gamepad.id}`;
+      }
+
+      previousGamepadButtons =
+        gamepad.buttons.map(() => false);
+    });
+
+
+    /* =====================================================
+       GAMEPAD DESCONECTADO
+       ===================================================== */
+
+    window.addEventListener('gamepaddisconnected', event => {
+
+      if (gamepadStatus) {
+        gamepadStatus.textContent =
+          'CONTROLLER DISCONNECTED';
+      }
+
+      previousGamepadButtons = [];
+    });
+
+
+    /* =====================================================
+       COMEÇAR MAPEAMENTO
+       ===================================================== */
+
+    mapButtons.forEach(button => {
+
+      button.addEventListener('click', event => {
+
+        event.preventDefault();
+
+        mappingTarget =
+          button.dataset.map;
+
+        if (gamepadStatus) {
+          gamepadStatus.textContent =
+            `PRESS A BUTTON FOR ${mappingTarget.toUpperCase()}`;
+        }
+
+        button.textContent = 'PRESS...';
+      });
+    });
+
+
+    /* =====================================================
+       DETECTAR BOTÃO PRESSIONADO
+       ===================================================== */
+
+    function detectGamepadMapping() {
+
+      const gamepads =
+        navigator.getGamepads
+          ? navigator.getGamepads()
+          : [];
+
+      let activeGamepad = null;
+
+      for (const gamepad of gamepads) {
+
+      if (!gamepad || !gamepad.connected) {
+        continue;
+      }
+
+      const id =
+        String(gamepad.id || '').toLowerCase();
+
+      if (id.includes('consumer control')) {
+        continue;
+      }
+
+      activeGamepad = gamepad;
+      break;
+    }
+
+      if (!activeGamepad) {
+        requestAnimationFrame(detectGamepadMapping);
+        return;
+      }
+
+
+      /*
+        Detecta apenas quando o botão
+        muda de NÃO pressionado → pressionado.
+      */
+
+      activeGamepad.buttons.forEach((button, index) => {
+
+        const pressed = button.pressed;
+
+        const wasPressed =
+          previousGamepadButtons[index] || false;
+
+
+        if (
+          mappingTarget &&
+          pressed &&
+          !wasPressed
+        ) {
+
+          gamepadMapping[mappingTarget] =
+            index;
+
+          saveGamepadMapping();
+
+          const targetButton =
+            document.querySelector(
+              `[data-map="${mappingTarget}"]`
+            );
+
+          if (targetButton) {
+            targetButton.textContent = 'MAP';
+          }
+
+          if (gamepadStatus) {
+            gamepadStatus.textContent =
+              `${mappingTarget.toUpperCase()} → BUTTON ${index}`;
+          }
+
+          mappingTarget = null;
+
+          updateGamepadMappingDisplay();
+        }
+
+      });
+
+
+      previousGamepadButtons =
+        activeGamepad.buttons.map(
+          button => button.pressed
+        );
+
+
+      requestAnimationFrame(
+        detectGamepadMapping
+      );
+    }
+
+
+    /* =====================================================
+       INICIAR DETECÇÃO
+       ===================================================== */
+
+    updateGamepadMappingDisplay();
+
+    requestAnimationFrame(
+      detectGamepadMapping
     );
 
 
-    showStatus(
-      editing
-        ? 'AJUSTES ATIVADOS'
-        : 'AJUSTES DESATIVADOS'
+
+    /* =====================================================
+       BLUETOOTH GAMEPAD • CONTROLE DO GAME BOY
+       ===================================================== */
+
+    function isMappedButtonPressed(gamepad, logical) {
+
+      const index =
+        gamepadMapping[logical];
+
+      if (
+        index === null ||
+        index === undefined
+      ) {
+        return false;
+      }
+
+      const button =
+        gamepad.buttons[index];
+
+      return !!(
+        button &&
+        button.pressed
+      );
+    }
+
+
+    function applyGamepadInput(gamepad) {
+
+      if (!gameboy || !gameboy.input) {
+        return;
+      }
+
+
+      /* =================================================
+         D-PAD
+         ================================================= */
+
+      let up = false;
+      let down = false;
+      let left = false;
+      let right = false;
+
+
+      /*
+        Controle padrão:
+        12 = UP
+        13 = DOWN
+        14 = LEFT
+        15 = RIGHT
+      */
+
+      if (gamepad.buttons[12]) {
+        up =
+          gamepad.buttons[12].pressed;
+      }
+
+      if (gamepad.buttons[13]) {
+        down =
+          gamepad.buttons[13].pressed;
+      }
+
+      if (gamepad.buttons[14]) {
+        left =
+          gamepad.buttons[14].pressed;
+      }
+
+      if (gamepad.buttons[15]) {
+        right =
+          gamepad.buttons[15].pressed;
+      }
+
+
+      /* =================================================
+         GAME BOY
+         ================================================= */
+
+      gameboy.input.isPressingUp =
+        up;
+
+      gameboy.input.isPressingDown =
+        down;
+
+      gameboy.input.isPressingLeft =
+        left;
+
+      gameboy.input.isPressingRight =
+        right;
+
+      gameboy.input.isPressingA =
+        isMappedButtonPressed(
+          gamepad,
+          'a'
+        );
+
+      gameboy.input.isPressingB =
+        isMappedButtonPressed(
+          gamepad,
+          'b'
+        );
+
+      gameboy.input.isPressingStart =
+        isMappedButtonPressed(
+          gamepad,
+          'start'
+        );
+
+      gameboy.input.isPressingSelect =
+        isMappedButtonPressed(
+          gamepad,
+          'select'
+        );
+    }
+
+
+    /* =====================================================
+       LOOP DO GAMEPAD
+       ===================================================== */
+
+    function gamepadControlLoop() {
+
+      const gamepads =
+        navigator.getGamepads
+          ? navigator.getGamepads()
+          : [];
+
+      let activeGamepad = null;
+
+      for (const gamepad of gamepads) {
+
+      if (!gamepad || !gamepad.connected) {
+        continue;
+      }
+
+      const id =
+        String(gamepad.id || '').toLowerCase();
+
+      if (id.includes('consumer control')) {
+        continue;
+      }
+
+      activeGamepad = gamepad;
+      break;
+    }
+
+      if (activeGamepad) {
+        applyGamepadInput(
+          activeGamepad
+        );
+      }
+
+      requestAnimationFrame(
+        gamepadControlLoop
+      );
+    }
+
+
+    requestAnimationFrame(
+      gamepadControlLoop
     );
 
-  }
-);
+    closeHelp.addEventListener(
+      'click',
+      () => {
 
-
-
-/* =====================================================
-   CONCLUÍDO
-   ===================================================== */
-
-doneEdit.addEventListener(
-  'click',
-  () => {
-
-    saveLayout();
-
-
-    app.classList.remove(
-      'editing'
+        helpContainer.classList.remove(
+          'open'
+        );
+      }
     );
 
 
-    editor.classList.remove(
-      'open'
+
+    document.addEventListener(
+      'keydown',
+      event => {
+
+        if (
+          event.key === 'Escape' &&
+          helpContainer.classList.contains('open')
+        ) {
+
+          helpContainer.classList.remove(
+            'open'
+          );
+        }
+      }
     );
 
 
-    btnEdit.setAttribute(
-      'aria-label',
-      'Ativar ajustes'
-    );
+
+    const dpadRange =
+      document.getElementById(
+        'dpadRange'
+      );
 
 
-    btnEdit.setAttribute(
-      'title',
-      'Ativar ajustes'
-    );
+    const bRange =
+      document.getElementById(
+        'bRange'
+      );
 
 
-    showStatus(
-      'Adjustments saved'
-    );
-
-  }
-);
+    const aRange =
+      document.getElementById(
+        'aRange'
+      );
 
 
-
-/* =====================================================
-   RESET CONTROLES
-   ===================================================== */
-
-resetControls.addEventListener(
-  'click',
-  () => {
-
-    applyLayout(
-      defaultLayout
-    );
-
-
-    saveLayout();
-
-  }
-);
+    const smallRange =
+      document.getElementById(
+        'smallRange'
+      );
 
 
 
-/* =====================================================
-   PAGEHIDE
-   ===================================================== */
+    const dpadScaleRange =
+      document.getElementById(
+        'dpadScaleRange'
+      );
 
-window.addEventListener(
-  'pagehide',
-  () => {
 
-    if (
-      gameboy &&
-      currentRomName &&
-      gameboy.cartridge
-    ) {
+    const bScaleRange =
+      document.getElementById(
+        'bScaleRange'
+      );
+
+
+    const aScaleRange =
+      document.getElementById(
+        'aScaleRange'
+      );
+
+
+    const smallScaleRange =
+      document.getElementById(
+        'smallScaleRange'
+      );
+
+
+
+    const dpadValue =
+      document.getElementById(
+        'dpadValue'
+      );
+
+
+    const bValue =
+      document.getElementById(
+        'bValue'
+      );
+
+
+    const aValue =
+      document.getElementById(
+        'aValue'
+      );
+
+
+    const smallValue =
+      document.getElementById(
+        'smallValue'
+      );
+
+
+
+    const dpadScaleValue =
+      document.getElementById(
+        'dpadScaleValue'
+      );
+
+
+    const bScaleValue =
+      document.getElementById(
+        'bScaleValue'
+      );
+
+
+    const aScaleValue =
+      document.getElementById(
+        'aScaleValue'
+      );
+
+
+    const smallScaleValue =
+      document.getElementById(
+        'smallScaleValue'
+      );
+
+
+
+    const grpDpad =
+      document.getElementById(
+        'grpDpad'
+      );
+
+
+    const grpB =
+      document.getElementById(
+        'grpB'
+      );
+
+
+    const grpA =
+      document.getElementById(
+        'grpA'
+      );
+
+
+    const grpSmall =
+      document.getElementById(
+        'grpSmall'
+      );
+
+
+    const grpSelect =
+      document.getElementById(
+        'grpSelect'
+      );
+
+
+    const grpStart =
+      document.getElementById(
+        'grpStart'
+      );
+
+
+
+    /* =====================================================
+       LAYOUT PADRÃO
+       ===================================================== */
+
+    const defaultLayout = {
+
+      dpad: 0,
+      dpadY: 0,
+      dpadScale: 1,
+
+      b: 0,
+      bY: 0,
+      bScale: 1,
+
+      a: 0,
+      aY: 0,
+      aScale: 1,
+
+      small: 0,
+      smallY: 0,
+      smallScale: 1,
+
+      selectX: 0,
+      selectY: 0,
+      selectScale: 1,
+
+      startX: 0,
+      startY: 0,
+      startScale: 1
+    };
+
+
+
+    /* =====================================================
+       APLICAR LAYOUT
+       ===================================================== */
+
+    function applyLayout(layout) {
+
+      const d =
+        Number(layout.dpad) || 0;
+
+
+      const dY =
+        Number(layout.dpadY) || 0;
+
+
+      const dScale =
+        Number(layout.dpadScale) || 1;
+
+
+      const b =
+        Number(layout.b) || 0;
+
+
+      const bY =
+        Number(layout.bY) || 0;
+
+
+      const bScale =
+        Number(layout.bScale) || 1;
+
+
+      const a =
+        Number(layout.a) || 0;
+
+
+      const aY =
+        Number(layout.aY) || 0;
+
+
+      const aScale =
+        Number(layout.aScale) || 1;
+
+
+      const s =
+        Number(layout.small) || 0;
+
+
+      const sY =
+        Number(layout.smallY) || 0;
+
+
+      const sScale =
+        Number(layout.smallScale) || 1;
+
+
+      const selectX =
+        Number(layout.selectX) || 0;
+
+
+      const selectY =
+        Number(layout.selectY) || 0;
+
+
+      const selectScale =
+        Number(layout.selectScale) || 1;
+
+
+      const startX =
+        Number(layout.startX) || 0;
+
+
+      const startY =
+        Number(layout.startY) || 0;
+
+
+      const startScale =
+        Number(layout.startScale) || 1;
+
+
+
+      grpDpad.style.transform =
+        `translate(${d}px, ${dY}px) scale(${dScale})`;
+
+
+      grpB.style.transform =
+        `translate(${b}px, ${bY}px) rotate(-2deg) scale(${bScale})`;
+
+
+      grpA.style.transform =
+        `translate(${a}px, ${aY}px) scale(${aScale})`;
+
+
+      grpSmall.style.transform =
+        `translate(${s}px, ${sY}px) scale(${sScale})`;
+
+
+      grpSelect.style.transform =
+        `translate(${selectX}px, ${selectY}px) rotate(-26deg) scale(${selectScale})`;
+
+
+      grpStart.style.transform =
+        `translate(${startX}px, ${startY}px) rotate(-26deg) scale(${startScale})`;
+
+
+
+      dpadRange.value =
+        d;
+
+
+      bRange.value =
+        b;
+
+
+      aRange.value =
+        a;
+
+
+      smallRange.value =
+        s;
+
+
+
+      dpadValue.textContent =
+        d;
+
+
+      bValue.textContent =
+        b;
+
+
+      aValue.textContent =
+        a;
+
+
+      smallValue.textContent =
+        s;
+
+
+
+      dpadScaleRange.value =
+        Math.round(
+          dScale * 100
+        );
+
+
+      bScaleRange.value =
+        Math.round(
+          bScale * 100
+        );
+
+
+      aScaleRange.value =
+        Math.round(
+          aScale * 100
+        );
+
+
+      smallScaleRange.value =
+        Math.round(
+          sScale * 100
+        );
+
+
+
+      dpadScaleValue.textContent =
+        `${Math.round(dScale * 100)}%`;
+
+
+      bScaleValue.textContent =
+        `${Math.round(bScale * 100)}%`;
+
+
+      aScaleValue.textContent =
+        `${Math.round(aScale * 100)}%`;
+
+
+      smallScaleValue.textContent =
+        `${Math.round(sScale * 100)}%`;
+
+
+
+      grpDpad.dataset.y =
+        dY;
+
+      grpDpad.dataset.scale =
+        dScale;
+
+      grpDpad.dataset.x =
+        d;
+
+
+
+      grpB.dataset.y =
+        bY;
+
+      grpB.dataset.scale =
+        bScale;
+
+      grpB.dataset.x =
+        b;
+
+
+
+      grpA.dataset.y =
+        aY;
+
+      grpA.dataset.scale =
+        aScale;
+
+      grpA.dataset.x =
+        a;
+
+
+
+      grpSmall.dataset.y =
+        sY;
+
+      grpSmall.dataset.scale =
+        sScale;
+
+      grpSmall.dataset.x =
+        s;
+
+
+
+      grpSelect.dataset.x =
+        selectX;
+
+      grpSelect.dataset.y =
+        selectY;
+
+      grpSelect.dataset.scale =
+        selectScale;
+
+
+
+      grpStart.dataset.x =
+        startX;
+
+      grpStart.dataset.y =
+        startY;
+
+      grpStart.dataset.scale =
+        startScale;
+    }
+
+
+
+    /* =====================================================
+       PEGAR LAYOUT
+       ===================================================== */
+
+    function getLayout() {
+
+      return {
+
+        dpad:
+          Number(dpadRange.value),
+
+        dpadY:
+          Number(grpDpad.dataset.y) || 0,
+
+        dpadScale:
+          Number(
+            dpadScaleRange.value
+          ) / 100 || 1,
+
+
+
+        b:
+          Number(bRange.value),
+
+        bY:
+          Number(grpB.dataset.y) || 0,
+
+        bScale:
+          Number(
+            bScaleRange.value
+          ) / 100 || 1,
+
+
+
+        a:
+          Number(aRange.value),
+
+        aY:
+          Number(grpA.dataset.y) || 0,
+
+        aScale:
+          Number(
+            aScaleRange.value
+          ) / 100 || 1,
+
+
+
+        small:
+          Number(smallRange.value),
+
+        smallY:
+          Number(grpSmall.dataset.y) || 0,
+
+        smallScale:
+          Number(
+            smallScaleRange.value
+          ) / 100 || 1,
+
+
+
+        selectX:
+          Number(grpSelect.dataset.x) || 0,
+
+        selectY:
+          Number(grpSelect.dataset.y) || 0,
+
+        selectScale:
+          Number(
+            grpSelect.dataset.scale
+          ) || 1,
+
+
+
+        startX:
+          Number(grpStart.dataset.x) || 0,
+
+        startY:
+          Number(grpStart.dataset.y) || 0,
+
+        startScale:
+          Number(
+            grpStart.dataset.scale
+          ) || 1
+      };
+    }
+
+
+
+    /* =====================================================
+       SALVAR LAYOUT
+       ===================================================== */
+
+    function saveLayout() {
+
+      localStorage.setItem(
+        'gb_controls_layout',
+        JSON.stringify(
+          getLayout()
+        )
+      );
+    }
+
+
+
+    /* =====================================================
+       CARREGAR LAYOUT
+       ===================================================== */
+
+    function loadLayout() {
 
       try {
 
-        const saveData =
-          gameboy.getCartridgeSaveRam();
-
-
-        if (
-          saveData &&
-          saveData.byteLength
-        ) {
-
-          const base64 =
-            arrayBufferToBase64(
-              saveData
-            );
-
-
-          localStorage.setItem(
-            'gb_save_' +
-            currentRomName,
-            base64
+        const saved =
+          localStorage.getItem(
+            'gb_controls_layout'
           );
+
+
+        if (saved) {
+
+          applyLayout(
+            JSON.parse(saved)
+          );
+
+
+          return;
         }
 
       } catch {}
+
+
+      applyLayout(
+        defaultLayout
+      );
     }
-  }
-);
 
 
 
-/* =====================================================
-   INICIALIZAÇÃO
-   ===================================================== */
+    /* =====================================================
+       EDITOR UPDATE
+       ===================================================== */
 
-async function init() {
+    function updateEditor() {
 
-  try {
+      applyLayout(
+        getLayout()
+      );
+    }
 
-    showStatus(
-      'LOADING CORE...'
+
+
+    [
+      dpadRange,
+      bRange,
+      aRange,
+      smallRange,
+
+      dpadScaleRange,
+      bScaleRange,
+      aScaleRange,
+      smallScaleRange
+
+    ].forEach(range => {
+
+      range.addEventListener(
+        'input',
+        updateEditor
+      );
+
+    });
+
+
+
+    /* =====================================================
+       CONTROLES ARRASTÁVEIS
+       ===================================================== */
+
+    const draggableControls = [
+
+      {
+        element: grpDpad,
+        range: dpadRange
+      },
+
+      {
+        element: grpB,
+        range: bRange
+      },
+
+      {
+        element: grpA,
+        range: aRange
+      },
+
+      {
+        element: grpSelect,
+        range: null
+      },
+
+      {
+        element: grpStart,
+        range: null
+      }
+
+    ];
+
+
+
+    function clamp(
+      value,
+      minimum,
+      maximum
+    ) {
+
+      return Math.min(
+        Math.max(
+          value,
+          minimum
+        ),
+        maximum
+      );
+    }
+
+
+
+    draggableControls.forEach(
+      control => {
+
+        let dragStart = null;
+
+
+
+        control.element.addEventListener(
+          'pointerdown',
+          event => {
+
+            if (
+              !app.classList.contains(
+                'editing'
+              )
+            ) {
+
+              return;
+            }
+
+
+            event.preventDefault();
+
+            event.stopPropagation();
+
+
+            dragStart = {
+
+              x: event.clientX,
+
+              y: event.clientY,
+
+              offsetX:
+                control.range
+                  ? Number(
+                      control.range.value
+                    ) || 0
+                  : Number(
+                      control.element.dataset.x
+                    ) || 0,
+
+              offsetY:
+                Number(
+                  control.element.dataset.y
+                ) || 0,
+
+              dragging: false
+            };
+
+
+            control.element.setPointerCapture(
+              event.pointerId
+            );
+
+          }
+        );
+
+
+
+        control.element.addEventListener(
+          'pointermove',
+          event => {
+
+            if (!dragStart) {
+
+              return;
+            }
+
+
+            const deltaX =
+              event.clientX -
+              dragStart.x;
+
+
+            const deltaY =
+              event.clientY -
+              dragStart.y;
+
+
+            if (
+              !dragStart.dragging &&
+              Math.hypot(
+                deltaX,
+                deltaY
+              ) < 5
+            ) {
+
+              return;
+            }
+
+
+            if (!dragStart.dragging) {
+
+              dragStart.dragging =
+                true;
+
+
+              event.preventDefault();
+
+
+              control.element.classList.remove(
+                'pressed'
+              );
+
+
+              setTouchInput(
+                control.element.dataset.key,
+                false
+              );
+            }
+
+
+            const nextX =
+              clamp(
+                dragStart.offsetX +
+                  deltaX,
+                -100,
+                100
+              );
+
+
+            if (control.range) {
+
+              control.range.value =
+                clamp(
+                  nextX,
+                  Number(
+                    control.range.min
+                  ),
+                  Number(
+                    control.range.max
+                  )
+                );
+
+            } else {
+
+              control.element.dataset.x =
+                nextX;
+            }
+
+
+            control.element.dataset.y =
+              clamp(
+                dragStart.offsetY +
+                  deltaY,
+                -100,
+                100
+              );
+
+
+            updateEditor();
+
+          }
+        );
+
+
+
+        control.element.addEventListener(
+          'pointerup',
+          () => {
+
+            if (
+              dragStart?.dragging
+            ) {
+
+              saveLayout();
+            }
+
+
+            dragStart =
+              null;
+
+          }
+        );
+
+
+
+        control.element.addEventListener(
+          'pointercancel',
+          () => {
+
+            dragStart =
+              null;
+
+          }
+        );
+
+
+
+        control.element.addEventListener(
+          'wheel',
+          event => {
+
+            if (
+              !app.classList.contains(
+                'editing'
+              )
+            ) {
+
+              return;
+            }
+
+
+            event.preventDefault();
+
+            event.stopPropagation();
+
+
+            const currentScale =
+              Number(
+                control.element.dataset.scale
+              ) || 1;
+
+
+            control.element.dataset.scale =
+              clamp(
+                currentScale +
+                  (
+                    event.deltaY < 0
+                      ? 0.05
+                      : -0.05
+                  ),
+                0.6,
+                1.5
+              ).toFixed(2);
+
+
+            updateEditor();
+
+          },
+          {
+            passive: false
+          }
+        );
+
+      }
     );
 
 
-    const { Gameboy } =
-      await import(
-        'https://esm.sh/gameboy-emulator@1.1.2'
-      );
+
+    /* =====================================================
+       BOTÃO EDITAR
+       ===================================================== */
+
+    btnEdit.addEventListener(
+      'click',
+      () => {
+
+        const editing =
+          !app.classList.contains(
+            'editing'
+          );
 
 
-    gameboy =
-      new Gameboy();
+        app.classList.toggle(
+          'editing',
+          editing
+        );
+
+
+        editor.classList.toggle(
+          'open',
+          editing
+        );
+
+
+        btnEdit.setAttribute(
+          'aria-label',
+          editing
+            ? ' Ajustments'
+            : ' Ajust your controls position and size'
+        );
+
+
+        btnEdit.setAttribute(
+          'title',
+          editing
+            ? 'Desativar ajustes'
+            : 'Ativar ajustes'
+        );
+
+
+        showStatus(
+          editing
+            ? 'AJUSTES ATIVADOS'
+            : 'AJUSTES DESATIVADOS'
+        );
+
+      }
+    );
 
 
 
-    /* =================================================
-       PALETA GAME BOY
-       ================================================= */
+    /* =====================================================
+       CONCLUÍDO
+       ===================================================== */
 
-    function applyDMGPalette(
-      imageData
-    ) {
+    doneEdit.addEventListener(
+      'click',
+      () => {
 
-      const data =
-        imageData.data;
-
-
-      const palette = [
-
-        [15, 56, 15],
-
-        [48, 98, 48],
-
-        [139, 172, 15],
-
-        [155, 188, 15]
-
-      ];
+        saveLayout();
 
 
-      for (
-        let i = 0;
-        i < data.length;
-        i += 4
-      ) {
-
-        const r =
-          data[i];
+        app.classList.remove(
+          'editing'
+        );
 
 
-        const g =
-          data[i + 1];
+        editor.classList.remove(
+          'open'
+        );
 
 
-        const b =
-          data[i + 2];
+        btnEdit.setAttribute(
+          'aria-label',
+          'Ativar ajustes'
+        );
 
 
-        const brightness =
-          0.299 * r +
-          0.587 * g +
-          0.114 * b;
+        btnEdit.setAttribute(
+          'title',
+          'Ativar ajustes'
+        );
 
 
-        let shade;
+        showStatus(
+          'Adjustments saved'
+        );
 
+      }
+    );
+
+
+
+    /* =====================================================
+       RESET CONTROLES
+       ===================================================== */
+
+    resetControls.addEventListener(
+      'click',
+      () => {
+
+        applyLayout(
+          defaultLayout
+        );
+
+
+        saveLayout();
+
+      }
+    );
+
+
+
+    /* =====================================================
+       PAGEHIDE
+       ===================================================== */
+
+    window.addEventListener(
+      'pagehide',
+      () => {
 
         if (
-          brightness < 64
+          gameboy &&
+          currentRomName &&
+          gameboy.cartridge
         ) {
 
-          shade =
-            palette[0];
+          try {
 
-        } else if (
-          brightness < 128
-        ) {
+            const saveData =
+              gameboy.getCartridgeSaveRam();
 
-          shade =
-            palette[1];
 
-        } else if (
-          brightness < 192
-        ) {
+            if (
+              saveData &&
+              saveData.byteLength
+            ) {
 
-          shade =
-            palette[2];
+              const base64 =
+                arrayBufferToBase64(
+                  saveData
+                );
 
-        } else {
 
-          shade =
-            palette[3];
-        }
-
-
-        data[i] =
-          shade[0];
-
-
-        data[i + 1] =
-          shade[1];
-
-
-        data[i + 2] =
-          shade[2];
-      }
-    }
-
-
-
-    /* =================================================
-       FRAME
-       ================================================= */
-
-    gameboy.onFrameFinished(
-      imageData => {
-
-        if (!emulatorPoweredOn) {
-
-          return;
-        }
-
-
-        applyDMGPalette(
-          imageData
-        );
-
-
-        ctx.putImageData(
-          imageData,
-          0,
-          0
-        );
-
-      }
-    );
-
-
-
-    /* =================================================
-       TECLADO
-       ================================================= */
-
-    gameboy.keyboardManager.left =
-      'ArrowLeft';
-
-
-    gameboy.keyboardManager.right =
-      'ArrowRight';
-
-
-    gameboy.keyboardManager.up =
-      'ArrowUp';
-
-
-    gameboy.keyboardManager.down =
-      'ArrowDown';
-
-
-    gameboy.keyboardManager.a =
-      'KeyX';
-
-
-    gameboy.keyboardManager.b =
-      'KeyZ';
-
-
-    gameboy.keyboardManager.start =
-      'Enter';
-
-
-    gameboy.keyboardManager.select =
-      'ShiftLeft';
-
-
-
-    /* =================================================
-       LAYOUT
-       ================================================= */
-
-    loadLayout();
-
-
-
-    /* =================================================
-       RECUPERAR ROM ANTERIOR
-       ================================================= */
-
-    const autoRom =
-      await getFromDB(
-        'active_rom_buffer'
-      );
-
-
-    const autoName =
-      await getFromDB(
-        'active_rom_name'
-      );
-
-
-    if (
-      autoRom &&
-      autoName
-    ) {
-
-      currentRomBuffer =
-        autoRom;
-
-
-      currentRomName =
-        autoName;
-
-
-      showStatus(
-        'SISTEMA DESLIGADO • ROM PRONTA'
-      );
-
-    } else {
-
-      showStatus(
-        'SISTEMA DESLIGADO • CARREGUE UMA ROM'
-      );
-    }
-
-
-    emulatorPoweredOn =
-      false;
-
-
-    updatePowerVisual(
-      false
-    );
-
-
-    paintPoweredOffScreen();
-
-  } catch {
-
-    emulatorPoweredOn =
-      false;
-
-
-    updatePowerVisual(
-      false
-    );
-
-
-    paintPoweredOffScreen();
-
-
-    showError(
-      'NÃO FOI POSSÍVEL CARREGAR O EMULADOR'
-    );
-  }
-}
-
-
-
-/* =====================================================
-   PREPARAR SPRITES
-   ===================================================== */
-
-async function prepareSprites() {
-
-  const sprites =
-    document.querySelectorAll(
-      '.dpadSprite, .buttonSprite'
-    );
-
-
-  await Promise.all(
-
-    [...sprites].map(
-      async image => {
-
-        if (!image.complete) {
-
-          await new Promise(
-            resolve => {
-
-              let finished =
-                false;
-
-
-              const finish =
-                () => {
-
-                  if (finished) {
-
-                    return;
-                  }
-
-
-                  finished =
-                    true;
-
-
-                  image.removeEventListener(
-                    'load',
-                    finish
-                  );
-
-
-                  image.removeEventListener(
-                    'error',
-                    finish
-                  );
-
-
-                  resolve();
-                };
-
-
-              image.addEventListener(
-                'load',
-                finish,
-                {
-                  once: true
-                }
+              localStorage.setItem(
+                'gb_save_' +
+                currentRomName,
+                base64
               );
-
-
-              image.addEventListener(
-                'error',
-                finish,
-                {
-                  once: true
-                }
-              );
-
-
-              setTimeout(
-                finish,
-                5000
-              );
-
             }
-          );
+
+          } catch {}
         }
+      }
+    );
 
 
-        if (!image.naturalWidth) {
 
-          return;
-        }
+    /* =====================================================
+       INICIALIZAÇÃO
+       ===================================================== */
 
+    async function init() {
 
-        try {
+      try {
 
-          const sourceCanvas =
-            document.createElement(
-              'canvas'
-            );
-
-
-          sourceCanvas.width =
-            image.naturalWidth;
+        showStatus(
+          'LOADING CORE...'
+        );
 
 
-          sourceCanvas.height =
-            image.naturalHeight;
-
-
-          const sourceContext =
-            sourceCanvas.getContext(
-              '2d'
-            );
-
-
-          if (!sourceContext) {
-
-            return;
-          }
-
-
-          sourceContext.drawImage(
-            image,
-            0,
-            0
+        const { Gameboy } =
+          await import(
+            'https://esm.sh/gameboy-emulator@1.1.2'
           );
 
 
-          const sourceImage =
-            sourceContext.getImageData(
-              0,
-              0,
-              sourceCanvas.width,
-              sourceCanvas.height
-            );
+        gameboy =
+          new Gameboy();
 
 
-          let minX =
-            sourceCanvas.width;
+
+        /* =================================================
+           PALETA GAME BOY
+           ================================================= */
+
+        function applyDMGPalette(
+          imageData
+        ) {
+
+          const data =
+            imageData.data;
 
 
-          let minY =
-            sourceCanvas.height;
+          const palette = [
 
+            [15, 56, 15],
 
-          let maxX =
-            -1;
+            [48, 98, 48],
 
+            [139, 172, 15],
 
-          let maxY =
-            -1;
+            [155, 188, 15]
+
+          ];
 
 
           for (
-            let y = 0;
-            y < sourceCanvas.height;
-            y++
+            let i = 0;
+            i < data.length;
+            i += 4
           ) {
 
-            for (
-              let x = 0;
-              x < sourceCanvas.width;
-              x++
+            const r =
+              data[i];
+
+
+            const g =
+              data[i + 1];
+
+
+            const b =
+              data[i + 2];
+
+
+            const brightness =
+              0.299 * r +
+              0.587 * g +
+              0.114 * b;
+
+
+            let shade;
+
+
+            if (
+              brightness < 64
             ) {
 
-              const index =
-                (
-                  y *
-                  sourceCanvas.width +
-                  x
-                ) * 4;
+              shade =
+                palette[0];
+
+            } else if (
+              brightness < 128
+            ) {
+
+              shade =
+                palette[1];
+
+            } else if (
+              brightness < 192
+            ) {
+
+              shade =
+                palette[2];
+
+            } else {
+
+              shade =
+                palette[3];
+            }
 
 
-              const red =
-                sourceImage.data[
-                  index
-                ];
+            data[i] =
+              shade[0];
 
 
-              const green =
-                sourceImage.data[
-                  index + 1
-                ];
+            data[i + 1] =
+              shade[1];
 
 
-              const blue =
-                sourceImage.data[
-                  index + 2
-                ];
+            data[i + 2] =
+              shade[2];
+          }
+        }
 
 
-              if (
-                red > 232 &&
-                green > 232 &&
-                blue > 232
-              ) {
 
-                sourceImage.data[
-                  index + 3
-                ] = 0;
+        /* =================================================
+           FRAME
+           ================================================= */
+
+        gameboy.onFrameFinished(
+          imageData => {
+
+            if (!emulatorPoweredOn) {
+
+              return;
+            }
 
 
-                continue;
+            applyDMGPalette(
+              imageData
+            );
+
+
+            ctx.putImageData(
+              imageData,
+              0,
+              0
+            );
+
+          }
+        );
+
+
+
+        /* =================================================
+           TECLADO
+           ================================================= */
+
+        gameboy.keyboardManager.left =
+          'ArrowLeft';
+
+
+        gameboy.keyboardManager.right =
+          'ArrowRight';
+
+
+        gameboy.keyboardManager.up =
+          'ArrowUp';
+
+
+        gameboy.keyboardManager.down =
+          'ArrowDown';
+
+
+        gameboy.keyboardManager.a =
+          'KeyA';
+
+
+        gameboy.keyboardManager.b =
+          'KeyS';
+
+
+        gameboy.keyboardManager.start =
+          'Enter';
+
+
+        gameboy.keyboardManager.select =
+          'ShiftLeft';
+
+
+
+        /* =================================================
+           LAYOUT
+           ================================================= */
+
+        loadLayout();
+
+
+
+        /* =================================================
+           RECUPERAR ROM ANTERIOR
+           ================================================= */
+
+        const autoRom =
+          await getFromDB(
+            'active_rom_buffer'
+          );
+
+
+        const autoName =
+          await getFromDB(
+            'active_rom_name'
+          );
+
+
+        if (
+          autoRom &&
+          autoName
+        ) {
+
+          currentRomBuffer =
+            autoRom;
+
+
+          currentRomName =
+            autoName;
+
+
+          showStatus(
+            'SISTEMA DESLIGADO • ROM PRONTA'
+          );
+
+        } else {
+
+          showStatus(
+            'SISTEMA DESLIGADO • CARREGUE UMA ROM'
+          );
+        }
+
+
+        emulatorPoweredOn =
+          false;
+
+
+        updatePowerVisual(
+          false
+        );
+
+
+        paintPoweredOffScreen();
+
+      } catch {
+
+        emulatorPoweredOn =
+          false;
+
+
+        updatePowerVisual(
+          false
+        );
+
+
+        paintPoweredOffScreen();
+
+
+        showError(
+          'NÃO FOI POSSÍVEL CARREGAR O EMULADOR'
+        );
+      }
+    }
+
+
+
+    /* =====================================================
+       PREPARAR SPRITES
+       ===================================================== */
+
+    async function prepareSprites() {
+
+      const sprites =
+        document.querySelectorAll(
+          '.dpadSprite, .buttonSprite'
+        );
+
+
+      await Promise.all(
+
+        [...sprites].map(
+          async image => {
+
+            if (!image.complete) {
+
+              await new Promise(
+                resolve => {
+
+                  let finished =
+                    false;
+
+
+                  const finish =
+                    () => {
+
+                      if (finished) {
+
+                        return;
+                      }
+
+
+                      finished =
+                        true;
+
+
+                      image.removeEventListener(
+                        'load',
+                        finish
+                      );
+
+
+                      image.removeEventListener(
+                        'error',
+                        finish
+                      );
+
+
+                      resolve();
+                    };
+
+
+                  image.addEventListener(
+                    'load',
+                    finish,
+                    {
+                      once: true
+                    }
+                  );
+
+
+                  image.addEventListener(
+                    'error',
+                    finish,
+                    {
+                      once: true
+                    }
+                  );
+
+
+                  setTimeout(
+                    finish,
+                    5000
+                  );
+
+                }
+              );
+            }
+
+
+            if (!image.naturalWidth) {
+
+              return;
+            }
+
+
+            try {
+
+              const sourceCanvas =
+                document.createElement(
+                  'canvas'
+                );
+
+
+              sourceCanvas.width =
+                image.naturalWidth;
+
+
+              sourceCanvas.height =
+                image.naturalHeight;
+
+
+              const sourceContext =
+                sourceCanvas.getContext(
+                  '2d'
+                );
+
+
+              if (!sourceContext) {
+
+                return;
               }
 
 
-              minX =
-                Math.min(
-                  minX,
-                  x
-                );
-
-
-              minY =
-                Math.min(
-                  minY,
-                  y
-                );
-
-
-              maxX =
-                Math.max(
-                  maxX,
-                  x
-                );
-
-
-              maxY =
-                Math.max(
-                  maxY,
-                  y
-                );
-            }
-          }
-
-
-          if (maxX < 0) {
-
-            return;
-          }
-
-
-          sourceContext.putImageData(
-            sourceImage,
-            0,
-            0
-          );
-
-
-          const croppedCanvas =
-            document.createElement(
-              'canvas'
-            );
-
-
-          croppedCanvas.width =
-            maxX - minX + 1;
-
-
-          croppedCanvas.height =
-            maxY - minY + 1;
-
-
-          const croppedContext =
-            croppedCanvas.getContext(
-              '2d'
-            );
-
-
-          if (!croppedContext) {
-
-            return;
-          }
-
-
-          croppedContext.drawImage(
-
-            sourceCanvas,
-
-            minX,
-            minY,
-
-            croppedCanvas.width,
-            croppedCanvas.height,
-
-            0,
-            0,
-
-            croppedCanvas.width,
-            croppedCanvas.height
-          );
-
-
-          image.src =
-            croppedCanvas.toDataURL(
-              'image/png'
-            );
-
-
-          if (image.decode) {
-
-            await image
-              .decode()
-              .catch(
-                () => {}
+              sourceContext.drawImage(
+                image,
+                0,
+                0
               );
+
+
+              const sourceImage =
+                sourceContext.getImageData(
+                  0,
+                  0,
+                  sourceCanvas.width,
+                  sourceCanvas.height
+                );
+
+
+              let minX =
+                sourceCanvas.width;
+
+
+              let minY =
+                sourceCanvas.height;
+
+
+              let maxX =
+                -1;
+
+
+              let maxY =
+                -1;
+
+
+              for (
+                let y = 0;
+                y < sourceCanvas.height;
+                y++
+              ) {
+
+                for (
+                  let x = 0;
+                  x < sourceCanvas.width;
+                  x++
+                ) {
+
+                  const index =
+                    (
+                      y *
+                      sourceCanvas.width +
+                      x
+                    ) * 4;
+
+
+                  const red =
+                    sourceImage.data[
+                      index
+                    ];
+
+
+                  const green =
+                    sourceImage.data[
+                      index + 1
+                    ];
+
+
+                  const blue =
+                    sourceImage.data[
+                      index + 2
+                    ];
+
+
+                  if (
+                    red > 232 &&
+                    green > 232 &&
+                    blue > 232
+                  ) {
+
+                    sourceImage.data[
+                      index + 3
+                    ] = 0;
+
+
+                    continue;
+                  }
+
+
+                  minX =
+                    Math.min(
+                      minX,
+                      x
+                    );
+
+
+                  minY =
+                    Math.min(
+                      minY,
+                      y
+                    );
+
+
+                  maxX =
+                    Math.max(
+                      maxX,
+                      x
+                    );
+
+
+                  maxY =
+                    Math.max(
+                      maxY,
+                      y
+                    );
+                }
+              }
+
+
+              if (maxX < 0) {
+
+                return;
+              }
+
+
+              sourceContext.putImageData(
+                sourceImage,
+                0,
+                0
+              );
+
+
+              const croppedCanvas =
+                document.createElement(
+                  'canvas'
+                );
+
+
+              croppedCanvas.width =
+                maxX - minX + 1;
+
+
+              croppedCanvas.height =
+                maxY - minY + 1;
+
+
+              const croppedContext =
+                croppedCanvas.getContext(
+                  '2d'
+                );
+
+
+              if (!croppedContext) {
+
+                return;
+              }
+
+
+              croppedContext.drawImage(
+
+                sourceCanvas,
+
+                minX,
+                minY,
+
+                croppedCanvas.width,
+                croppedCanvas.height,
+
+                0,
+                0,
+
+                croppedCanvas.width,
+                croppedCanvas.height
+              );
+
+
+              image.src =
+                croppedCanvas.toDataURL(
+                  'image/png'
+                );
+
+
+              if (image.decode) {
+
+                await image
+                  .decode()
+                  .catch(
+                    () => {}
+                  );
+              }
+
+            } catch {}
+
           }
-
-        } catch {}
-
-      }
-    )
-  );
-}
+        )
+      );
+    }
 
 
 
-/* =====================================================
-   ESTADO INICIAL
-   ===================================================== */
+    /* =====================================================
+       ESTADO INICIAL
+       ===================================================== */
 
-updatePowerVisual(
-  false
-);
-
-
-paintPoweredOffScreen();
+    updatePowerVisual(
+      false
+    );
 
 
+    paintPoweredOffScreen();
 
-/* =====================================================
-   INICIAR
-   ===================================================== */
 
-prepareSprites()
-  .then(init);
 
-</script>
+    /* =====================================================
+       INICIAR
+       ===================================================== */
+
+    prepareSprites()
+      .then(init);
+
+  </script>
 
 </body>
 </html>
