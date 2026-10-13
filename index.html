@@ -1516,140 +1516,6 @@
       background: #9bbc0f;
     }
 
-    #gamepadMapper {
-      display: none;
-
-      position: absolute;
-
-      top: 45px;
-
-      left: 50%;
-
-      width: min(
-        360px,
-        calc(100% - 24px)
-      );
-
-      transform: translateX(-50%);
-
-      padding: 14px;
-
-      background: #c3c5bf;
-
-      color: #292b28;
-
-      border-radius: 12px;
-
-      box-shadow:
-        0 10px 25px #0006;
-
-      z-index: 100000;
-
-      text-align: center;
-    }
-
-    #gamepadMapper.open {
-      display: block;
-    }
-
-    #gamepadMapper h3 {
-      margin:
-        0
-        0
-        8px;
-
-      font-size: 16px;
-
-      font-weight: 900;
-    }
-
-    #gamepadStatus {
-      margin:
-        0
-        0
-        12px;
-
-      font-size: 11px;
-
-      font-weight: 700;
-    }
-
-    .mapRow {
-      display: grid;
-
-      grid-template-columns:
-        70px
-        70px
-        1fr;
-
-      align-items: center;
-
-      gap: 8px;
-
-      margin-bottom: 8px;
-
-      padding: 6px;
-
-      background: #aaada7;
-
-      border-radius: 8px;
-
-      font-size: 12px;
-
-      font-weight: 900;
-    }
-
-    .mapRow button {
-      padding: 5px;
-
-      border-radius: 7px;
-
-      border: 1px solid #000;
-
-      background: #327f21;
-
-      color: #fff;
-
-      font-size: 11px;
-
-      font-weight: 900;
-    }
-
-    .mapRow button.mapped {
-      background: #245f1d;
-      border-color: #fff;
-    }
-
-    .mapRow span:last-child {
-      text-align: left;
-
-      font-size: 10px;
-
-      overflow: hidden;
-
-      text-overflow: ellipsis;
-    }
-
-    #closeGamepadMapper {
-      width: 100%;
-
-      margin-top: 8px;
-
-      padding: 7px;
-
-      border-radius: 8px;
-
-      border: 1px solid #000;
-
-      background: #30342f;
-
-      color: #fff;
-
-      font-size: 11px;
-
-      font-weight: 900;
-    }
-
   </style>
 </head>
 
@@ -1882,10 +1748,10 @@
       <button
               id="btnGamepad"
               type="button"
-              aria-label="Map Game Controller"
-              title="Map your USB or Bluetooth controller"
+              aria-label="Connect Controller"
+              title="Connect a USB or Bluetooth controller"
       >
-        MAP CONTROLLER
+        CONNECT CONTROLLER
       </button>
 
 
@@ -1909,71 +1775,6 @@
         </button>
 
       </div>
-
-    </div>
-
-
-    <div
-            id="gamepadMapper"
-            role="dialog"
-            aria-modal="false"
-            aria-labelledby="gamepadMapperTitle"
-    >
-
-      <h3 id="gamepadMapperTitle">
-        CONTROLLER MAPPING
-      </h3>
-
-      <p id="gamepadStatus">
-        Connect a USB or Bluetooth controller
-      </p>
-
-      <div class="mapRow">
-        <span>A</span>
-        <button type="button" data-map="a">
-          MAP
-        </button>
-        <span id="mapAValue">
-      —
-    </span>
-      </div>
-
-      <div class="mapRow">
-        <span>B</span>
-        <button type="button" data-map="b">
-          MAP
-        </button>
-        <span id="mapBValue">
-      —
-    </span>
-      </div>
-
-      <div class="mapRow">
-        <span>START</span>
-        <button type="button" data-map="start">
-          MAP
-        </button>
-        <span id="mapStartValue">
-      —
-    </span>
-      </div>
-
-      <div class="mapRow">
-        <span>SELECT</span>
-        <button type="button" data-map="select">
-          MAP
-        </button>
-        <span id="mapSelectValue">
-      —
-    </span>
-      </div>
-
-      <button
-              id="closeGamepadMapper"
-              type="button"
-      >
-        CLOSE
-      </button>
 
     </div>
 
@@ -4140,136 +3941,27 @@
       }
     );
 
-    const btnGamepad = document.getElementById('btnGamepad');
-    const gamepadMapper = document.getElementById('gamepadMapper');
-    const closeGamepadMapper = document.getElementById('closeGamepadMapper');
+    const btnGamepad =
+      document.getElementById('btnGamepad');
 
-    if (btnGamepad && gamepadMapper) {
-      btnGamepad.addEventListener('click', () => {
-        gamepadMapper.classList.add('open');
-      });
-    }
-
-    if (closeGamepadMapper && gamepadMapper) {
-      closeGamepadMapper.addEventListener('click', () => {
-        gamepadMapper.classList.remove('open');
-        cancelGamepadMapping();
-      });
-    }
-
-    /* =====================================================
-       BLUETOOTH GAMEPAD • MAPEAMENTO
-       ===================================================== */
-
-    const GAMEPAD_MAPPING_KEY = 'dougx_gamepad_mapping';
-
-    const defaultGamepadMapping = {
+    const gamepadMapping = {
       a: 0,
       b: 1,
       start: 9,
       select: 8
     };
 
-    let gamepadMapping = loadGamepadMapping();
-    let mappingTarget = null;
-    let mappingAwaitingRelease = false;
-    let previousGamepadButtons = [];
-    let previousGamepadIndex = null;
-
-
-    /* =====================================================
-       CARREGAR / SALVAR MAPEAMENTO
-       ===================================================== */
-
-    function loadGamepadMapping() {
-      try {
-        const saved = localStorage.getItem(GAMEPAD_MAPPING_KEY);
-
-        if (!saved) {
-          return {
-            ...defaultGamepadMapping
-          };
-        }
-
-        const parsed = JSON.parse(saved);
-        const mapping = {
-          ...defaultGamepadMapping,
-          ...parsed
-        };
-
-        Object.keys(defaultGamepadMapping).forEach(key => {
-          if (!Number.isInteger(mapping[key]) || mapping[key] < 0) {
-            mapping[key] = defaultGamepadMapping[key];
-          }
-        });
-
-        return mapping;
-
-      } catch {
-        return {
-          ...defaultGamepadMapping
-        };
-      }
-    }
-
-
-    function saveGamepadMapping() {
-      localStorage.setItem(
-        GAMEPAD_MAPPING_KEY,
-        JSON.stringify(gamepadMapping)
-      );
-    }
-
-
-    /* =====================================================
-       ELEMENTOS
-       ===================================================== */
-
-    const gamepadStatus =
-      document.getElementById('gamepadStatus');
-
-    const mapButtons =
-      document.querySelectorAll('[data-map]');
-
-
-    /* =====================================================
-       MOSTRAR MAPEAMENTO
-       ===================================================== */
-
-    function updateGamepadMappingDisplay() {
-
-      const elements = {
-        a: document.getElementById('mapAValue'),
-        b: document.getElementById('mapBValue'),
-        start: document.getElementById('mapStartValue'),
-        select: document.getElementById('mapSelectValue')
-      };
-
-      Object.keys(elements).forEach(key => {
-
-        const element = elements[key];
-
-        if (!element) return;
-
-        element.textContent = `BUTTON ${gamepadMapping[key]}`;
-      });
-    }
+    let waitingForGamepad = false;
 
     function getActiveGamepad() {
-      if (!navigator.getGamepads) {
+      if (typeof navigator.getGamepads !== 'function') {
         return null;
       }
 
       const gamepads = navigator.getGamepads();
 
       for (const gamepad of gamepads) {
-        if (!gamepad || !gamepad.connected) {
-          continue;
-        }
-
-        const id = String(gamepad.id || '').toLowerCase();
-
-        if (!id.includes('consumer control')) {
+        if (gamepad && gamepad.connected) {
           return gamepad;
         }
       }
@@ -4277,173 +3969,58 @@
       return null;
     }
 
-    function cancelGamepadMapping() {
-      if (mappingTarget) {
-        const button = document.querySelector(
-          `[data-map="${mappingTarget}"]`
-        );
+    function showConnectedGamepad(gamepad) {
+      waitingForGamepad = false;
 
-        if (button) {
-          button.textContent = 'MAP';
-        }
+      if (btnGamepad) {
+        btnGamepad.textContent = 'CONTROLLER CONNECTED';
       }
 
-      mappingTarget = null;
-      mappingAwaitingRelease = false;
-    }
-
-
-    /* =====================================================
-       GAMEPAD CONECTADO
-       ===================================================== */
-
-    window.addEventListener('gamepadconnected', event => {
-
-      const gamepad = event.gamepad;
-
-      if (gamepadStatus) {
-        gamepadStatus.textContent =
-          `CONTROLLER CONNECTED • ${gamepad.id} • ${gamepad.buttons.length} BUTTONS`;
-      }
-
-      previousGamepadButtons =
-        gamepad.buttons.map(() => false);
-      previousGamepadIndex = gamepad.index;
-    });
-
-
-    /* =====================================================
-       GAMEPAD DESCONECTADO
-       ===================================================== */
-
-    window.addEventListener('gamepaddisconnected', event => {
-
-      if (gamepadStatus) {
-        gamepadStatus.textContent =
-          'CONTROLLER DISCONNECTED';
-      }
-
-      if (previousGamepadIndex === event.gamepad.index) {
-        previousGamepadButtons = [];
-        previousGamepadIndex = null;
-      }
-    });
-
-
-    /* =====================================================
-       COMEÇAR MAPEAMENTO
-       ===================================================== */
-
-    mapButtons.forEach(button => {
-
-      button.addEventListener('click', event => {
-
-        event.preventDefault();
-
-        cancelGamepadMapping();
-        mappingTarget =
-          button.dataset.map;
-
-        if (gamepadStatus) {
-          gamepadStatus.textContent =
-            `PRESS A BUTTON FOR ${mappingTarget.toUpperCase()}`;
-        }
-
-        button.textContent = 'PRESS...';
-        button.classList.remove('mapped');
-      });
-    });
-
-
-    /* =====================================================
-       DETECTAR BOTÃO PRESSIONADO
-       ===================================================== */
-
-    function detectGamepadMapping() {
-      const activeGamepad = getActiveGamepad();
-
-      if (!activeGamepad) {
-        nativeRequestAnimationFrame(detectGamepadMapping);
-        return;
-      }
-
-      if (previousGamepadIndex !== activeGamepad.index) {
-        previousGamepadIndex = activeGamepad.index;
-        previousGamepadButtons =
-          activeGamepad.buttons.map(button => button.pressed);
-      }
-
-      /*
-        Detecta apenas quando o botão
-        muda de NÃO pressionado → pressionado.
-      */
-
-      activeGamepad.buttons.forEach((button, index) => {
-
-        const pressed = button.pressed;
-
-        const wasPressed =
-          previousGamepadButtons[index] || false;
-
-
-        if (
-          mappingTarget &&
-          pressed &&
-          !wasPressed
-        ) {
-
-          gamepadMapping[mappingTarget] =
-            index;
-
-          saveGamepadMapping();
-
-          const targetButton =
-            document.querySelector(
-              `[data-map="${mappingTarget}"]`
-            );
-
-          if (targetButton) {
-            targetButton.textContent = 'OK!';
-            targetButton.classList.add('mapped');
-          }
-
-          if (gamepadStatus) {
-            gamepadStatus.textContent =
-              `${mappingTarget.toUpperCase()} MAPPED SUCCESSFULLY → BUTTON ${index} • ${activeGamepad.id}`;
-          }
-
-          mappingTarget = null;
-          mappingAwaitingRelease = true;
-
-          updateGamepadMappingDisplay();
-        }
-
-      });
-
-
-      previousGamepadButtons =
-        activeGamepad.buttons.map(
-          button => button.pressed
-        );
-
-
-      nativeRequestAnimationFrame(
-        detectGamepadMapping
+      showStatus(
+        `CONTROLLER CONNECTED • ${gamepad.id} • ${gamepad.buttons.length} BUTTONS`
       );
     }
 
+    if (btnGamepad) {
+      btnGamepad.addEventListener('click', () => {
+        if (typeof navigator.getGamepads !== 'function') {
+          showStatus('GAMEPAD API NOT AVAILABLE IN THIS BROWSER');
+          return;
+        }
 
-    /* =====================================================
-       INICIAR DETECÇÃO
-       ===================================================== */
+        if (!window.isSecureContext) {
+          showStatus('OPEN THIS PAGE OVER HTTPS OR LOCALHOST TO USE A CONTROLLER');
+          return;
+        }
 
-    updateGamepadMappingDisplay();
+        const gamepad = getActiveGamepad();
 
-    nativeRequestAnimationFrame(
-      detectGamepadMapping
-    );
+        if (gamepad) {
+          showConnectedGamepad(gamepad);
+          return;
+        }
 
+        waitingForGamepad = true;
+        btnGamepad.textContent = 'CONNECTING...';
+        showStatus(
+          'PAIR THE CONTROLLER IN YOUR DEVICE BLUETOOTH SETTINGS, THEN PRESS ANY BUTTON'
+        );
+      });
+    }
 
+    window.addEventListener('gamepadconnected', event => {
+      if (waitingForGamepad) {
+        showConnectedGamepad(event.gamepad);
+      }
+    });
+
+    window.addEventListener('gamepaddisconnected', () => {
+      waitingForGamepad = false;
+
+      if (btnGamepad) {
+        btnGamepad.textContent = 'CONNECT CONTROLLER';
+      }
+    });
 
     /* =====================================================
        BLUETOOTH GAMEPAD • CONTROLE DO GAME BOY
@@ -4565,23 +4142,15 @@
     function gamepadControlLoop() {
       const activeGamepad = getActiveGamepad();
 
-      if (
-        activeGamepad &&
-        emulatorPoweredOn &&
-        !mappingTarget
-      ) {
-        if (mappingAwaitingRelease) {
-          mappingAwaitingRelease =
-            activeGamepad.buttons.some(button => button.pressed);
-        }
-
-        if (!mappingAwaitingRelease) {
-          applyGamepadInput(activeGamepad);
-        }
+      if (activeGamepad && waitingForGamepad) {
+        showConnectedGamepad(activeGamepad);
       }
 
-      if (!emulatorPoweredOn) {
-        mappingAwaitingRelease = false;
+      if (
+        activeGamepad &&
+        emulatorPoweredOn
+      ) {
+        applyGamepadInput(activeGamepad);
       }
 
       nativeRequestAnimationFrame(
