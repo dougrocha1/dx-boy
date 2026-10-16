@@ -508,6 +508,8 @@
 
       background: #20251f;
 
+      image-rendering: pixelated;
+
       border:
         5px solid
         #272b25;
@@ -2062,6 +2064,9 @@
         canvas.height
       );
     }
+
+
+    ctx.imageSmoothingEnabled = false;
 
 
 
@@ -5272,13 +5277,13 @@
 
           const palette = [
 
-            [15, 30, 15],
+            [10, 25, 15], /* Preto */
 
-            [48, 88, 48],
+            [48, 98, 48],/* Verde escuro */
 
-            [109, 172, 15],
+            [139, 172, 15],/* Verde claro */
 
-            [100, 165, 15]
+            [155, 188, 15] /* Verde mais claro */
 
           ];
 
